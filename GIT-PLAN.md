@@ -1,7 +1,7 @@
 # Plan de subida incremental a GitHub
 
 > Repo: https://github.com/dair7/portfolio-frontend · rama `main` · **privado por ahora**
-> Última actualización: 2026-08-04
+> Última actualización: 2026-08-04 (noche)
 
 ## Convención acordada
 
@@ -102,39 +102,119 @@ Como cayó a las 21:22 local = **4 ago 02:22 UTC**, el cuadrito del 4 de agosto 
 lleno y la racha nunca estuvo en riesgo. La alarma "🚨 4 de agosto" que había en este
 archivo se basaba en el supuesto equivocado de que no se había commiteado.
 
+### ✅ Lote 7 — SUBIDO (2026-08-04)
+
+| Commit | Contenido |
+|---|---|
+| `03dabab` Add project README and environment variable example | `README.md`, `.env.example` |
+| `324c67b` Add technical analysis and incremental upload plan | `ANALISIS.md`, `GIT-PLAN.md` |
+
+`README.md` se reescribió desde cero — ya no es el template de Vite. Cubre qué es el
+proyecto, requisitos, arranque con pnpm, `VITE_API_URL`, scripts, estructura de `src/`,
+tabla de rutas, cómo funciona el JWT y el aviso de los placeholders de EmailJS.
+
+🏁 **Con esto se acaban los lotes: no queda ni un archivo del frontend sin subir.**
+`git status` está limpio y `main` sincronizado con `origin/main`.
+
 ---
 
-## Lotes pendientes
+## Y ahora qué — la fase después de los lotes
 
-### ⬜ Lote 7 — Documentación · **el siguiente (2026-08-04)**
-- [ ] Commit A: `README.md` + `.env.example`
-- [ ] Commit B: `ANALISIS.md`, `GIT-PLAN.md`
+Ya no hay archivos guardados para dosificar, así que **cada commit diario tiene que ser
+trabajo real**. La buena noticia es que la lista de pendientes de `ANALISIS.md` está hecha
+justo de eso: arreglos pequeños e independientes, uno o dos por día.
 
-Ambos archivos del commit A ya están **escritos** (2026-08-04), solo falta commitear:
+El orden de abajo prioriza lo que **desbloquea hacer público el repo**, que es el objetivo
+que quedó abierto desde el principio.
 
-- `README.md` reescrito desde cero — ya no es el template de Vite. Cubre qué es el
-  proyecto, requisitos, arranque con pnpm, `VITE_API_URL`, scripts, estructura de `src/`,
-  tabla de rutas, cómo funciona el JWT y el aviso de los placeholders de EmailJS.
-- `.env.example` creado con `VITE_API_URL`. El `.gitignore` ya traía la excepción
-  `!.env.example` en la línea 16, así que sí entra en el commit.
+### ✅ Día 1 — Dependencias y lint · HECHO (2026-08-04, 21:4x local)
 
-Comandos listos para pegar:
+Se adelantó a la noche del 4 de agosto. Como cae en el **cuadrito del 5 de agosto UTC**,
+que era el día que tenía asignado, el calendario sigue exacto.
 
-```powershell
-cd C:\Users\dairg\Documents\Mi_portafolio_manager\portfolio-frontend
+| Commit | Contenido |
+|---|---|
+| `d4797b4` Update axios and react-router-dom to patch security advisories | `package.json`, `pnpm-lock.yaml` |
+| `6898e2d` Split auth context so Fast Refresh works in AuthContext.tsx | `src/context/auth.ts`, `src/hooks/useAuth.ts` + 4 archivos |
 
-git add README.md .env.example
-git commit -m "Add project README and environment variable example"
+**Vulnerabilidades: de 39 (16 *high*) a 1.** El recuento de partida se verificó el
+2026-08-04 con `pnpm audit --prod` y desmintió las 5 que decía `ANALISIS.md` §3: ese
+número era de `npm audit` del 31 de julio, solo miraba `react-router-dom` y no vio que la
+mayor parte venía de **axios 1.15.0** (prototype pollution, ReDoS, fuga de
+`Proxy-Authorization`, SSRF por bypass de `no_proxy`).
 
-git add ANALISIS.md GIT-PLAN.md
-git commit -m "Add technical analysis and incremental upload plan"
+| Paquete | Antes | Ahora |
+|---|---|---|
+| `axios` | 1.15.0 | 1.19.0 |
+| `react-router-dom` | 7.14.0 | 7.18.2 |
 
-git push
-```
+Las dos eran *minor* y no hubo breaking changes: `pnpm build` pasó (123 módulos,
+351.73 kB / 107.26 kB gzip).
 
-Es el último lote del frontend. Después de esto no quedan archivos pendientes, así que
-los commits diarios tienen que salir del backend (`../portfolio-manager/`) o de trabajo
-nuevo — arreglar las 4 vulnerabilidades de `react-router-dom` es el candidato natural.
+> ⚠️ **Queda 1 *high* que no se puede cerrar con un minor:**
+> [GHSA-qwww-vcr4-c8h2](https://github.com/advisories/GHSA-qwww-vcr4-c8h2), un bypass de
+> CSRF en `react-router`. Pide subir a **8.3.0**, que es un *major*. Solo afecta al
+> **modo RSC**, y este proyecto es una SPA con `BrowserRouter` sobre Vite — no lo usa, así
+> que no es alcanzable aquí. **No bloquea hacer público el repo.** Si algún día se migra a
+> RSC o a un framework con SSR, hay que revisarlo.
+
+El commit B además dejó **`pnpm lint` limpio por primera vez**. El error era
+`react-refresh/only-export-components`: `AuthContext.tsx` exportaba el componente
+`AuthProvider` *y* el hook `useAuth`, y con eso Fast Refresh no funciona en ese archivo.
+Ahora:
+
+| Archivo | Qué exporta |
+|---|---|
+| `src/context/auth.ts` | el objeto `AuthContext` y el tipo `AuthContextType` |
+| `src/context/AuthContext.tsx` | solo `AuthProvider` |
+| `src/hooks/useAuth.ts` | el hook `useAuth` |
+
+Se actualizaron los 3 imports (`AdminLayout.tsx`, `Login.tsx`, `PrivateRoute.tsx`).
+
+> El archivo nuevo se llama `auth.ts` a secas, no `authContext.ts`: en Windows ese nombre
+> choca por mayúsculas con `AuthContext.tsx` y TypeScript lo rechaza.
+
+### ⬜ Día 2 (2026-08-05) — Los enlaces y el formulario de contacto · **el siguiente**
+
+Lo más vergonzoso si alguien entra hoy al sitio: **el formulario de contacto no funciona**
+y los enlaces sociales no van a ningún lado (`ANALISIS.md` §2, puntos 1 y 2).
+
+- [ ] Commit A: reemplazar los placeholders de LinkedIn/GitHub/email en `Contact.tsx`,
+      `Footer.tsx` y `Hero.tsx` por las URLs reales
+- [ ] Commit B: mover las claves de EmailJS a `.env` (`VITE_EMAILJS_SERVICE_ID`,
+      `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`), actualizar `.env.example` y
+      configurar la cuenta de EmailJS de verdad
+
+Requiere que Dair tenga una cuenta de EmailJS y sus URLs de LinkedIn a mano.
+
+### ⬜ Día 3 — SEO
+
+`index.html` sigue con `<title>portfolio-frontend</title>` y `lang="en"` sobre contenido
+en español (`ANALISIS.md` §2, punto 19). Para un portafolio que debe salir en Google y
+verse bien al compartirlo en LinkedIn, es de lo más rentable que hay.
+
+- [ ] Commit A: `<title>`, `lang="es"`, meta description
+- [ ] Commit B: Open Graph + Twitter Card
+
+### ⬜ Día 4 en adelante — a elegir
+
+Ya sin orden obligatorio. Candidatos por retorno, todos de `ANALISIS.md`:
+
+| Qué | Dónde | Por qué |
+|---|---|---|
+| `catch` en las 4 promesas con `try/finally` | Dashboard, Skills, Technologies, ProjectForm | Hoy la UI miente: muestra "no hay proyectos" cuando la API falla |
+| Accesibilidad de `ProjectCard`/`ProjectModal` | `src/components/` | Hoy no se puede abrir un proyecto sin ratón |
+| Usar `public/icons.svg` | 5 SVG de GitHub inline | El sprite existe y no se usa en ningún lado |
+| Unificar el español (voseo vs tuteo) | Toda la UI | Se nota, y es un rato |
+| Backend: `BadCredentialsException` → 401 | `../portfolio-manager/` | Hoy un login fallido devuelve 500 |
+| Backend: CORS duplicado y abierto | `CorsConfig` + `SecurityConfig` | Indefendible en una entrevista |
+
+**El backend es la otra fuente de commits** cuando el frontend se quede corto:
+`../portfolio-manager/` → https://github.com/dair7/dev-portfolio-manager
+
+> ⚠️ Antes de meterle trabajo grande al backend, ojo con la decisión abierta de
+> `ANALISIS.md` §1 (si el sitio público debe depender de él en runtime). Los dos arreglos
+> de la tabla valen igual, decida lo que decida.
 
 ---
 
@@ -178,7 +258,8 @@ lo que commitees **después de las 7:00 pm hora local** cae en el cuadrito del d
 | Lotes 2 y 3 | 1 ago 20:03–20:06 | **2 de agosto** |
 | Lotes 4 y 5 | 2 ago 19:52–20:00 | **3 de agosto** |
 | Lote 6 | 3 ago 21:22 | **4 de agosto** |
-| Lote 7 | 4 ago (noche) | **5 de agosto** |
+| Lote 7 | 4 ago 20:30 | **5 de agosto** |
+| Día 1 | 4 ago 21:4x | **5 de agosto** |
 
 Van cinco días consecutivos (1 al 5 de agosto UTC) sin huecos. Se mantiene el patrón
 nocturno: commitear después de las 7:00 pm local desplaza el cuadrito un día, pero
@@ -200,9 +281,11 @@ siguiente también sea tarde — no alternar.
 
 ## Antes de hacerlo público
 
-- [ ] Arreglar las 4 vulnerabilidades *high* de `react-router-dom` (ver `ANALISIS.md`)
-- [x] Reescribir el `README.md` ✅ 2026-08-04 — escrito, se sube en el Lote 7
-- [x] Crear y subir `.env.example` con `VITE_API_URL` ✅ 2026-08-04 — creado, va en el Lote 7
+- [x] **Actualizar `axios` y `react-router-dom`** ✅ 2026-08-04 — `d4797b4`. De 39
+      vulnerabilidades (16 *high*) a 1, y la que queda solo afecta al modo RSC de
+      React Router, que este proyecto no usa. **Ya no queda ningún requisito técnico.**
+- [x] Reescribir el `README.md` ✅ 2026-08-04 — subido en `03dabab`
+- [x] Crear y subir `.env.example` con `VITE_API_URL` ✅ 2026-08-04 — subido en `03dabab`
 - [ ] Confirmar que ningún commit del historial incluyó `.env` o claves
 - [x] Tener subido al menos hasta el Lote 3 para que el repo sea instalable ✅ 2026-08-01
 - [x] Tener subido el Lote 6 para que el repo compile ✅ 2026-08-04 — `pnpm build` verificado
@@ -219,10 +302,11 @@ siguiente también sea tarde — no alternar.
 
 0. ⏰ Rutina normal: commitear **antes de las 7:00 pm** local, o si se hace de noche, que
    el día siguiente también sea de noche. No alternar.
-1. El siguiente lote es el **7** (documentación) — los comandos ya están escritos arriba,
-   listos para pegar, y los archivos ya están redactados. Es el **último del frontend**:
-   a partir del 5 de agosto los commits diarios salen del backend o de trabajo nuevo.
-   Usar `pnpm`, no `npm`.
+1. 🏁 **Los lotes se acabaron** (Lote 7 subido el 2026-08-04). Ya no hay archivos
+   guardados: de aquí en adelante cada commit es trabajo real. El **Día 1** también quedó
+   hecho esa misma noche, así que lo siguiente es el **Día 2 — enlaces y formulario de
+   contacto**, en la sección "Y ahora qué". Hace falta tener a mano la cuenta de EmailJS y
+   las URLs reales de LinkedIn/GitHub. Usar `pnpm`, no `npm`.
 2. El backend ya tiene su propio repo: `../portfolio-manager/` →
    https://github.com/dair7/dev-portfolio-manager (ojo: el `.git` está en el nivel
    `portfolio-manager/`, no en la carpeta anidada `portfolio-manager/portfolio-manager/`).
