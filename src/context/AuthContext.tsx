@@ -1,15 +1,6 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { useState, useCallback, type ReactNode } from 'react'
 import type { AuthResponse } from '../types'
-
-interface AuthContextType {
-  user: AuthResponse | null
-  token: string | null
-  login: (data: AuthResponse) => void
-  logout: () => void
-  isAdmin: boolean
-}
-
-const AuthContext = createContext<AuthContextType | null>(null)
+import { AuthContext } from './auth'
 
 function loadFromStorage(): { user: AuthResponse | null; token: string | null } {
   try {
@@ -44,10 +35,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth must be used inside AuthProvider')
-  return ctx
 }
