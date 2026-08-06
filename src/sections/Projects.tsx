@@ -1,29 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
-import api from '../api/axios'
 import type { Project } from '../types'
 import { PROJECT_CATEGORIES } from '../types'
+import { PROJECTS } from '../data/projects'
 import ProjectCard from '../components/ProjectCard'
 import ProjectModal from '../components/ProjectModal'
 import { useInView } from '../hooks/useInView'
 
 const PAGE_SIZE = 6
 
+// Only the categories that actually have projects get a filter button.
+// Computed once at module level — the catalog is static.
+const AVAILABLE_CATEGORIES = PROJECT_CATEGORIES.filter((cat) =>
+  PROJECTS.some((p) => p.category === cat.value)
+)
+
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [page, setPage] = useState(0)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const { ref, inView } = useInView()
-
-  useEffect(() => {
-    api
-      .get<Project[]>('/projects')
-      .then((res) => setProjects(res.data))
-      .catch(() => setError(true))
-      .finally(() => setLoading(false))
-  }, [])
 
   const prevPage = useRef(0)
 
@@ -42,14 +37,10 @@ export default function Projects() {
     setPage(newPage)
   }
 
-  const availableCategories = PROJECT_CATEGORIES.filter((cat) =>
-    projects.some((p) => p.category === cat.value)
-  )
-
   const filtered =
     activeFilter === null
-      ? projects
-      : projects.filter((p) => p.category === activeFilter)
+      ? PROJECTS
+      : PROJECTS.filter((p) => p.category === activeFilter)
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const paginated = filtered.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE)
@@ -60,15 +51,15 @@ export default function Projects() {
         {/* Header */}
         <div className="mb-10">
           <p className="text-violet-400 text-sm font-medium tracking-widest uppercase mb-2">
-            Portafolio
+            Portfolio
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Proyectos destacados
+            Featured projects
           </h2>
         </div>
 
         {/* Filters */}
-        {!loading && !error && availableCategories.length > 0 && (
+        {AVAILABLE_CATEGORIES.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-10">
             <button
               onClick={() => handleFilter(null)}
@@ -78,9 +69,9 @@ export default function Projects() {
                   : 'bg-transparent border-gray-700 text-gray-400 hover:border-gray-500 hover:text-white'
               }`}
             >
-              Todos
+              All
             </button>
-            {availableCategories.map((cat) => (
+            {AVAILABLE_CATEGORIES.map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => handleFilter(cat.value)}
@@ -96,32 +87,18 @@ export default function Projects() {
           </div>
         )}
 
-        {/* Loading */}
-        {loading && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-80 bg-gray-900 rounded-2xl animate-pulse border border-gray-800" />
-            ))}
-          </div>
-        )}
-
-        {/* Error */}
-        {error && (
-          <p className="text-gray-500 text-center py-16">No se pudieron cargar los proyectos.</p>
-        )}
-
         {/* Empty global */}
-        {!loading && !error && projects.length === 0 && (
-          <p className="text-gray-500 text-center py-16">Aún no hay proyectos publicados.</p>
+        {PROJECTS.length === 0 && (
+          <p className="text-gray-500 text-center py-16">No projects published yet.</p>
         )}
 
         {/* Empty filter */}
-        {!loading && !error && projects.length > 0 && filtered.length === 0 && (
-          <p className="text-gray-500 text-center py-16">No hay proyectos en esta categoría.</p>
+        {PROJECTS.length > 0 && filtered.length === 0 && (
+          <p className="text-gray-500 text-center py-16">No projects in this category.</p>
         )}
 
         {/* Grid */}
-        {!loading && !error && paginated.length > 0 && (
+        {paginated.length > 0 && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {paginated.map((project) => (
               <ProjectCard
@@ -134,7 +111,7 @@ export default function Projects() {
         )}
 
         {/* Pagination */}
-        {!loading && !error && totalPages > 1 && (
+        {totalPages > 1 && (
           <div className="flex items-center justify-center gap-3 mt-10">
             <button
               onClick={() => handlePage(page - 1)}
@@ -144,7 +121,7 @@ export default function Projects() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Anterior
+              Previous
             </button>
 
             <div className="flex items-center gap-1">
@@ -168,7 +145,7 @@ export default function Projects() {
               disabled={page === totalPages - 1}
               className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
-              Siguiente
+              Next
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>

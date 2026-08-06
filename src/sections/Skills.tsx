@@ -1,26 +1,18 @@
-import { useEffect, useState } from 'react'
-import api from '../api/axios'
 import { useInView } from '../hooks/useInView'
-import type { Skill, SkillCategoryValue } from '../types'
+import type { SkillCategoryValue } from '../types'
 import { SKILL_CATEGORIES } from '../types'
+import { SKILLS } from '../data/skills'
+
+// Group skills by category, preserving SKILL_CATEGORIES order. Computed once at
+// module level — the data is static, so there is nothing to recompute per render.
+const GROUPED = SKILL_CATEGORIES.map((cat) => ({
+  value: cat.value as SkillCategoryValue,
+  label: cat.label,
+  items: SKILLS.filter((s) => s.category === cat.value),
+})).filter((g) => g.items.length > 0)
 
 export default function Skills() {
   const { ref, inView } = useInView()
-  const [skills, setSkills] = useState<Skill[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    api.get<Skill[]>('/skills')
-      .then((res) => setSkills(res.data))
-      .finally(() => setLoading(false))
-  }, [])
-
-  // Group skills by category, preserving SKILL_CATEGORIES order
-  const grouped = SKILL_CATEGORIES.map((cat) => ({
-    value: cat.value as SkillCategoryValue,
-    label: cat.label,
-    items: skills.filter((s) => s.category === cat.value),
-  })).filter((g) => g.items.length > 0)
 
   return (
     <section ref={ref} id="skills" className={`py-24 bg-gray-900/50 fade-up ${inView ? 'visible' : ''}`}>
@@ -28,36 +20,22 @@ export default function Skills() {
         {/* Header */}
         <div className="mb-14">
           <p className="text-violet-400 text-sm font-medium tracking-widest uppercase mb-2">
-            Habilidades
+            Skills
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Mi stack
+            My stack
           </h2>
         </div>
 
-        {/* Loading */}
-        {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="space-y-4">
-                <div className="h-4 w-24 bg-gray-800 rounded animate-pulse" />
-                {[...Array(4)].map((_, j) => (
-                  <div key={j} className="h-10 bg-gray-800 rounded-lg animate-pulse" />
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
-
         {/* Empty */}
-        {!loading && skills.length === 0 && (
-          <p className="text-gray-500 text-sm">No hay skills disponibles todavía.</p>
+        {GROUPED.length === 0 && (
+          <p className="text-gray-500 text-sm">No skills listed yet.</p>
         )}
 
         {/* Grouped skills */}
-        {!loading && grouped.length > 0 && (
+        {GROUPED.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
-            {grouped.map((group) => (
+            {GROUPED.map((group) => (
               <div key={group.value}>
                 <p className="text-xs text-gray-500 font-medium uppercase tracking-widest mb-4">
                   {group.label}

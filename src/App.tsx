@@ -1,5 +1,15 @@
-import AppRouter from './router/AppRouter'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import Home from './pages/Home'
 
 export default function App() {
-  return <AppRouter />
+  return (
+    <div className="min-h-screen bg-gray-950 text-white flex flex-col">
+      <Navbar />
+      <main className="flex-1">
+        <Home />
+      </main>
+      <Footer />
+    </div>
+  )
 }
