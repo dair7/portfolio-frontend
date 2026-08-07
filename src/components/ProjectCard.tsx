@@ -1,4 +1,5 @@
 import type { Project } from '../types'
+import { projectCategoryLabel } from '../types'
 import TechBadge from './TechBadge'
 
 interface Props {
@@ -29,7 +30,7 @@ export default function ProjectCard({ project, onClick }: Props) {
         )}
         {/* Category badge */}
         <span className="absolute top-3 left-3 text-xs bg-gray-950/80 text-violet-400 border border-violet-500/30 px-2.5 py-1 rounded-full backdrop-blur-sm">
-          {project.category}
+          {projectCategoryLabel(project.category)}
         </span>
       </div>
 

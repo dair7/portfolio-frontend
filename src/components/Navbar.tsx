@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 
 const links = [
-  { label: 'Inicio', href: '#hero' },
-  { label: 'Sobre mí', href: '#about' },
-  { label: 'Proyectos', href: '#projects' },
+  { label: 'Home', href: '#hero' },
+  { label: 'About', href: '#about' },
+  { label: 'Projects', href: '#projects' },
   { label: 'Skills', href: '#skills' },
-  { label: 'Contacto', href: '#contact' },
+  { label: 'Contact', href: '#contact' },
 ]
 
 export default function Navbar() {

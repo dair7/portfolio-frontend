@@ -7,7 +7,7 @@ export default function Footer() {
         </span>
 
         <p className="text-sm text-gray-500">
-          © {new Date().getFullYear()} — Construido con React + Spring Boot
+          © {new Date().getFullYear()} — Built with React & TypeScript
         </p>
 
         <div className="flex items-center gap-5">
