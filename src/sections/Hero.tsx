@@ -12,7 +12,7 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <p className="text-violet-400 text-sm font-medium tracking-widest uppercase mb-4">
-          Hola, soy
+          Hi, I'm
         </p>
 
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 leading-tight">
@@ -20,12 +20,12 @@ export default function Hero() {
         </h1>
 
         <h2 className="text-xl md:text-2xl text-gray-400 font-medium mb-6">
-          Desarrollador Full Stack
+          Full Stack Developer
         </h2>
 
         <p className="text-gray-500 max-w-xl mx-auto text-base md:text-lg mb-10 leading-relaxed">
-          Construyo aplicaciones web modernas con Java, Spring Boot y React.
-          Enfocado en código limpio, buen diseño y experiencias rápidas.
+          I build modern web applications with Java, Spring Boot and React.
+          Focused on clean code, thoughtful design and fast experiences.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
@@ -33,13 +33,13 @@ export default function Hero() {
             href="#projects"
             className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-colors duration-200"
           >
-            Ver proyectos
+            View projects
           </a>
           <a
             href="#contact"
             className="px-6 py-3 border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white text-sm font-medium rounded-lg transition-colors duration-200"
           >
-            Contáctame
+            Get in touch
           </a>
         </div>
 

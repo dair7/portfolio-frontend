@@ -1,8 +1,8 @@
 const highlights = [
   { label: 'Backend', value: 'Java & Spring Boot' },
   { label: 'Frontend', value: 'React & TypeScript' },
-  { label: 'Base de datos', value: 'PostgreSQL' },
-  { label: 'Enfoque', value: 'Clean Code & REST APIs' },
+  { label: 'Database', value: 'PostgreSQL' },
+  { label: 'Focus', value: 'Clean Code & REST APIs' },
 ]
 
 import { useInView } from '../hooks/useInView'
@@ -15,10 +15,10 @@ export default function About() {
         {/* Section header */}
         <div className="mb-14">
           <p className="text-violet-400 text-sm font-medium tracking-widest uppercase mb-2">
-            Sobre mí
+            About
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Un poco de mi historia
+            A bit about me
           </h2>
         </div>
 
@@ -26,24 +26,24 @@ export default function About() {
           {/* Text */}
           <div className="space-y-5 text-gray-400 leading-relaxed">
             <p>
-              Soy un desarrollador full stack apasionado por construir productos
-              que combinen un backend sólido con interfaces modernas y rápidas.
+              I'm a full stack developer who enjoys building products that pair a
+              solid backend with modern, fast interfaces.
             </p>
             <p>
-              Me especializo en el ecosistema Java con Spring Boot para APIs REST,
-              y en el frontend trabajo con React y TypeScript para crear
-              experiencias de usuario limpias y funcionales.
+              I specialize in the Java ecosystem with Spring Boot for REST APIs,
+              and on the frontend I work with React and TypeScript to build clean,
+              functional user experiences.
             </p>
             <p>
-              Cuando no estoy programando, estoy aprendiendo algo nuevo o
-              explorando cómo mejorar el código que ya escribí.
+              When I'm not coding, I'm usually learning something new or figuring
+              out how to improve code I've already written.
             </p>
 
             <a
               href="#contact"
               className="inline-flex items-center gap-2 text-violet-400 hover:text-violet-300 text-sm font-medium transition-colors"
             >
-              Hablemos
+              Let's talk
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
