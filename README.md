@@ -1,39 +1,30 @@
 # portfolio-frontend
 
-Personal portfolio site with a private admin panel to manage its content. Built with React 19,
-TypeScript and Vite, styled with Tailwind CSS 4.
+Personal portfolio site. A single scrolling landing page — hero, about, projects, skills, contact —
+built with React 19, TypeScript and Vite, styled with Tailwind CSS 4.
 
-The public page is a single scrolling landing (hero, about, projects, skills, contact). The admin
-panel behind `/admin` is a JWT-protected CRUD for the projects, technologies and skills shown on
-that page.
+**Fully static.** The content lives in `src/data/` as typed TypeScript modules, so the site makes no
+network requests, has no backend to wake up, and renders on the first frame. Editing the portfolio
+means editing a file and redeploying.
 
-This is the frontend only. It talks to a Spring Boot + PostgreSQL API that lives in a separate
-repository: [dev-portfolio-manager](https://github.com/dair7/dev-portfolio-manager).
+> The Spring Boot + PostgreSQL API this project used to consume is a separate portfolio piece and
+> lives in its own repository: [dev-portfolio-manager](https://github.com/dair7/dev-portfolio-manager).
+> The public site no longer depends on it at runtime.
 
 ## Requirements
 
 - Node.js 20.19+ (or 22.12+) — required by Vite 8
 - [pnpm](https://pnpm.io/) 10.28.2 — pinned in `package.json` via `packageManager`
-- The backend API running and reachable
 
 ## Getting started
 
 ```bash
 pnpm install
-cp .env.example .env    # then edit VITE_API_URL if your API is elsewhere
 pnpm dev
 ```
 
-The dev server starts on http://localhost:5173.
-
-## Environment variables
-
-| Variable | Description | Example |
-|---|---|---|
-| `VITE_API_URL` | Base URL of the backend API | `http://localhost:8080/api` |
-
-Vite only exposes variables prefixed with `VITE_`, and it inlines them into the bundle at build
-time — never put a secret in one.
+The dev server starts on http://localhost:5173. There is nothing else to configure — no environment
+variables, no database, no API.
 
 ## Scripts
 
@@ -48,40 +39,31 @@ time — never put a secret in one.
 
 ```
 src/
-├── api/         axios instance — attaches the JWT, logs out on 401
 ├── components/  Navbar, Footer, ProjectCard, ProjectModal, TechBadge
-├── context/     AuthContext — token persistence, login/logout
+├── data/        The content: projects, skills, technologies
 ├── hooks/       useInView — scroll-reveal animations
-├── layouts/     MainLayout (public), AdminLayout (panel)
-├── pages/       Home + pages/admin/ (Login, Dashboard, ProjectForm, Technologies, Skills)
-├── router/      AppRouter and PrivateRoute guard
+├── pages/       Home — composes the sections
 ├── sections/    Hero, About, Projects, Skills, Contact
 └── types/       Shared domain types (Project, Technology, Skill, …)
 ```
 
-## Routes
+## Editing the content
 
-| Route | Access | View |
-|---|---|---|
-| `/` | Public | Landing page |
-| `/admin/login` | Public | Admin login |
-| `/admin` | Protected | Dashboard |
-| `/admin/projects/new` | Protected | Create a project |
-| `/admin/projects/:id` | Protected | Edit a project |
-| `/admin/technologies` | Protected | Manage technologies |
-| `/admin/skills` | Protected | Manage skills |
+Everything shown on the site comes from three files. They are TypeScript, not JSON, on purpose: a
+misspelled category or technology key is a compile error instead of a section that silently renders
+empty.
 
-Anything else redirects to `/`.
+| File | Holds |
+|---|---|
+| `src/data/projects.ts` | The project catalog. Array order is the order on the page |
+| `src/data/skills.ts` | Skills and their level, grouped by category |
+| `src/data/technologies.ts` | The technology catalog projects reference by key |
 
-## Authentication
-
-`AuthContext` holds the JWT and persists it, so a reload keeps the session. The axios instance in
-`src/api/axios.ts` adds `Authorization: Bearer <token>` to every request and clears the session on
-a `401`, sending the user back to the login page. `PrivateRoute` blocks the admin routes when there
-is no token.
+Each file documents its own fields at the top. Project images go in `public/projects/` and are
+referenced as `/projects/<file>.png`.
 
 ## Contact form
 
-The contact section sends messages through [EmailJS](https://www.emailjs.com/). The credentials in
-`src/sections/Contact.tsx` are placeholders — replace `SERVICE_ID`, `TEMPLATE_ID` and `PUBLIC_KEY`
-with your own EmailJS values for the form to work.
+The contact section sends messages through [EmailJS](https://www.emailjs.com/), which is what keeps
+the site backend-free. The credentials in `src/sections/Contact.tsx` are still placeholders —
+replace `SERVICE_ID`, `TEMPLATE_ID` and `PUBLIC_KEY` with real EmailJS values for the form to work.
