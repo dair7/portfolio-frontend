@@ -1,7 +1,7 @@
 # Plan de subida incremental a GitHub
 
 > Repo: https://github.com/dair7/portfolio-frontend · rama `main` · **privado por ahora**
-> Última actualización: 2026-08-04 (noche)
+> Última actualización: 2026-08-06
 
 ## Convención acordada
 
@@ -118,16 +118,15 @@ tabla de rutas, cómo funciona el JWT y el aviso de los placeholders de EmailJS.
 
 ---
 
-## Y ahora qué — la fase después de los lotes
+## La fase después de los lotes
 
 Ya no hay archivos guardados para dosificar, así que **cada commit diario tiene que ser
-trabajo real**. La buena noticia es que la lista de pendientes de `ANALISIS.md` está hecha
-justo de eso: arreglos pequeños e independientes, uno o dos por día.
+trabajo real**.
 
-El orden de abajo prioriza lo que **desbloquea hacer público el repo**, que es el objetivo
-que quedó abierto desde el principio.
+De esta fase solo llegó a hacerse el Día 1 con el plan viejo. Lo que vino después está en
+el **Plan de 8 días**, más abajo.
 
-### ✅ Día 1 — Dependencias y lint · HECHO (2026-08-04, 21:4x local)
+### ✅ Día 1 (plan viejo) — Dependencias y lint · HECHO (2026-08-04, 21:4x local)
 
 Se adelantó a la noche del 4 de agosto. Como cae en el **cuadrito del 5 de agosto UTC**,
 que era el día que tenía asignado, el calendario sigue exacto.
@@ -151,12 +150,14 @@ mayor parte venía de **axios 1.15.0** (prototype pollution, ReDoS, fuga de
 Las dos eran *minor* y no hubo breaking changes: `pnpm build` pasó (123 módulos,
 351.73 kB / 107.26 kB gzip).
 
-> ⚠️ **Queda 1 *high* que no se puede cerrar con un minor:**
+> ⚠️ **Quedó 1 *high* que no se pudo cerrar con un minor:**
 > [GHSA-qwww-vcr4-c8h2](https://github.com/advisories/GHSA-qwww-vcr4-c8h2), un bypass de
-> CSRF en `react-router`. Pide subir a **8.3.0**, que es un *major*. Solo afecta al
-> **modo RSC**, y este proyecto es una SPA con `BrowserRouter` sobre Vite — no lo usa, así
-> que no es alcanzable aquí. **No bloquea hacer público el repo.** Si algún día se migra a
-> RSC o a un framework con SSR, hay que revisarlo.
+> CSRF en `react-router`. Pedía subir a **8.3.0**, que es un *major*. Solo afectaba al
+> **modo RSC**, y este proyecto era una SPA con `BrowserRouter` sobre Vite — no lo usaba.
+>
+> ✅ **Cerrada el 2026-08-05**, sin parchear nada: al borrar el panel admin,
+> `react-router-dom` se quedó sin consumidores y se desinstaló. `pnpm audit --prod` pasó a
+> *"No known vulnerabilities found"*. Ver `PLAN-ESTATICO.md`, Fase 4.
 
 El commit B además dejó **`pnpm lint` limpio por primera vez**. El error era
 `react-refresh/only-export-components`: `AuthContext.tsx` exportaba el componente
@@ -174,47 +175,91 @@ Se actualizaron los 3 imports (`AdminLayout.tsx`, `Login.tsx`, `PrivateRoute.tsx
 > El archivo nuevo se llama `auth.ts` a secas, no `authContext.ts`: en Windows ese nombre
 > choca por mayúsculas con `AuthContext.tsx` y TypeScript lo rechaza.
 
-### ⬜ Día 2 (2026-08-05) — Los enlaces y el formulario de contacto · **el siguiente**
+---
 
-Lo más vergonzoso si alguien entra hoy al sitio: **el formulario de contacto no funciona**
-y los enlaces sociales no van a ningún lado (`ANALISIS.md` §2, puntos 1 y 2).
+## 📅 Plan de 8 días (2026-08-05 → 2026-08-12)
 
-- [ ] Commit A: reemplazar los placeholders de LinkedIn/GitHub/email en `Contact.tsx`,
-      `Footer.tsx` y `Hero.tsx` por las URLs reales
-- [ ] Commit B: mover las claves de EmailJS a `.env` (`VITE_EMAILJS_SERVICE_ID`,
-      `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`), actualizar `.env.example` y
-      configurar la cuenta de EmailJS de verdad
+> El plan viejo de "Día 2 — enlaces / Día 3 — SEO" quedó superado el 2026-08-05: ese día
+> se hizo la migración a sitio estático completa (ver `PLAN-ESTATICO.md`). Aquellos
+> pendientes siguen vivos, pero reubicados en el calendario de abajo.
 
-Requiere que Dair tenga una cuenta de EmailJS y sus URLs de LinkedIn a mano.
+### Por qué no son 8 días de trabajo de hoy
 
-### ⬜ Día 3 — SEO
+El trabajo del 5 de agosto es **una sola cosa**: sacar el backend. Y está encadenado —
+`src/types/index.ts` borra los tipos de auth, así que en el momento en que ese archivo
+entra, el panel admin *tiene* que entrar también o el proyecto no compila. Igual con
+`src/data/`: si entra sin la nueva `Projects.tsx`, nadie lo consume.
 
-`index.html` sigue con `<title>portfolio-frontend</title>` y `lang="en"` sobre contenido
-en español (`ANALISIS.md` §2, punto 19). Para un portafolio que debe salir en Google y
-verse bien al compartirlo en LinkedIn, es de lo más rentable que hay.
+Forzarlo a 8 días produce **commits que no compilan**, y en un repo cuyo propósito es que
+alguien lo mire, eso es peor que tener menos commits. Lo de hoy da **5 commits repartibles
+en 3 días**; los 5 días restantes salen de las fases pendientes de `PLAN-ESTATICO.md`.
 
-- [ ] Commit A: `<title>`, `lang="es"`, meta description
-- [ ] Commit B: Open Graph + Twitter Card
+### El calendario
 
-### ⬜ Día 4 en adelante — a elegir
+| Día | Commits | Contenido | Bloqueado por |
+|---|---|---|---|
+| **D1** · 5 ago ✅ | 1 | Datos estáticos + borrar el panel admin | — |
+| **D2** · 6 ago ✅ | 2 | A: traducir `src/components/` · B: traducir `src/sections/` + `index.html` | — |
+| **D3** · 7 ago | 2 | A: reescribir `README.md` · B: `PLAN-ESTATICO.md` + este archivo | — |
+| **D4** · 8 ago | 2 | A: catálogo real de proyectos · B: skills y tecnologías reales | **Dair** — escribir el contenido |
+| **D5** · 9 ago | 1 | Imágenes en `public/projects/` | **Dair** — capturas |
+| **D6** · 10 ago | 2 | A: enlaces reales de LinkedIn/email · B: EmailJS configurado | **Dair** — cuenta + URLs |
+| **D7** · 11 ago | 2 | A: meta description · B: Open Graph + Twitter Card | — |
+| **D8** · 12 ago | 2 | A: deploy en Vercel · B: README con URL y captura | cuenta de Vercel |
 
-Ya sin orden obligatorio. Candidatos por retorno, todos de `ANALISIS.md`:
+**14 commits, 8 días, todos compilando.**
+
+### ✅ D1 y D2 — SUBIDOS
+
+| Día | Commit | Contenido |
+|---|---|---|
+| D1 · 5 ago 21:36 | `1487b19` Serve the public site from static data and remove the admin panel | `src/data/`, `Projects.tsx`, `Skills.tsx`, `types/index.ts`, `App.tsx`, `main.tsx`, `package.json` + las 15 eliminaciones |
+| D2 · 6 ago 20:03 | `7ff047f` Translate UI components to English | `src/components/` (4 archivos) |
+| D2 · 6 ago 20:03 | `b7bddba` Translate public sections and page title to English | `Hero.tsx`, `About.tsx`, `Contact.tsx`, `index.html` |
+
+Verificado antes de commitear: `pnpm lint` limpio y `pnpm build` OK — 52 módulos,
+226.33 kB / 68.33 kB gzip.
+
+### Los grupos de archivos que quedan (D3)
+
+Ya están escritos en el working tree del 5 de agosto. Se sueltan con `git add` por grupo:
+
+```powershell
+# D3 — commit A
+git add README.md
+git commit -m "Rewrite README for the static, backend-free site"
+
+# D3 — commit B
+git add PLAN-ESTATICO.md GIT-PLAN.md
+git commit -m "Document the static migration and update the upload plan"
+
+git push
+```
+
+Verificar al final de todo: `git status --short` tiene que salir **vacío**.
+
+> ⚠️ **Los commits los ejecuta Dair, no Claude.** Regla fijada el 2026-08-06 en
+> `../CLAUDE.md`. Claude prepara el trabajo, lo verifica con `pnpm lint` + `pnpm build` y
+> deja los comandos listos para copiar; ahí se para.
+
+### Después del D8
+
+Pendientes que ya no bloquean nada, por si hace falta llenar días:
 
 | Qué | Dónde | Por qué |
 |---|---|---|
-| `catch` en las 4 promesas con `try/finally` | Dashboard, Skills, Technologies, ProjectForm | Hoy la UI miente: muestra "no hay proyectos" cuando la API falla |
-| Accesibilidad de `ProjectCard`/`ProjectModal` | `src/components/` | Hoy no se puede abrir un proyecto sin ratón |
-| Usar `public/icons.svg` | 5 SVG de GitHub inline | El sprite existe y no se usa en ningún lado |
-| Unificar el español (voseo vs tuteo) | Toda la UI | Se nota, y es un rato |
-| Backend: `BadCredentialsException` → 401 | `../portfolio-manager/` | Hoy un login fallido devuelve 500 |
+| Accesibilidad de `ProjectCard`/`ProjectModal` | `src/components/` | Hoy no se puede abrir un proyecto sin ratón (`ANALISIS.md` §2.18) |
+| Usar `public/icons.svg` o borrarlo | 5 SVG de GitHub inline | El sprite existe y no se usa en ningún lado |
+| Tests con Vitest | — | El frontend tiene 0 tests |
+| Backend: `BadCredentialsException` → 401 | `../portfolio-manager/` | Un login fallido devuelve 500 |
 | Backend: CORS duplicado y abierto | `CorsConfig` + `SecurityConfig` | Indefendible en una entrevista |
 
 **El backend es la otra fuente de commits** cuando el frontend se quede corto:
 `../portfolio-manager/` → https://github.com/dair7/dev-portfolio-manager
 
-> ⚠️ Antes de meterle trabajo grande al backend, ojo con la decisión abierta de
-> `ANALISIS.md` §1 (si el sitio público debe depender de él en runtime). Los dos arreglos
-> de la tabla valen igual, decida lo que decida.
+> Ya no aplica la advertencia sobre "si el sitio debe depender del backend": se decidió el
+> 2026-08-05 que **no**. Los dos arreglos del backend valen igual, como pieza de portafolio
+> Java independiente.
 
 ---
 
@@ -222,8 +267,10 @@ Ya sin orden obligatorio. Candidatos por retorno, todos de `ANALISIS.md`:
 
 | Archivo | Motivo |
 |---|---|
-| `.env` | Ya ignorado por `.gitignore`. Contiene `VITE_API_URL`. ~~Pendiente el `.env.example`~~ **Resuelto (2026-08-04):** se creó `.env.example` y va en el Lote 7. |
-| `node_modules/`, `dist/` | Ya ignorados. |
+| `.env` | Ya ignorado por `.gitignore`. Contiene un `VITE_API_URL` que desde el 2026-08-05 **ya no lee nadie** — se puede borrar del disco. |
+| `.env.example` | **Borrado el 2026-08-05:** el proyecto se quedó sin ninguna variable de entorno en uso. Vuelve en el D6 con las claves de EmailJS. |
+| `node_modules/`, `dist/`, `.claude/` | Ya ignorados. |
+| `src/assets/` | Carpeta vacía desde abril. Git no versiona directorios vacíos, así que ni aparece. Se puede borrar a mano. |
 | `package-lock.json` | ~~Conflicto de lockfiles~~ **Resuelto (2026-08-01):** se eligió pnpm y se borró el lockfile de npm. Solo se sube `pnpm-lock.yaml`. |
 
 ---
@@ -259,9 +306,16 @@ lo que commitees **después de las 7:00 pm hora local** cae en el cuadrito del d
 | Lotes 4 y 5 | 2 ago 19:52–20:00 | **3 de agosto** |
 | Lote 6 | 3 ago 21:22 | **4 de agosto** |
 | Lote 7 | 4 ago 20:30 | **5 de agosto** |
-| Día 1 | 4 ago 21:4x | **5 de agosto** |
+| Día 1 (plan viejo) | 4 ago 21:4x | **5 de agosto** |
+| D1 del plan de 8 días | 5 ago 21:36 | **6 de agosto** |
+| D2 del plan de 8 días | 6 ago 20:03 | **7 de agosto** |
 
-Van cinco días consecutivos (1 al 5 de agosto UTC) sin huecos. Se mantiene el patrón
+> 📌 Ojo con el Plan de 8 días: **el cuadrito del 5 de agosto ya quedó lleno** por el Día 1
+> del plan viejo, commiteado la noche del 4. O sea que el D1 de hoy no está sosteniendo la
+> racha — el margen está cubierto pase lo que pase. Lo único que importa es mantener el
+> patrón: si se commitea de noche, que sea *siempre* de noche.
+
+Van siete días consecutivos (1 al 7 de agosto UTC) sin huecos. Se mantiene el patrón
 nocturno: commitear después de las 7:00 pm local desplaza el cuadrito un día, pero
 mientras sea *siempre* de noche la racha no se rompe.
 
@@ -281,20 +335,22 @@ siguiente también sea tarde — no alternar.
 
 ## Antes de hacerlo público
 
-- [x] **Actualizar `axios` y `react-router-dom`** ✅ 2026-08-04 — `d4797b4`. De 39
-      vulnerabilidades (16 *high*) a 1, y la que queda solo afecta al modo RSC de
-      React Router, que este proyecto no usa. **Ya no queda ningún requisito técnico.**
-- [x] Reescribir el `README.md` ✅ 2026-08-04 — subido en `03dabab`
-- [x] Crear y subir `.env.example` con `VITE_API_URL` ✅ 2026-08-04 — subido en `03dabab`
+- [x] **Actualizar `axios` y `react-router-dom`** ✅ 2026-08-04 — `d4797b4`
+- [x] **Cero vulnerabilidades** ✅ 2026-08-05 — al borrar el panel admin se fueron las dos
+      dependencias. `pnpm audit --prod`: *"No known vulnerabilities found"*
+- [x] Reescribir el `README.md` ✅ 2026-08-04 — `03dabab`, y reescrito otra vez el
+      2026-08-05 (describía un panel admin que ya no existe)
 - [ ] Confirmar que ningún commit del historial incluyó `.env` o claves
 - [x] Tener subido al menos hasta el Lote 3 para que el repo sea instalable ✅ 2026-08-01
 - [x] Tener subido el Lote 6 para que el repo compile ✅ 2026-08-04 — `pnpm build` verificado
+- [ ] **Reemplazar los 3 proyectos inventados** de `src/data/projects.ts` por el catálogo
+      real. Van marcados con `⚠️ PLACEHOLDER` — no pueden salir a producción
 
-> Sobre las claves: las credenciales de EmailJS en `src/sections/Contact.tsx` son
-> placeholders (`TU_SERVICE_ID`, `TU_TEMPLATE_ID`, `TU_PUBLIC_KEY`), no valores reales.
-> Revisado el 2026-08-04. Cuando se pongan las de verdad, ojo: la *public key* de EmailJS
-> viaja en el bundle igual, así que la protección hay que ponerla en el panel de EmailJS
-> (restricción por dominio), no en el código.
+> Sobre las claves: las credenciales de EmailJS en `src/sections/Contact.tsx` siguen siendo
+> placeholders (`TU_SERVICE_ID`, `TU_TEMPLATE_ID`, `TU_PUBLIC_KEY`). Cuando se pongan las
+> de verdad (D6), ojo: la *public key* de EmailJS viaja en el bundle igual, así que la
+> protección hay que ponerla en el panel de EmailJS (restricción por dominio), no en el
+> código.
 
 ---
 
@@ -302,15 +358,18 @@ siguiente también sea tarde — no alternar.
 
 0. ⏰ Rutina normal: commitear **antes de las 7:00 pm** local, o si se hace de noche, que
    el día siguiente también sea de noche. No alternar.
-1. 🏁 **Los lotes se acabaron** (Lote 7 subido el 2026-08-04). Ya no hay archivos
-   guardados: de aquí en adelante cada commit es trabajo real. El **Día 1** también quedó
-   hecho esa misma noche, así que lo siguiente es el **Día 2 — enlaces y formulario de
-   contacto**, en la sección "Y ahora qué". Hace falta tener a mano la cuenta de EmailJS y
-   las URLs reales de LinkedIn/GitHub. Usar `pnpm`, no `npm`.
-2. El backend ya tiene su propio repo: `../portfolio-manager/` →
+1. 📅 **Se sigue el "Plan de 8 días"** de más arriba. Mirar en qué día quedó el calendario
+   y soltar el grupo de archivos que toca. Usar `pnpm`, no `npm`.
+2. 🔌 **El sitio público ya no depende del backend** (decidido y hecho el 2026-08-05).
+   Los datos viven en `src/data/` como módulos TypeScript. **No volver a proponer la API
+   como fuente de datos del sitio.** El razonamiento completo está en
+   [`PLAN-ESTATICO.md`](./PLAN-ESTATICO.md).
+3. 🌐 **El sitio es solo en inglés** (decidido el 2026-08-05, mercado objetivo remoto
+   internacional). Se descartó el toggle ES/EN. El chat sigue siendo en español.
+4. El backend ya tiene su propio repo: `../portfolio-manager/` →
    https://github.com/dair7/dev-portfolio-manager (ojo: el `.git` está en el nivel
    `portfolio-manager/`, no en la carpeta anidada `portfolio-manager/portfolio-manager/`).
    Es otra fuente de commits diarios cuando el frontend se quede corto.
-3. Si el backend se mantiene o no, **se discute más adelante** — decisión abierta.
-   El razonamiento de fondo está en [`ANALISIS.md`](./ANALISIS.md) §1.
-4. Los pendientes técnicos del proyecto están en [`ANALISIS.md`](./ANALISIS.md).
+5. Los pendientes técnicos están en [`ANALISIS.md`](./ANALISIS.md), pero **ojo: ese
+   documento es del 31 de julio** y buena parte de su diagnóstico del frontend quedó
+   obsoleto con la migración a estático.
