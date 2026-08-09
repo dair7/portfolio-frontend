@@ -1,7 +1,7 @@
 # Plan de subida incremental a GitHub
 
 > Repo: https://github.com/dair7/portfolio-frontend · rama `main` · **privado por ahora**
-> Última actualización: 2026-08-06
+> Última actualización: 2026-08-08
 
 ## Convención acordada
 
@@ -200,38 +200,56 @@ en 3 días**; los 5 días restantes salen de las fases pendientes de `PLAN-ESTAT
 |---|---|---|---|
 | **D1** · 5 ago ✅ | 1 | Datos estáticos + borrar el panel admin | — |
 | **D2** · 6 ago ✅ | 2 | A: traducir `src/components/` · B: traducir `src/sections/` + `index.html` | — |
-| **D3** · 7 ago | 2 | A: reescribir `README.md` · B: `PLAN-ESTATICO.md` + este archivo | — |
-| **D4** · 8 ago | 2 | A: catálogo real de proyectos · B: skills y tecnologías reales | **Dair** — escribir el contenido |
-| **D5** · 9 ago | 1 | Imágenes en `public/projects/` | **Dair** — capturas |
+| **D3** · 7 ago ✅ | 2 | A: reescribir `README.md` · B: `PLAN-ESTATICO.md` + este archivo | — |
+| **D4** · 8 ago ✅ | 2 | A: dependencia GSAP · B: hero como terminal CRT ámbar | — |
+| **D5** · 9 ago | 2 | A: catálogo real de proyectos + imágenes en `public/projects/` · B: skills y tecnologías reales | **Dair** — contenido y capturas |
 | **D6** · 10 ago | 2 | A: enlaces reales de LinkedIn/email · B: EmailJS configurado | **Dair** — cuenta + URLs |
 | **D7** · 11 ago | 2 | A: meta description · B: Open Graph + Twitter Card | — |
 | **D8** · 12 ago | 2 | A: deploy en Vercel · B: README con URL y captura | cuenta de Vercel |
 
 **14 commits, 8 días, todos compilando.**
 
-### ✅ D1 y D2 — SUBIDOS
+### ✅ D1, D2 y D3 — SUBIDOS
 
 | Día | Commit | Contenido |
 |---|---|---|
 | D1 · 5 ago 21:36 | `1487b19` Serve the public site from static data and remove the admin panel | `src/data/`, `Projects.tsx`, `Skills.tsx`, `types/index.ts`, `App.tsx`, `main.tsx`, `package.json` + las 15 eliminaciones |
 | D2 · 6 ago 20:03 | `7ff047f` Translate UI components to English | `src/components/` (4 archivos) |
 | D2 · 6 ago 20:03 | `b7bddba` Translate public sections and page title to English | `Hero.tsx`, `About.tsx`, `Contact.tsx`, `index.html` |
+| D3 · 7 ago | `801f027` Rewrite README for the static, backend-free site | `README.md` |
+| D3 · 7 ago | `8c6a7f9` Document the static migration and update the upload plan | `PLAN-ESTATICO.md`, `GIT-PLAN.md` |
 
 Verificado antes de commitear: `pnpm lint` limpio y `pnpm build` OK — 52 módulos,
 226.33 kB / 68.33 kB gzip.
 
-### Los grupos de archivos que quedan (D3)
+### Los grupos de archivos que quedan (D4)
 
-Ya están escritos en el working tree del 5 de agosto. Se sueltan con `git add` por grupo:
+El D4 previsto (catálogo real de proyectos) seguía **bloqueado por contenido de Dair**, así
+que se movió al D5. En su lugar entra el trabajo que sí estaba hecho en el working tree:
+el **hero rehecho como terminal CRT de fósforo ámbar**, con secuencia de arranque animada
+en GSAP — dos peticiones `curl` tecleadas en vivo, payload JSON, el nombre quemándose en
+el fósforo y los CTA como comandos ejecutables.
+
+Detalles que importan:
+
+- **`gsap` es dependencia nueva** (`^3.15.0`), por eso va en su propio commit: la
+  dependencia primero, el código que la usa después. Cada commit compila por separado.
+- El bundle sube de 226.33 kB a **300.12 kB (98.10 kB gzip)** — es el coste de GSAP.
+- Respeta `prefers-reduced-motion`: sin animación, el terminal se pinta ya resuelto.
+- Cualquier clic o tecla salta el intro (`timeline.progress(1)`).
+- La paleta ámbar y `--font-terminal` se declaran en `@theme` de `src/index.css`
+  **sin pisar `--font-mono`**, para que ninguna otra sección cambie de tipografía.
+- Los CTA se corrigieron a inglés (`./view-projects`, `./contact`): venían en español y
+  eso contradecía la decisión de sitio solo en inglés del 2026-08-05.
 
 ```powershell
-# D3 — commit A
-git add README.md
-git commit -m "Rewrite README for the static, backend-free site"
+# D4 — commit A
+git add package.json pnpm-lock.yaml
+git commit -m "Add GSAP for the hero boot animation"
 
-# D3 — commit B
-git add PLAN-ESTATICO.md GIT-PLAN.md
-git commit -m "Document the static migration and update the upload plan"
+# D4 — commit B
+git add src/index.css src/sections/Hero.tsx GIT-PLAN.md
+git commit -m "Rebuild the hero as an amber CRT terminal boot sequence"
 
 git push
 ```
@@ -309,13 +327,14 @@ lo que commitees **después de las 7:00 pm hora local** cae en el cuadrito del d
 | Día 1 (plan viejo) | 4 ago 21:4x | **5 de agosto** |
 | D1 del plan de 8 días | 5 ago 21:36 | **6 de agosto** |
 | D2 del plan de 8 días | 6 ago 20:03 | **7 de agosto** |
+| D3 del plan de 8 días | 7 ago (noche) | **8 de agosto** |
 
 > 📌 Ojo con el Plan de 8 días: **el cuadrito del 5 de agosto ya quedó lleno** por el Día 1
 > del plan viejo, commiteado la noche del 4. O sea que el D1 de hoy no está sosteniendo la
 > racha — el margen está cubierto pase lo que pase. Lo único que importa es mantener el
 > patrón: si se commitea de noche, que sea *siempre* de noche.
 
-Van siete días consecutivos (1 al 7 de agosto UTC) sin huecos. Se mantiene el patrón
+Van ocho días consecutivos (1 al 8 de agosto UTC) sin huecos. Se mantiene el patrón
 nocturno: commitear después de las 7:00 pm local desplaza el cuadrito un día, pero
 mientras sea *siempre* de noche la racha no se rompe.
 

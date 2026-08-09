@@ -1,4 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  /* Amber phosphor terminal palette (Hero) */
+  --color-bg: #0A0904;
+  --color-amber: #FFB300;
+  --color-amber-bright: #FFC93C;
+  --color-amber-dim: #C98A2E;
+  --color-amber-faint: #6B4A16;
+
+  /* Scoped on purpose: does not override Tailwind's default --font-mono,
+     so no other section changes typeface. */
+  --font-terminal: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+}
 
 .fade-up {
   opacity: 0;

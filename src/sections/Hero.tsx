@@ -1,82 +1,325 @@
+import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+
+const CMD_PROFILE = 'curl -s api.dair.dev/v1/profile | jq'
+const CMD_NAME = "curl -s api.dair.dev/v1/profile | jq -r '.name, .role'"
+
+const PROFILE = {
+  name: 'Dair Guerrero',
+  role: 'Full Stack Developer',
+  stack: ['Java', 'Spring Boot', 'React', 'TypeScript'],
+  basedIn: 'remote',
+  available: true,
+}
+
+const COMMANDS = [
+  { label: './view-projects', href: '#projects', external: false },
+  { label: './contact', href: '#contact', external: false },
+  { label: './github', href: 'https://github.com/dair7', external: true },
+]
+
+const pad = (n: number) => String(n).padStart(2, '0')
+
+const formatUptime = (total: number) =>
+  `${pad(Math.floor(total / 3600))}:${pad(Math.floor(total / 60) % 60)}:${pad(total % 60)}`
+
+/**
+ * Block cursor: terminals draw a filled cell, not a hairline.
+ * It owns its blink so it keeps pulsing when it jumps to the next prompt.
+ */
+function Caret({ on }: { on: boolean }) {
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!on || !el) return
+    const blink = gsap.to(el, {
+      autoAlpha: 0,
+      duration: 0.5,
+      repeat: -1,
+      yoyo: true,
+      ease: 'steps(1)',
+    })
+    return () => {
+      blink.kill()
+      gsap.set(el, { autoAlpha: 1 })
+    }
+  }, [on])
+
+  if (!on) return null
+  return (
+    <span
+      ref={ref}
+      aria-hidden
+      className="ml-[1px] inline-block h-[1.05em] w-[0.55em] translate-y-[0.18em] bg-amber"
+    />
+  )
+}
+
 export default function Hero() {
+  const rootRef = useRef<HTMLElement>(null)
+  const timelineRef = useRef<gsap.core.Timeline | null>(null)
+
+  const [typedProfile, setTypedProfile] = useState('')
+  const [typedName, setTypedName] = useState('')
+  const [caret, setCaret] = useState<'profile' | 'name' | 'idle'>('profile')
+  const [uptime, setUptime] = useState(0)
+
+  // Session clock, ticking from the moment the hero mounts.
+  useEffect(() => {
+    const id = window.setInterval(() => setUptime((s) => s + 1), 1000)
+    return () => window.clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root) return
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const ctx = gsap.context(() => {
+      // Everything is in the DOM from the start so the terminal never reflows
+      // mid-sequence; the timeline only reveals it.
+      gsap.set(['.reveal', '.json-line', '.name-bloom'], { autoAlpha: 0 })
+
+      if (reduced) {
+        setTypedProfile(CMD_PROFILE)
+        setTypedName(CMD_NAME)
+        setCaret('idle')
+        gsap.set(['.reveal', '.json-line'], { autoAlpha: 1 })
+        gsap.set('.name-bloom', { autoAlpha: 0.45 })
+        return
+      }
+
+      // Continuous CRT ambience, independent of the boot sequence.
+      gsap.to('.crt-screen', {
+        opacity: 0.965,
+        duration: 0.09,
+        repeat: -1,
+        repeatDelay: 3.2,
+        yoyo: true,
+        ease: 'steps(1)',
+      })
+
+      gsap.fromTo(
+        '.crt-sweep',
+        { yPercent: -140 },
+        { yPercent: 940, duration: 7.5, repeat: -1, ease: 'none' }
+      )
+
+      const type = (text: string, setter: (value: string) => void, cps = 30) => {
+        const cursor = { at: 0 }
+        return gsap.to(cursor, {
+          at: text.length,
+          duration: text.length / cps,
+          ease: 'none',
+          onUpdate: () => setter(text.slice(0, Math.floor(cursor.at))),
+          onComplete: () => setter(text),
+        })
+      }
+
+      const tl = gsap.timeline({ delay: 0.4 })
+      timelineRef.current = tl
+
+      tl.add(type(CMD_PROFILE, setTypedProfile))
+        .to('.json-line', {
+          autoAlpha: 1,
+          duration: 0.12,
+          stagger: 0.07,
+          ease: 'none',
+        })
+        .call(() => setCaret('name'), undefined, '+=0.35')
+        .add(type(CMD_NAME, setTypedName))
+        .call(() => setCaret('idle'))
+        .to('.reveal-name', { autoAlpha: 1, duration: 0.18, ease: 'none' }, '+=0.15')
+        // Phosphor flare: the glow overshoots, then settles into a steady burn.
+        .fromTo(
+          '.name-bloom',
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.14, ease: 'none' },
+          '<'
+        )
+        .to('.name-bloom', { autoAlpha: 0.45, duration: 0.9, ease: 'power2.out' })
+        .to('.reveal-role', { autoAlpha: 1, duration: 0.2, ease: 'none' }, '-=0.75')
+        .to(
+          '.reveal-cmd',
+          { autoAlpha: 1, duration: 0.15, stagger: 0.09, ease: 'none' },
+          '-=0.5'
+        )
+        .to('.reveal-prompt', { autoAlpha: 1, duration: 0.15, ease: 'none' })
+        .to('.reveal-scroll', { autoAlpha: 1, duration: 0.4, ease: 'none' }, '-=0.1')
+    }, root)
+
+    // A visitor who starts interacting should not wait out the intro.
+    const skip = () => timelineRef.current?.progress(1)
+    root.addEventListener('pointerdown', skip)
+    window.addEventListener('keydown', skip)
+
+    return () => {
+      root.removeEventListener('pointerdown', skip)
+      window.removeEventListener('keydown', skip)
+      ctx.revert()
+    }
+  }, [])
+
   return (
     <section
+      ref={rootRef}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen overflow-hidden bg-bg font-terminal selection:bg-amber selection:text-bg"
     >
-      {/* Background grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:48px_48px]" />
+      {/* --- CRT glass: vignette, scanlines, drifting refresh band --- */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-30"
+        style={{ boxShadow: 'inset 0 0 200px 50px rgba(0,0,0,0.95)' }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-30 opacity-[0.32]"
+        style={{
+          backgroundImage:
+            'repeating-linear-gradient(to bottom, rgba(0,0,0,0.6) 0px, rgba(0,0,0,0.6) 1px, transparent 1px, transparent 3px)',
+        }}
+      />
+      <div
+        aria-hidden
+        className="crt-sweep pointer-events-none absolute inset-x-0 top-0 z-20 h-24 bg-amber opacity-[0.035] blur-2xl"
+      />
 
-      {/* Glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        <p className="text-violet-400 text-sm font-medium tracking-widest uppercase mb-4">
-          Hi, I'm
-        </p>
-
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 leading-tight">
-          Dair<span className="text-violet-500"> Guerrero</span>
-        </h1>
-
-        <h2 className="text-xl md:text-2xl text-gray-400 font-medium mb-6">
-          Full Stack Developer
-        </h2>
-
-        <p className="text-gray-500 max-w-xl mx-auto text-base md:text-lg mb-10 leading-relaxed">
-          I build modern web applications with Java, Spring Boot and React.
-          Focused on clean code, thoughtful design and fast experiences.
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="#projects"
-            className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+      <div className="crt-screen relative z-10 flex min-h-screen items-center px-4 py-16 sm:px-6 sm:py-20">
+        <div className="mx-auto w-full max-w-3xl">
+          {/* --- Terminal window: square corners, hairline amber, phosphor bloom --- */}
+          <div
+            className="border border-amber-faint bg-bg"
+            style={{ boxShadow: '0 0 140px -30px rgba(255,179,0,0.22)' }}
           >
-            View projects
-          </a>
-          <a
-            href="#contact"
-            className="px-6 py-3 border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white text-sm font-medium rounded-lg transition-colors duration-200"
-          >
-            Get in touch
-          </a>
-        </div>
+            {/* Title bar — no macOS traffic lights on purpose */}
+            <div className="flex items-center justify-between gap-4 border-b border-amber-faint px-3 py-2 text-[11px] tracking-[0.12em] text-amber-dim uppercase sm:px-5">
+              <span className="truncate">dair@portfolio:~</span>
+              <span className="shrink-0 tabular-nums">
+                uptime <span className="text-amber">{formatUptime(uptime)}</span>
+              </span>
+            </div>
 
-        {/* Social links */}
-        <div className="flex items-center justify-center gap-4 mt-8">
-          <a
-            href="https://github.com/dair7"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5 text-gray-500 hover:text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
-            aria-label="GitHub"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5 text-gray-500 hover:text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
-            aria-label="LinkedIn"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-            </svg>
-          </a>
-        </div>
+            <div className="px-3 py-5 text-[13px] leading-[1.75] sm:px-5 sm:py-7 sm:text-sm">
+              {/* --- 1. live-typed request --- */}
+              <p className="break-all text-amber">
+                <span className="mr-2 text-amber-faint select-none">$</span>
+                {typedProfile}
+                <Caret on={caret === 'profile'} />
+              </p>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-          <span className="text-xs text-gray-600">scroll</span>
-          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+              {/* --- 2. JSON payload, highlighted in amber tints only --- */}
+              <div className="mt-3 text-amber-dim">
+                <p className="json-line text-amber-faint">{'{'}</p>
+                <p className="json-line pl-4">
+                  "role"<span className="text-amber-faint">: </span>
+                  <span className="text-amber-bright">"{PROFILE.role}"</span>
+                  <span className="text-amber-faint">,</span>
+                </p>
+                <p className="json-line pl-4">
+                  "stack"<span className="text-amber-faint">: [</span>
+                  {PROFILE.stack.map((tech, i) => (
+                    <span key={tech}>
+                      <span className="text-amber-bright">"{tech}"</span>
+                      {i < PROFILE.stack.length - 1 && (
+                        <span className="text-amber-faint">, </span>
+                      )}
+                    </span>
+                  ))}
+                  <span className="text-amber-faint">],</span>
+                </p>
+                <p className="json-line pl-4">
+                  "based_in"<span className="text-amber-faint">: </span>
+                  <span className="text-amber-bright">"{PROFILE.basedIn}"</span>
+                  <span className="text-amber-faint">,</span>
+                </p>
+                <p className="json-line pl-4">
+                  "available"<span className="text-amber-faint">: </span>
+                  <span className="text-amber">{String(PROFILE.available)}</span>
+                </p>
+                <p className="json-line text-amber-faint">{'}'}</p>
+              </div>
+
+              {/* --- 3. second request --- */}
+              <p className="mt-6 break-all text-amber">
+                <span className="mr-2 text-amber-faint select-none">$</span>
+                {typedName}
+                <Caret on={caret === 'name'} />
+              </p>
+
+              {/* --- 4. raw output: the name, burning into the phosphor --- */}
+              <div className="mt-5 mb-1">
+                <div className="relative">
+                  <span
+                    aria-hidden
+                    className="name-bloom pointer-events-none absolute inset-0 text-4xl leading-[1.1] font-semibold tracking-tight text-amber blur-[16px] sm:text-5xl md:text-6xl"
+                  >
+                    {PROFILE.name}
+                  </span>
+                  <h1
+                    className="reveal reveal-name relative text-4xl leading-[1.1] font-semibold tracking-tight text-amber-bright sm:text-5xl md:text-6xl"
+                    style={{ textShadow: '0 0 22px rgba(255,179,0,0.55)' }}
+                  >
+                    {PROFILE.name}
+                  </h1>
+                </div>
+                <h2 className="reveal reveal-role mt-3 text-base text-amber-dim sm:text-lg">
+                  {PROFILE.role}
+                </h2>
+              </div>
+
+              {/* --- 5. CTAs as runnable commands; hover = reverse video --- */}
+              <div className="mt-8 flex flex-col items-start">
+                {COMMANDS.map(({ label, href, external }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    {...(external
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                    className="reveal reveal-cmd group -mx-2 flex items-center px-2 text-amber outline-none hover:bg-amber hover:text-bg focus-visible:bg-amber focus-visible:text-bg"
+                  >
+                    <span className="mr-2 text-amber-faint select-none group-hover:text-bg group-focus-visible:text-bg">
+                      $
+                    </span>
+                    {label}
+                  </a>
+                ))}
+
+                {/* Prompt left waiting for the next command */}
+                <p className="reveal reveal-prompt mt-1 text-amber">
+                  <span className="mr-2 text-amber-faint select-none">$</span>
+                  <Caret on={caret === 'idle'} />
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Scroll indicator — anchored to the section, not to the content block */}
+      <a
+        href="#about"
+        aria-label="Scroll to about"
+        className="reveal reveal-scroll absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 text-amber-faint transition-colors hover:text-amber"
+      >
+        <span className="text-[10px] tracking-[0.3em] uppercase">scroll</span>
+        <svg
+          className="h-4 w-4 animate-bounce"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </a>
     </section>
   )
 }
