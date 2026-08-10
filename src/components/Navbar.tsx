@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 
+// Path-style labels: the navbar reads as a filesystem, like the hero's prompt.
 const links = [
-  { label: 'Home', href: '#hero' },
-  { label: 'About', href: '#about' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' },
+  { label: '/home', href: '#hero' },
+  { label: '/about', href: '#about' },
+  { label: '/projects', href: '#projects' },
+  { label: '/skills', href: '#skills' },
+  { label: '/contact', href: '#contact' },
 ]
 
 export default function Navbar() {
@@ -20,23 +21,26 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-gray-950/90 backdrop-blur-md shadow-lg shadow-black/20' : 'bg-transparent'
+      className={`fixed top-0 right-0 left-0 z-50 font-terminal transition-colors duration-300 ${
+        scrolled ? 'border-b border-amber-faint bg-bg/90 backdrop-blur-md' : 'border-b border-transparent bg-transparent'
       }`}
     >
-      <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="flex h-16 items-center justify-between px-[6vw]">
         {/* Logo */}
-        <a href="#hero" className="text-xl font-bold text-white tracking-tight">
-          dair<span className="text-violet-500">.</span>dev
+        <a
+          href="#hero"
+          className="text-base font-semibold tracking-tight text-amber transition-colors hover:text-amber-bright"
+        >
+          dair<span className="text-amber-faint">.</span>dev
         </a>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden items-center gap-7 md:flex">
           {links.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
-                className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+                className="text-[13px] tracking-[0.06em] text-amber-dim transition-colors duration-200 hover:text-amber-bright"
               >
                 {link.label}
               </a>
@@ -44,31 +48,26 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Mobile menu button */}
+        {/* Mobile menu button — a terminal toggles with glyphs, not hamburgers */}
         <button
-          className="md:hidden text-gray-400 hover:text-white"
+          className="text-sm tracking-[0.1em] text-amber-dim transition-colors hover:text-amber-bright md:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {menuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          {menuOpen ? '[ close ]' : '[ menu ]'}
         </button>
       </nav>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-gray-950/95 backdrop-blur-md border-t border-gray-800">
-          <ul className="flex flex-col px-6 py-4 gap-4">
+        <div className="border-t border-amber-faint bg-bg/95 backdrop-blur-md md:hidden">
+          <ul className="flex flex-col gap-4 px-[6vw] py-4">
             {links.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                  className="text-sm tracking-[0.06em] text-amber-dim transition-colors hover:text-amber-bright"
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}

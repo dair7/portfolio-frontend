@@ -88,6 +88,8 @@ export default function Hero() {
         setCaret('idle')
         gsap.set(['.reveal', '.json-line'], { autoAlpha: 1 })
         gsap.set('.name-bloom', { autoAlpha: 0.45 })
+        // The band only reads as a refresh artifact while it travels.
+        gsap.set('.crt-sweep', { autoAlpha: 0 })
         return
       }
 
@@ -101,10 +103,12 @@ export default function Hero() {
         ease: 'steps(1)',
       })
 
+      // Driven in percentages of the screen, so the band crosses the whole
+      // viewport at any height instead of stalling partway down.
       gsap.fromTo(
         '.crt-sweep',
-        { yPercent: -140 },
-        { yPercent: 940, duration: 7.5, repeat: -1, ease: 'none' }
+        { top: '-15%' },
+        { top: '115%', duration: 7.5, repeat: -1, ease: 'none' }
       )
 
       const type = (text: string, setter: (value: string) => void, cps = 30) => {
@@ -163,10 +167,12 @@ export default function Hero() {
   }, [])
 
   return (
+    /* `isolate` keeps the CRT layers in their own stacking context, so they can
+       never outrank the fixed navbar or leak over the next section. */
     <section
       ref={rootRef}
       id="hero"
-      className="relative min-h-screen overflow-hidden bg-bg font-terminal selection:bg-amber selection:text-bg"
+      className="relative isolate h-dvh overflow-hidden bg-bg font-terminal selection:bg-amber selection:text-bg"
     >
       {/* --- CRT glass: vignette, scanlines, drifting refresh band --- */}
       <div
@@ -187,23 +193,26 @@ export default function Hero() {
         className="crt-sweep pointer-events-none absolute inset-x-0 top-0 z-20 h-24 bg-amber opacity-[0.035] blur-2xl"
       />
 
-      <div className="crt-screen relative z-10 flex min-h-screen items-center px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto w-full max-w-3xl">
-          {/* --- Terminal window: square corners, hairline amber, phosphor bloom --- */}
-          <div
-            className="border border-amber-faint bg-bg"
-            style={{ boxShadow: '0 0 140px -30px rgba(255,179,0,0.22)' }}
-          >
-            {/* Title bar — no macOS traffic lights on purpose */}
-            <div className="flex items-center justify-between gap-4 border-b border-amber-faint px-3 py-2 text-[11px] tracking-[0.12em] text-amber-dim uppercase sm:px-5">
-              <span className="truncate">dair@portfolio:~</span>
-              <span className="shrink-0 tabular-nums">
-                uptime <span className="text-amber">{formatUptime(uptime)}</span>
-              </span>
-            </div>
+      {/* The screen fills the viewport; the frame is inset, not floated.
+          Frame at 2vw + inner 4vw puts every line of text on the same 6vw
+          gutter the navbar uses. `pt-16` clears the navbar, `pb` the scroll hint. */}
+      <div className="crt-screen relative z-10 flex h-full flex-col px-[2vw] pt-16 pb-10">
+        <div className="flex min-h-0 flex-1 flex-col border border-amber-faint">
+          {/* Status bar — no macOS traffic lights on purpose */}
+          <div className="flex shrink-0 items-center justify-between gap-4 border-b border-amber-faint px-[4vw] py-2.5 text-[clamp(10px,0.78vw,13px)] tracking-[0.12em] text-amber-dim uppercase">
+            <span className="truncate">dair@portfolio:~</span>
+            <span className="shrink-0 tabular-nums">
+              uptime <span className="text-amber">{formatUptime(uptime)}</span>
+            </span>
+          </div>
 
-            <div className="px-3 py-5 text-[13px] leading-[1.75] sm:px-5 sm:py-7 sm:text-sm">
-              {/* --- 1. live-typed request --- */}
+          {/* Output area. Four blocks pushed apart by `justify-between`, so the
+              sequence owns the full height instead of huddling at the top.
+              Every size clamps on width AND height, so the whole boot sequence
+              still fits a short window — no inner scrollbar, ever. */}
+          <div className="flex min-h-0 flex-1 flex-col justify-between overflow-hidden px-[4vw] py-[3vh] text-[clamp(13px,min(1.05vw,2.35vh),17px)] leading-[1.7]">
+            {/* --- 1. live-typed request + its payload --- */}
+            <div>
               <p className="break-all text-amber">
                 <span className="mr-2 text-amber-faint select-none">$</span>
                 {typedProfile}
@@ -211,7 +220,7 @@ export default function Hero() {
               </p>
 
               {/* --- 2. JSON payload, highlighted in amber tints only --- */}
-              <div className="mt-3 text-amber-dim">
+              <div className="mt-[1.4vh] text-amber-dim">
                 <p className="json-line text-amber-faint">{'{'}</p>
                 <p className="json-line pl-4">
                   "role"<span className="text-amber-faint">: </span>
@@ -241,59 +250,64 @@ export default function Hero() {
                 </p>
                 <p className="json-line text-amber-faint">{'}'}</p>
               </div>
+            </div>
 
-              {/* --- 3. second request --- */}
-              <p className="mt-6 break-all text-amber">
-                <span className="mr-2 text-amber-faint select-none">$</span>
-                {typedName}
-                <Caret on={caret === 'name'} />
-              </p>
+            {/* --- 3. second request --- */}
+            <p className="break-all text-amber">
+              <span className="mr-2 text-amber-faint select-none">$</span>
+              {typedName}
+              <Caret on={caret === 'name'} />
+            </p>
 
-              {/* --- 4. raw output: the name, burning into the phosphor --- */}
-              <div className="mt-5 mb-1">
-                <div className="relative">
-                  <span
-                    aria-hidden
-                    className="name-bloom pointer-events-none absolute inset-0 text-4xl leading-[1.1] font-semibold tracking-tight text-amber blur-[16px] sm:text-5xl md:text-6xl"
-                  >
-                    {PROFILE.name}
+            {/* --- 4. raw output: the payoff. Driven by viewport width so it
+                dominates instead of tracking the body copy; the 11.5vh term only
+                kicks in on short windows, where 8vw would overflow. --- */}
+            <div>
+              <div className="relative">
+                <span
+                  aria-hidden
+                  className="name-bloom pointer-events-none absolute inset-0 text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber blur-[28px]"
+                >
+                  {PROFILE.name}
+                </span>
+                <h1
+                  className="reveal reveal-name relative text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber-bright"
+                  style={{
+                    textShadow:
+                      '0 0 30px rgba(255,179,0,0.65), 0 0 90px rgba(255,179,0,0.3)',
+                  }}
+                >
+                  {PROFILE.name}
+                </h1>
+              </div>
+              <h2 className="reveal reveal-role mt-[1.2vh] text-[clamp(15px,min(1.5vw,3.4vh),22px)] text-amber-dim">
+                {PROFILE.role}
+              </h2>
+            </div>
+
+            {/* --- 5. CTAs as runnable commands; hover = reverse video --- */}
+            <div className="flex flex-col items-start">
+              {COMMANDS.map(({ label, href, external }) => (
+                <a
+                  key={label}
+                  href={href}
+                  {...(external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  className="reveal reveal-cmd group -mx-2 flex items-center px-2 text-amber outline-none hover:bg-amber hover:text-bg focus-visible:bg-amber focus-visible:text-bg"
+                >
+                  <span className="mr-2 text-amber-faint select-none group-hover:text-bg group-focus-visible:text-bg">
+                    $
                   </span>
-                  <h1
-                    className="reveal reveal-name relative text-4xl leading-[1.1] font-semibold tracking-tight text-amber-bright sm:text-5xl md:text-6xl"
-                    style={{ textShadow: '0 0 22px rgba(255,179,0,0.55)' }}
-                  >
-                    {PROFILE.name}
-                  </h1>
-                </div>
-                <h2 className="reveal reveal-role mt-3 text-base text-amber-dim sm:text-lg">
-                  {PROFILE.role}
-                </h2>
-              </div>
+                  {label}
+                </a>
+              ))}
 
-              {/* --- 5. CTAs as runnable commands; hover = reverse video --- */}
-              <div className="mt-8 flex flex-col items-start">
-                {COMMANDS.map(({ label, href, external }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    {...(external
-                      ? { target: '_blank', rel: 'noopener noreferrer' }
-                      : {})}
-                    className="reveal reveal-cmd group -mx-2 flex items-center px-2 text-amber outline-none hover:bg-amber hover:text-bg focus-visible:bg-amber focus-visible:text-bg"
-                  >
-                    <span className="mr-2 text-amber-faint select-none group-hover:text-bg group-focus-visible:text-bg">
-                      $
-                    </span>
-                    {label}
-                  </a>
-                ))}
-
-                {/* Prompt left waiting for the next command */}
-                <p className="reveal reveal-prompt mt-1 text-amber">
-                  <span className="mr-2 text-amber-faint select-none">$</span>
-                  <Caret on={caret === 'idle'} />
-                </p>
-              </div>
+              {/* Prompt left waiting for the next command */}
+              <p className="reveal reveal-prompt mt-1 text-amber">
+                <span className="mr-2 text-amber-faint select-none">$</span>
+                <Caret on={caret === 'idle'} />
+              </p>
             </div>
           </div>
         </div>
@@ -303,7 +317,7 @@ export default function Hero() {
       <a
         href="#about"
         aria-label="Scroll to about"
-        className="reveal reveal-scroll absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 text-amber-faint transition-colors hover:text-amber"
+        className="reveal reveal-scroll absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 text-amber-faint transition-colors hover:text-amber"
       >
         <span className="text-[10px] tracking-[0.3em] uppercase">scroll</span>
         <svg
