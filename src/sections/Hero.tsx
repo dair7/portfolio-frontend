@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import Caret from '../components/Caret'
+import AsciiRuntime from '../components/AsciiRuntime'
 
 const CMD_PROFILE = 'curl -s api.dair.dev/v1/profile | jq'
 const CMD_NAME = "curl -s api.dair.dev/v1/profile | jq -r '.name, .role'"
@@ -113,6 +114,8 @@ export default function Hero() {
         )
         .to('.name-bloom', { autoAlpha: 0.45, duration: 0.9, ease: 'power2.out' })
         .to('.reveal-role', { autoAlpha: 1, duration: 0.2, ease: 'none' }, '-=0.75')
+        // The runner has been looping since mount; it only becomes visible here.
+        .to('.reveal-ascii', { autoAlpha: 1, duration: 0.5, ease: 'none' }, '-=0.6')
         .to(
           '.reveal-cmd',
           { autoAlpha: 1, duration: 0.15, stagger: 0.09, ease: 'none' },
@@ -178,105 +181,112 @@ export default function Hero() {
               sequence owns the full height instead of huddling at the top.
               Every size clamps on width AND height, so the whole boot sequence
               still fits a short window — no inner scrollbar, ever. */}
-          <div className="flex min-h-0 flex-1 flex-col justify-between overflow-hidden px-[4vw] py-[3vh] text-[clamp(13px,min(1.05vw,2.35vh),17px)] leading-[1.7]">
-            {/* --- 1. live-typed request + its payload --- */}
-            <div>
+          <div className="grid min-h-0 flex-1 gap-[3vw] overflow-hidden px-[4vw] py-[3vh] text-[clamp(13px,min(1.05vw,2.35vh),17px)] leading-[1.7] min-[1000px]:grid-cols-[1fr_auto]">
+            {/* Left column: the boot sequence, still four blocks pushed apart. */}
+            <div className="flex min-h-0 flex-col justify-between">
+              {/* --- 1. live-typed request + its payload --- */}
+              <div>
+                <p className="break-all text-amber">
+                  <span className="mr-2 text-amber-faint select-none">$</span>
+                  {typedProfile}
+                  <Caret on={caret === 'profile'} />
+                </p>
+
+                {/* --- 2. JSON payload, highlighted in amber tints only --- */}
+                <div className="mt-[1.4vh] text-amber-dim">
+                  <p className="json-line text-amber-faint">{'{'}</p>
+                  <p className="json-line pl-4">
+                    "role"<span className="text-amber-faint">: </span>
+                    <span className="text-amber-bright">"{PROFILE.role}"</span>
+                    <span className="text-amber-faint">,</span>
+                  </p>
+                  <p className="json-line pl-4">
+                    "stack"<span className="text-amber-faint">: [</span>
+                    {PROFILE.stack.map((tech, i) => (
+                      <span key={tech}>
+                        <span className="text-amber-bright">"{tech}"</span>
+                        {i < PROFILE.stack.length - 1 && (
+                          <span className="text-amber-faint">, </span>
+                        )}
+                      </span>
+                    ))}
+                    <span className="text-amber-faint">],</span>
+                  </p>
+                  <p className="json-line pl-4">
+                    "based_in"<span className="text-amber-faint">: </span>
+                    <span className="text-amber-bright">"{PROFILE.basedIn}"</span>
+                    <span className="text-amber-faint">,</span>
+                  </p>
+                  <p className="json-line pl-4">
+                    "available"<span className="text-amber-faint">: </span>
+                    <span className="text-amber">{String(PROFILE.available)}</span>
+                  </p>
+                  <p className="json-line text-amber-faint">{'}'}</p>
+                </div>
+              </div>
+
+              {/* --- 3. second request --- */}
               <p className="break-all text-amber">
                 <span className="mr-2 text-amber-faint select-none">$</span>
-                {typedProfile}
-                <Caret on={caret === 'profile'} />
+                {typedName}
+                <Caret on={caret === 'name'} />
               </p>
 
-              {/* --- 2. JSON payload, highlighted in amber tints only --- */}
-              <div className="mt-[1.4vh] text-amber-dim">
-                <p className="json-line text-amber-faint">{'{'}</p>
-                <p className="json-line pl-4">
-                  "role"<span className="text-amber-faint">: </span>
-                  <span className="text-amber-bright">"{PROFILE.role}"</span>
-                  <span className="text-amber-faint">,</span>
-                </p>
-                <p className="json-line pl-4">
-                  "stack"<span className="text-amber-faint">: [</span>
-                  {PROFILE.stack.map((tech, i) => (
-                    <span key={tech}>
-                      <span className="text-amber-bright">"{tech}"</span>
-                      {i < PROFILE.stack.length - 1 && (
-                        <span className="text-amber-faint">, </span>
-                      )}
-                    </span>
-                  ))}
-                  <span className="text-amber-faint">],</span>
-                </p>
-                <p className="json-line pl-4">
-                  "based_in"<span className="text-amber-faint">: </span>
-                  <span className="text-amber-bright">"{PROFILE.basedIn}"</span>
-                  <span className="text-amber-faint">,</span>
-                </p>
-                <p className="json-line pl-4">
-                  "available"<span className="text-amber-faint">: </span>
-                  <span className="text-amber">{String(PROFILE.available)}</span>
-                </p>
-                <p className="json-line text-amber-faint">{'}'}</p>
-              </div>
-            </div>
-
-            {/* --- 3. second request --- */}
-            <p className="break-all text-amber">
-              <span className="mr-2 text-amber-faint select-none">$</span>
-              {typedName}
-              <Caret on={caret === 'name'} />
-            </p>
-
-            {/* --- 4. raw output: the payoff. Driven by viewport width so it
-                dominates instead of tracking the body copy; the 11.5vh term only
-                kicks in on short windows, where 8vw would overflow. --- */}
-            <div>
-              <div className="relative">
-                <span
-                  aria-hidden
-                  className="name-bloom pointer-events-none absolute inset-0 text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber blur-[28px]"
-                >
-                  {PROFILE.name}
-                </span>
-                <h1
-                  className="reveal reveal-name relative text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber-bright"
-                  style={{
-                    textShadow:
-                      '0 0 30px rgba(255,179,0,0.65), 0 0 90px rgba(255,179,0,0.3)',
-                  }}
-                >
-                  {PROFILE.name}
-                </h1>
-              </div>
-              <h2 className="reveal reveal-role mt-[1.2vh] text-[clamp(15px,min(1.5vw,3.4vh),22px)] text-amber-dim">
-                {PROFILE.role}
-              </h2>
-            </div>
-
-            {/* --- 5. CTAs as runnable commands; hover = reverse video --- */}
-            <div className="flex flex-col items-start">
-              {COMMANDS.map(({ label, href, external }) => (
-                <a
-                  key={label}
-                  href={href}
-                  {...(external
-                    ? { target: '_blank', rel: 'noopener noreferrer' }
-                    : {})}
-                  className="reveal reveal-cmd group -mx-2 flex items-center px-2 text-amber outline-none hover:bg-amber hover:text-bg focus-visible:bg-amber focus-visible:text-bg"
-                >
-                  <span className="mr-2 text-amber-faint select-none group-hover:text-bg group-focus-visible:text-bg">
-                    $
+              {/* --- 4. raw output: the payoff. Driven by viewport width so it
+                  dominates instead of tracking the body copy; the 11.5vh term only
+                  kicks in on short windows, where 8vw would overflow. --- */}
+              <div>
+                <div className="relative">
+                  <span
+                    aria-hidden
+                    className="name-bloom pointer-events-none absolute inset-0 text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber blur-[28px]"
+                  >
+                    {PROFILE.name}
                   </span>
-                  {label}
-                </a>
-              ))}
+                  <h1
+                    className="reveal reveal-name relative text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber-bright"
+                    style={{
+                      textShadow:
+                        '0 0 30px rgba(255,179,0,0.65), 0 0 90px rgba(255,179,0,0.3)',
+                    }}
+                  >
+                    {PROFILE.name}
+                  </h1>
+                </div>
+                <h2 className="reveal reveal-role mt-[1.2vh] text-[clamp(15px,min(1.5vw,3.4vh),22px)] text-amber-dim">
+                  {PROFILE.role}
+                </h2>
+              </div>
 
-              {/* Prompt left waiting for the next command */}
-              <p className="reveal reveal-prompt mt-1 text-amber">
-                <span className="mr-2 text-amber-faint select-none">$</span>
-                <Caret on={caret === 'idle'} />
-              </p>
+              {/* --- 5. CTAs as runnable commands; hover = reverse video --- */}
+              <div className="flex flex-col items-start">
+                {COMMANDS.map(({ label, href, external }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    {...(external
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                    className="reveal reveal-cmd group -mx-2 flex items-center px-2 text-amber outline-none hover:bg-amber hover:text-bg focus-visible:bg-amber focus-visible:text-bg"
+                  >
+                    <span className="mr-2 text-amber-faint select-none group-hover:text-bg group-focus-visible:text-bg">
+                      $
+                    </span>
+                    {label}
+                  </a>
+                ))}
+
+                {/* Prompt left waiting for the next command */}
+                <p className="reveal reveal-prompt mt-1 text-amber">
+                  <span className="mr-2 text-amber-faint select-none">$</span>
+                  <Caret on={caret === 'idle'} />
+                </p>
+              </div>
             </div>
+
+            {/* Right column: the idle half of the screen, running a character
+                buffer. `auto` so it claims only the width its 40 cols need. */}
+            <AsciiRuntime className="reveal reveal-ascii hidden self-center min-[1000px]:block" />
           </div>
         </div>
       </div>
