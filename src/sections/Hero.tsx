@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import Caret from '../components/Caret'
 
 const CMD_PROFILE = 'curl -s api.dair.dev/v1/profile | jq'
 const CMD_NAME = "curl -s api.dair.dev/v1/profile | jq -r '.name, .role'"
@@ -22,39 +23,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
 
 const formatUptime = (total: number) =>
   `${pad(Math.floor(total / 3600))}:${pad(Math.floor(total / 60) % 60)}:${pad(total % 60)}`
-
-/**
- * Block cursor: terminals draw a filled cell, not a hairline.
- * It owns its blink so it keeps pulsing when it jumps to the next prompt.
- */
-function Caret({ on }: { on: boolean }) {
-  const ref = useRef<HTMLSpanElement>(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!on || !el) return
-    const blink = gsap.to(el, {
-      autoAlpha: 0,
-      duration: 0.5,
-      repeat: -1,
-      yoyo: true,
-      ease: 'steps(1)',
-    })
-    return () => {
-      blink.kill()
-      gsap.set(el, { autoAlpha: 1 })
-    }
-  }, [on])
-
-  if (!on) return null
-  return (
-    <span
-      ref={ref}
-      aria-hidden
-      className="ml-[1px] inline-block h-[1.05em] w-[0.55em] translate-y-[0.18em] bg-amber"
-    />
-  )
-}
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null)
