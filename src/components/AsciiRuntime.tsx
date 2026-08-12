@@ -2,14 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 
 /**
  * A character-buffer runner that lives inside the hero terminal: no canvas,
- * no panel, no second color — just a 40x16 grid of glyphs painted straight
+ * no panel, no second color — just a 40x21 grid of glyphs painted straight
  * into a <pre>. The AI clears obstacles for three seconds, then deliberately
  * stops jumping so the cube comes apart, which is the whole joke.
  */
 
 const COLS = 40
-const ROWS = 16
-const GROUND_ROW = 12 // the ─ line; rows below it catch falling debris
+const ROWS = 21
+// The ground sits low in the buffer: sky above for the jump arc, and five rows
+// below so the debris keeps falling on screen instead of clipping at the edge.
+const GROUND_ROW = 15
 const CUBE_COL = 6
 const FPS = 30
 const FRAME_MS = 1000 / FPS
@@ -93,7 +95,7 @@ const step = (w: World) => {
       p.y += p.vy
       p.vy -= DEBRIS_GRAVITY
     }
-    w.particles = w.particles.filter((p) => p.x > -1 && p.x < COLS && p.y > -4)
+    w.particles = w.particles.filter((p) => p.x > -1 && p.x < COLS && p.y > -6)
     return
   }
 
@@ -240,7 +242,9 @@ export default function AsciiRuntime({ className = '' }: { className?: string })
     /* Decorative: 640 characters of glyphs would be noise to a screen reader. */
     <div
       aria-hidden
-      className={`text-[clamp(9px,0.72vw,13px)] leading-[1.05] text-amber-dim ${className}`}
+      /* Sized like the terminal copy next to it, not like a footnote. The vh
+         term keeps all 21 rows inside a short window. */
+      className={`text-[clamp(12px,min(1.05vw,1.7vh),16px)] leading-[1.05] text-amber-dim ${className}`}
     >
       <p className="mb-[0.6em] text-amber-faint">{'# runtime.js — running'}</p>
       <pre ref={preRef} className="font-terminal" />

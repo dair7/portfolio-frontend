@@ -181,7 +181,7 @@ export default function Hero() {
               sequence owns the full height instead of huddling at the top.
               Every size clamps on width AND height, so the whole boot sequence
               still fits a short window — no inner scrollbar, ever. */}
-          <div className="grid min-h-0 flex-1 gap-[3vw] overflow-hidden px-[4vw] py-[3vh] text-[clamp(13px,min(1.05vw,2.35vh),17px)] leading-[1.7] min-[1000px]:grid-cols-[1fr_auto]">
+          <div className="grid min-h-0 flex-1 gap-[1.5vw] overflow-hidden px-[4vw] py-[3vh] text-[clamp(13px,min(1.05vw,2.35vh),17px)] leading-[1.7] min-[1000px]:grid-cols-[1fr_auto]">
             {/* Left column: the boot sequence, still four blocks pushed apart. */}
             <div className="flex min-h-0 flex-col justify-between">
               {/* --- 1. live-typed request + its payload --- */}
