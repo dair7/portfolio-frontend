@@ -24,10 +24,10 @@ export const SKILL_CATEGORIES = [
 
 export type SkillCategoryValue = typeof SKILL_CATEGORIES[number]['value']
 
+// No `level` field on purpose — see the note in `src/data/skills.ts`.
 export interface Skill {
   id: number
   name: string
-  level: number
   category: SkillCategoryValue
 }
 
