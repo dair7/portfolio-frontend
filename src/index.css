@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -9,11 +9,35 @@
   --color-amber-dim: #C98A2E;
   --color-amber-faint: #6B4A16;
 
+  /* Page system — every section outside the hero.
+     The hero is the machine; everything below it is a document that borrows
+     the machine's colors but not its console language. */
+  --color-raised: #14110A; /* cards, inputs — one warm step above the page */
+  --color-line: #2A2114;   /* hairlines and borders */
+  --color-cream: #EDE4D3;  /* headings and reading text */
+  --color-muted: #9A8F7C;  /* secondary and meta text (~7:1 on --color-bg) */
+
+  /* Reading typeface. Plex Sans is the companion Plex Mono was drawn against,
+     so the two share a skeleton. Overriding --font-sans also makes it the
+     document default; the hero and the wordmark opt back in to --font-terminal. */
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+
   /* Scoped on purpose: does not override Tailwind's default --font-mono,
      so no other section changes typeface. */
   --font-terminal: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
+@layer base {
+  /* Every interactive element gets a visible keyboard ring, once, here —
+     rather than each component inventing (or forgetting) its own. */
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 2px;
+  }
+}
+
+/* ⚠️ LEGACY — the scroll reveal Projects and Contact still use. It is replaced
+   by `useSectionReveal`; delete this once those two sections migrate. */
 .fade-up {
   opacity: 0;
   transform: translateY(32px);
