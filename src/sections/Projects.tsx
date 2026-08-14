@@ -113,9 +113,11 @@ export default function Projects() {
           </div>
         )}
 
-        {/* Pagination */}
+        {/* Pagination. Wraps because prev + numbers + next is wider than a
+            phone once there are a few pages — dormant while the catalog still
+            fits on one. */}
         {totalPages > 1 && (
-          <div className="mt-12 flex items-center justify-center gap-3">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => handlePage(page - 1)}
               disabled={page === 0}
