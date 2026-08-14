@@ -2,6 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import Caret from '../components/Caret'
 import AsciiRuntime from '../components/AsciiRuntime'
+import PixelName from '../components/PixelName'
+
+/* The name's type scale. Shared by the blurred bloom behind the name and by the
+   hidden span the pixel canvas measures itself against, so the drawn name and
+   the glow it sits in can never drift onto different sizes. */
+const NAME_TYPE =
+  'text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight'
 
 const CMD_PROFILE = 'curl -s api.dair.dev/v1/profile | jq'
 const CMD_NAME = "curl -s api.dair.dev/v1/profile | jq -r '.name, .role'"
@@ -181,9 +188,17 @@ export default function Hero() {
               sequence owns the full height instead of huddling at the top.
               Every size clamps on width AND height, so the whole boot sequence
               still fits a short window — no inner scrollbar, ever. */}
-          <div className="grid min-h-0 flex-1 gap-[1.5vw] overflow-hidden px-[4vw] py-[3vh] text-[clamp(13px,min(1.05vw,2.35vh),17px)] leading-[1.7] min-[1000px]:grid-cols-[1fr_auto]">
-            {/* Left column: the boot sequence, still four blocks pushed apart. */}
-            <div className="flex min-h-0 flex-col justify-between">
+          {/* `minmax(0,1fr)` rather than a bare `1fr` or an implicit track.
+              Both carry an automatic minimum of min-content, and the name is a
+              canvas with a hard pixel width — so the track could be sized by
+              the canvas that is itself measured against the track. This pins
+              the track to the container and breaks that circularity. */}
+          <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)] gap-[1.5vw] overflow-hidden px-[4vw] py-[3vh] text-[clamp(13px,min(1.05vw,2.35vh),17px)] leading-[1.7] min-[1000px]:grid-cols-[minmax(0,1fr)_auto]">
+            {/* Left column: the boot sequence, still four blocks pushed apart.
+                `min-w-0` for the same reason as the track above — a grid item's
+                automatic minimum is its min-content, which the name canvas can
+                exceed once it is drawn. */}
+            <div className="flex min-h-0 min-w-0 flex-col justify-between">
               {/* --- 1. live-typed request + its payload --- */}
               <div>
                 <p className="break-all text-amber">
@@ -239,18 +254,15 @@ export default function Hero() {
                 <div className="relative">
                   <span
                     aria-hidden
-                    className="name-bloom pointer-events-none absolute inset-0 text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber blur-[28px]"
+                    className={`name-bloom pointer-events-none absolute inset-0 ${NAME_TYPE} text-amber blur-[28px]`}
                   >
                     {PROFILE.name}
                   </span>
-                  <h1
-                    className="reveal reveal-name relative text-[clamp(48px,min(8vw,11.5vh),96px)] leading-[1.02] font-bold tracking-tight text-amber-bright"
-                    style={{
-                      textShadow:
-                        '0 0 30px rgba(255,179,0,0.65), 0 0 90px rgba(255,179,0,0.3)',
-                    }}
-                  >
-                    {PROFILE.name}
+                  {/* No text-shadow any more: the canvas carries its own glow
+                      pass, and a second one on top of the blocks would fill the
+                      gaps between them back in. */}
+                  <h1 className="reveal reveal-name relative">
+                    <PixelName text={PROFILE.name} metricsClassName={NAME_TYPE} />
                   </h1>
                 </div>
                 <h2 className="reveal reveal-role mt-[1.2vh] text-[clamp(15px,min(1.5vw,3.4vh),22px)] text-amber-dim">
