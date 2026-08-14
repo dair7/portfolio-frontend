@@ -134,9 +134,18 @@ const step = (w: World) => {
     w.spun = !w.spun // flipping the face on each jump reads as rotation
   }
 
-  // The triangle is two rows tall, so anything under 2 rows up is a hit.
+  // Collision is tested against the cells the renderer actually paints, not
+  // against the raw float positions. `render` rounds both x and cubeY, so
+  // comparing the floats let a triangle at x=7.35 draw its `/` into the cube's
+  // own column while `o.x <= CUBE_COL + 1` still read false — the cube looked
+  // welded to the obstacle for a frame instead of hitting it. The rounding here
+  // has to stay identical to the rounding in `render`.
+  const cubeRow = Math.round(w.cubeY)
   for (const o of w.obstacles) {
-    if (o.x <= CUBE_COL + 1 && o.x + 3 >= CUBE_COL && w.cubeY < 2) {
+    const x = Math.round(o.x)
+    // The triangle spans x..x+3 on the two rows above the ground; the cube
+    // still reaches those rows while its rounded height is 0 or 1.
+    if (x <= CUBE_COL + 1 && x + 3 >= CUBE_COL && cubeRow <= 1) {
       crash(w)
       return
     }
