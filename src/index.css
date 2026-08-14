@@ -34,17 +34,12 @@
     outline: 2px solid var(--color-amber);
     outline-offset: 2px;
   }
-}
 
-/* ⚠️ LEGACY — the scroll reveal Projects and Contact still use. It is replaced
-   by `useSectionReveal`; delete this once those two sections migrate. */
-.fade-up {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
+  /* Document-wide, so the browser default (a cool blue) never turns up as the
+     only non-warm color on the page. It used to be scoped to Skills, back when
+     Skills was still a second terminal. */
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-bg);
+  }
 }
