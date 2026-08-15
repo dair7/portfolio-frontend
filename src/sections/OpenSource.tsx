@@ -66,18 +66,22 @@ export default function OpenSource() {
                 href={pr.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="reveal-item group grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2 border-b border-line py-5 md:grid-cols-[6rem_1fr_auto] md:gap-x-6"
+                className="reveal-item group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-2 border-b border-line py-5 md:grid-cols-[11rem_minmax(0,1fr)_auto] md:gap-x-6"
               >
                 {/* The key of the row, not its content — mono and dim, exactly
-                    like the category label in Skills. */}
-                <span className="order-1 font-terminal text-[11px] tracking-[0.14em] text-amber-dim uppercase md:order-none">
+                    like the category label in Skills. The track is sized for the
+                    longest org name so it stays on one line; `truncate` is the
+                    safety net for whatever longer name shows up next week. */}
+                <span className="order-1 min-w-0 truncate font-terminal text-[11px] tracking-[0.14em] text-amber-dim uppercase md:order-none">
                   {pr.organization}
                 </span>
 
-                {/* The row's actual content. On mobile it drops to its own line
+                {/* The row's actual content. It gets every pixel the other two
+                    columns don't need and never truncates — a long title wraps
+                    to a second line instead. On mobile it drops to its own line
                     and spans the full width: a PR title is far too long to
                     share a row with anything at that size. */}
-                <span className="order-3 col-span-2 text-sm leading-snug text-cream transition-colors group-hover:text-amber-bright md:order-none md:col-span-1">
+                <span className="order-3 col-span-2 min-w-0 text-sm leading-snug break-words text-cream transition-colors group-hover:text-amber-bright md:order-none md:col-span-1">
                   {pr.title}
                 </span>
 
