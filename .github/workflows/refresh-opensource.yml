@@ -1,0 +1,32 @@
+# Keeps the open source section current without anyone touching the repo.
+#
+# The data lives in src/data/opensource.json, which scripts/fetch-prs.ts
+# regenerates during `prebuild`. Nothing here fetches from GitHub or commits
+# anything: this workflow only pokes a Vercel deploy hook, and the rebuild on
+# Vercel's side re-runs the script against a fresh API response.
+name: Refresh open source data
+
+on:
+  schedule:
+    # Mondays at 06:17 UTC. The odd minute is deliberate — GitHub delays
+    # scheduled runs queued on the hour, when everyone else schedules theirs.
+    - cron: '17 6 * * 1'
+  # Lets you force a refresh from the Actions tab without waiting for Monday.
+  workflow_dispatch:
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger the Vercel deploy hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::error::VERCEL_DEPLOY_HOOK_URL is not set. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          # --fail turns an HTTP error into a non-zero exit, so a revoked or
+          # mistyped hook shows up as a red run instead of a silent no-op.
+          curl --fail --silent --show-error --request POST "$DEPLOY_HOOK_URL"
+          echo "Deploy hook triggered."
