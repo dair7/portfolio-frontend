@@ -31,6 +31,30 @@ export interface Skill {
   category: SkillCategoryValue
 }
 
+/**
+ * One merged pull request opened against somebody else's repository.
+ *
+ * These are not written by hand: `scripts/fetch-prs.ts` queries the GitHub
+ * Search API during the build and regenerates `src/data/opensource.json`. Edit
+ * the script, never the JSON — the next build overwrites it.
+ */
+export interface OpenSourcePullRequest {
+  // Account that owns the repository — an org ('spring-projects') or a person.
+  organization: string
+  repository: string
+  title: string
+  url: string
+  // ISO 8601, as returned by GitHub.
+  mergedAt: string
+}
+
+export interface OpenSourceData {
+  // When the build last reached GitHub. Lets the UI admit how stale it is.
+  generatedAt: string
+  count: number
+  pullRequests: OpenSourcePullRequest[]
+}
+
 export const PROJECT_CATEGORIES = [
   { value: 'FRONTEND', label: 'Frontend' },
   { value: 'BACKEND', label: 'Backend' },
