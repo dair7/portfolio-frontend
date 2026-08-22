@@ -52,16 +52,23 @@ export default function Skills() {
 
         {GROUPED.length > 0 && (
           /* The sheet: a rule opens it, one closes each row. Structure comes
-             from the rules and the two-column split, not from color. */
+             from the rules and the two-column split, not from color.
+
+             The measurements are not chosen here — they are copied from the
+             rows in `src/sections/OpenSource.tsx`, the other hairline list on
+             the page: 11rem key column, 1.5rem gutter, py-5. They used to
+             differ (14rem, 2.5rem, py-10), which left a hand's width of empty
+             page between a label and the two tags belonging to it and made
+             two lists built on the same idea look unrelated. */
           <div className="border-t border-line">
             {GROUPED.map((group) => (
               <div
                 key={group.value}
-                className="reveal-item grid gap-x-10 gap-y-5 border-b border-line py-8 md:grid-cols-[minmax(9rem,14rem)_1fr] md:py-10"
+                className="reveal-item grid gap-x-6 gap-y-3 border-b border-line py-5 md:grid-cols-[11rem_minmax(0,1fr)]"
               >
                 {/* Left: the key. Mono and dim — it labels the row, it is not
                     the content of the row. */}
-                <div>
+                <div className="md:pt-1.5">
                   <p className="font-terminal text-xs tracking-[0.18em] text-muted uppercase">
                     {group.label}
                   </p>
