@@ -9,8 +9,11 @@ import { useSectionReveal } from '../hooks/useSectionReveal'
  *
  * The rows survived from the amber version; the console did not. Names set at
  * 42px in mono made this a second hero — it out-shouted the one at the top of
- * the page and turned a list of six words into the loudest thing on the site.
+ * the page and turned a plain list of names into the loudest thing on the site.
  * Tags are the honest size for what this is: an index, not a headline.
+ *
+ * Each row also carries a one-line note under its tags, written by Dair — see
+ * CATEGORY_NOTES in `src/data/skills.ts`.
  *
  * There is still no bar, no percentage and no seniority label — see
  * `src/data/skills.ts` for why.
@@ -67,24 +70,34 @@ export default function Skills() {
                 className="reveal-item grid gap-x-6 gap-y-3 border-b border-line py-5 md:grid-cols-[11rem_minmax(0,1fr)]"
               >
                 {/* Left: the key. Mono and dim — it labels the row, it is not
-                    the content of the row. */}
+                    the content of the row. Nothing else goes in this track: at
+                    11rem it fits 'FRAMEWORKS' and little else. */}
                 <div className="md:pt-1.5">
                   <p className="font-terminal text-xs tracking-[0.18em] text-muted uppercase">
                     {group.label}
                   </p>
+                </div>
+
+                {/* Right: the names, then the note. Nothing here is clickable,
+                    so nothing here behaves like a button — no hover, no
+                    pointer cursor. */}
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-start gap-2">
+                    {group.items.map((skill) => (
+                      <TechBadge key={skill.id} name={skill.name} size="md" tone="strong" />
+                    ))}
+                  </div>
+
+                  {/* The note belongs to the row, not to the label, so it sits
+                      under the tags it is talking about and reads at a normal
+                      measure. Capped at 62ch: the content track runs to ~900px
+                      on a wide screen, and a sentence set that long is a stripe
+                      of text nobody finishes. */}
                   {group.note && (
-                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                    <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-pretty text-muted">
                       {group.note}
                     </p>
                   )}
-                </div>
-
-                {/* Right: the names. Nothing here is clickable, so nothing here
-                    behaves like a button — no hover, no pointer cursor. */}
-                <div className="flex flex-wrap items-start gap-2">
-                  {group.items.map((skill) => (
-                    <TechBadge key={skill.id} name={skill.name} size="md" tone="strong" />
-                  ))}
                 </div>
               </div>
             ))}
