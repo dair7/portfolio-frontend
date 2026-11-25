@@ -1,0 +1,78 @@
+---
+import { Image } from "astro:assets";
+
+import StatusBadge from "../ui/StatusBadge.astro";
+import Tag from "../ui/Tag.astro";
+import ProjectFlow from "../project/ProjectFlow.astro";
+import { projectTitleTransitionName, type Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+  number: string;
+  reversed: boolean;
+}
+
+const { project, number, reversed } = Astro.props;
+const { data } = project;
+const caseStudyHref = `/projects/${project.id}`;
+const caseStudyContext = `about ${data.title}`;
+---
+
+<div class="group relative grid items-center gap-8 rounded-3xl lg:grid-cols-2 lg:gap-16">
+  <div class:list={["overflow-hidden rounded-3xl", reversed && "lg:order-2"]}>
+    <div class="transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100">
+      {data.cover && data.coverAlt ? (
+        <Image
+          src={data.cover}
+          alt={data.coverAlt}
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 64rem) 50vw, 100vw"
+          class="h-auto w-full"
+        />
+      ) : data.flow ? (
+        <ProjectFlow steps={data.flow} variant="compact" />
+      ) : (
+        <div class="grid aspect-video place-items-center rounded-3xl bg-feature font-mono text-small text-feature-text">
+          {data.title}
+        </div>
+      )}
+    </div>
+  </div>
+  <div class="space-y-5">
+    <div class="flex flex-wrap items-center gap-4">
+      <span
+        aria-hidden="true"
+        class="font-display text-section font-medium text-accent"
+      >
+        {number}
+      </span>
+      <StatusBadge status={data.status} />
+    </div>
+    <h3
+      class="text-headline"
+      transition:name={projectTitleTransitionName(project.id)}
+    >
+      {data.title}
+    </h3>
+    <p class="max-w-reading text-body text-muted">{data.summary}</p>
+    <p class="text-small">
+      <span class="font-semibold">Role:</span> {data.role}
+    </p>
+    <ul class="flex flex-wrap gap-2">
+      {data.stack.map((technology) => (
+        <li>
+          <Tag label={technology} />
+        </li>
+      ))}
+    </ul>
+    <p>
+      <a
+        href={caseStudyHref}
+        class="font-medium text-text underline decoration-1 underline-offset-4 group-hover:decoration-2 after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+      >
+        Read the case study <span class="sr-only">{caseStudyContext}</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </p>
+  </div>
+</div>

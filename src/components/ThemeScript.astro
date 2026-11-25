@@ -1,0 +1,46 @@
+---
+import { themeColors, themeStorageKey } from "../data/theme";
+
+const themeBackgrounds = {
+  light: themeColors.light.bg,
+  dark: themeColors.dark.bg,
+};
+---
+
+<script is:inline define:vars={{ themeStorageKey, themeBackgrounds }}>
+  const readStoredTheme = () => {
+    // Storage can throw in private modes or when cookies are blocked.
+    try {
+      return localStorage.getItem(themeStorageKey);
+    } catch {
+      return null;
+    }
+  };
+
+  const resolveTheme = () => {
+    const stored = readStoredTheme();
+    if (stored === "light" || stored === "dark") return stored;
+    return matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+
+  const applyTheme = () => {
+    document.documentElement.dataset.theme = resolveTheme();
+  };
+
+  const syncThemeColor = () => {
+    const color = themeBackgrounds[document.documentElement.dataset.theme];
+    if (!color) return;
+    for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
+      meta.setAttribute("content", color);
+    }
+  };
+
+  new MutationObserver(syncThemeColor).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  applyTheme();
+  document.addEventListener("astro:after-swap", applyTheme);
+</script>

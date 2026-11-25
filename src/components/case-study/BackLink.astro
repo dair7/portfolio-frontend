@@ -1,0 +1,10 @@
+---
+import TextLink from "../ui/TextLink.astro";
+import { sectionHref, sectionIds } from "../../data/navigation";
+
+const allWorkHref = sectionHref(sectionIds.work, Astro.url.pathname);
+---
+
+<TextLink href={allWorkHref} class="text-small">
+  <span aria-hidden="true">←&nbsp;</span>All work
+</TextLink>

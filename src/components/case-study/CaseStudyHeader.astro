@@ -1,0 +1,51 @@
+---
+import Button from "../ui/Button.astro";
+import Container from "../ui/Container.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import BackLink from "./BackLink.astro";
+import { projectTitleTransitionName, type Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+  number: string;
+}
+
+const { project, number } = Astro.props;
+const { data } = project;
+const caseStudyLabel = `Case study ${number}`;
+// TODO(dair): review the wording of this note.
+const inProgressNote =
+  "This project is still in progress. The case study reflects its current state.";
+---
+
+<Container as="header" class="space-y-10 pt-10 pb-16 sm:pt-16 sm:pb-20">
+  <BackLink />
+  <div class="space-y-6">
+    <div class="flex flex-wrap items-center gap-4">
+      <p class="font-mono text-small text-muted">{caseStudyLabel}</p>
+      <StatusBadge status={data.status} />
+    </div>
+    <h1
+      class="text-hero"
+      transition:name={projectTitleTransitionName(project.id)}
+    >
+      {data.title}
+    </h1>
+    <p class="max-w-reading text-body text-text">{data.summary}</p>
+  </div>
+  <div class="flex flex-wrap gap-3">
+    <Button href={data.repoUrl}>
+      View the code<span aria-hidden="true">&nbsp;↗</span>
+    </Button>
+    {data.demoUrl && (
+      <Button variant="secondary" href={data.demoUrl}>
+        Live demo<span aria-hidden="true">&nbsp;↗</span>
+      </Button>
+    )}
+  </div>
+  {data.status === "in-progress" && (
+    <p class="max-w-reading border-l-2 border-accent pl-4 text-small text-muted">
+      {inProgressNote}
+    </p>
+  )}
+</Container>

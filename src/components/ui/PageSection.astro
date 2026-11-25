@@ -1,0 +1,45 @@
+---
+import Container from "./Container.astro";
+import SectionHeading from "./SectionHeading.astro";
+
+type SectionLayout = "stacked" | "split";
+
+interface Props {
+  id: string;
+  title: string;
+  lead?: string;
+  band?: boolean;
+  isNavigationTarget?: boolean;
+  layout?: SectionLayout;
+}
+
+const {
+  id,
+  title,
+  lead,
+  band = false,
+  isNavigationTarget = false,
+  layout = "stacked",
+} = Astro.props;
+const titleId = `${id}-title`;
+
+const layoutClasses: Record<SectionLayout, string> = {
+  stacked: "space-y-12",
+  split: "grid gap-8 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16",
+};
+---
+
+<section
+  id={id}
+  tabindex={isNavigationTarget ? -1 : undefined}
+  aria-labelledby={titleId}
+  class:list={["py-24 sm:py-32", band && "bg-band"]}
+>
+  <Container class={layoutClasses[layout]}>
+    <div class="space-y-4">
+      <SectionHeading id={titleId} title={title} />
+      {lead && <p class="max-w-reading text-body text-muted">{lead}</p>}
+    </div>
+    <slot />
+  </Container>
+</section>

@@ -1,0 +1,45 @@
+---
+import StyleguideSection from "./StyleguideSection.astro";
+import { contrastPairs, largeTextMinimum, tokenVariable } from "./tokens";
+---
+
+<StyleguideSection title="Contrast (WCAG AA)">
+  <table class="w-full text-left text-small">
+    <thead class="text-caption text-muted">
+      <tr>
+        <th class="py-2 font-medium">Pair</th>
+        <th class="py-2 font-medium">Sample</th>
+        <th class="py-2 font-medium">Ratio</th>
+        <th class="py-2 font-medium">Needs</th>
+      </tr>
+    </thead>
+    <tbody>
+      {contrastPairs.map(({ foreground, background, minimumRatio }) => (
+        <tr class="border-t border-line">
+          <td class="py-2 font-mono text-caption">
+            {foreground} / {background}
+          </td>
+          <td class="py-2">
+            <span
+              data-contrast-sample
+              data-minimum-ratio={minimumRatio}
+              class="inline-block rounded-md border border-line px-3 py-1 font-semibold"
+              style={{
+                color: tokenVariable(foreground),
+                backgroundColor: tokenVariable(background),
+              }}
+            >
+              Aa
+            </span>
+          </td>
+          <td class="py-2 font-mono" data-contrast-ratio />
+          <td class="py-2 text-caption text-muted">
+            {minimumRatio === largeTextMinimum
+              ? "3:1 · large text only"
+              : "4.5:1"}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</StyleguideSection>

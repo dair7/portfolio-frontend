@@ -1,0 +1,26 @@
+---
+import type { Theme } from "../data/theme";
+import ColorSwatches from "./ColorSwatches.astro";
+import ComponentPreview from "./ComponentPreview.astro";
+import ContrastTable from "./ContrastTable.astro";
+import TypeScale from "./TypeScale.astro";
+
+interface Props {
+  theme: Theme;
+}
+
+const { theme } = Astro.props;
+---
+
+<section
+  data-theme={theme}
+  data-theme-panel
+  aria-label={`${theme} theme`}
+  class="min-w-0 space-y-12 rounded-3xl border border-line bg-bg p-6 text-text sm:p-8"
+>
+  <h2 class="text-section capitalize">{theme}</h2>
+  <ColorSwatches />
+  <ContrastTable />
+  <TypeScale />
+  <ComponentPreview />
+</section>

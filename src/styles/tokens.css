@@ -1,0 +1,94 @@
+:root {
+  --nav-offset: 6rem;
+}
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --theme-bg: #f7f1ec;
+  --theme-text: #2a1418;
+  --theme-muted: #76625f;
+  --theme-line: #e6dad3;
+  --theme-surface: #efe6e0;
+  --theme-band: #f1e8e2;
+  --theme-accent: #d93a25;
+  --theme-on-accent: #ffffff;
+  --theme-feature: #2a1418;
+  --theme-feature-text: #f7f1ec;
+  --theme-feature-muted: #d9c9c2;
+  --theme-feature-accent: #ff7a63;
+  --theme-glass: rgba(247, 241, 236, 0.62);
+  --theme-glass-line: rgba(42, 20, 24, 0.12);
+  --theme-glass-highlight: rgba(255, 255, 255, 0.7);
+  --theme-glass-shadow: 0 8px 32px rgba(42, 20, 24, 0.08);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-bg: #160e0f;
+  --theme-text: #f2eae4;
+  --theme-muted: #a8958f;
+  --theme-line: #2e2223;
+  --theme-surface: #231819;
+  --theme-band: #1c1314;
+  --theme-accent: #f0513a;
+  --theme-on-accent: #160e0f;
+  --theme-feature: #231819;
+  --theme-feature-text: #f2eae4;
+  --theme-feature-muted: #a8958f;
+  --theme-feature-accent: #f0513a;
+  --theme-glass: rgba(35, 24, 25, 0.55);
+  --theme-glass-line: rgba(242, 234, 228, 0.12);
+  --theme-glass-highlight: rgba(242, 234, 228, 0.08);
+  --theme-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+@theme inline {
+  --color-*: initial;
+  --color-bg: var(--theme-bg);
+  --color-text: var(--theme-text);
+  --color-muted: var(--theme-muted);
+  --color-line: var(--theme-line);
+  --color-surface: var(--theme-surface);
+  --color-band: var(--theme-band);
+  --color-accent: var(--theme-accent);
+  --color-on-accent: var(--theme-on-accent);
+  --color-feature: var(--theme-feature);
+  --color-feature-text: var(--theme-feature-text);
+  --color-feature-muted: var(--theme-feature-muted);
+  --color-feature-accent: var(--theme-feature-accent);
+  --color-glass: var(--theme-glass);
+  --color-glass-line: var(--theme-glass-line);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-*: initial;
+  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+@theme {
+  --text-*: initial;
+  --text-hero: clamp(3.5rem, 8vw, 6.5rem);
+  --text-hero--line-height: 0.95;
+  --text-hero--letter-spacing: -0.045em;
+  --text-section: clamp(2.25rem, 4.5vw, 3.25rem);
+  --text-section--line-height: 1.05;
+  --text-section--letter-spacing: -0.03em;
+  --text-headline: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+  --text-headline--line-height: 1.15;
+  --text-headline--letter-spacing: -0.02em;
+  --text-title: 1.5rem;
+  --text-title--line-height: 1.25;
+  --text-title--letter-spacing: -0.015em;
+  --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-body--line-height: 1.7;
+  --text-small: 0.9375rem;
+  --text-small--line-height: 1.5;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.45;
+
+  --container-page: 72rem;
+  --container-reading: 70ch;
+}

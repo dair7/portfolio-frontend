@@ -1,0 +1,32 @@
+---
+import { isPending } from "../../lib/pending";
+import { site } from "../../data/site";
+import PendingText from "./PendingText.astro";
+import TextLink from "./TextLink.astro";
+
+interface Props {
+  includeResume?: boolean;
+}
+
+const { includeResume = false } = Astro.props;
+---
+
+<ul class="flex flex-wrap items-center gap-x-6 gap-y-1 text-small">
+  <li>
+    <TextLink href={site.githubUrl}>GitHub</TextLink>
+  </li>
+  <li>
+    {isPending(site.linkedinUrl) ? (
+      <PendingText value={site.linkedinUrl} />
+    ) : (
+      <TextLink href={site.linkedinUrl}>LinkedIn</TextLink>
+    )}
+  </li>
+  {includeResume && (
+    <li>
+      <TextLink href={site.resumeHref} data-astro-reload>
+        Résumé (PDF)
+      </TextLink>
+    </li>
+  )}
+</ul>

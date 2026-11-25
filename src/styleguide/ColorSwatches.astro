@@ -1,0 +1,23 @@
+---
+import StyleguideSection from "./StyleguideSection.astro";
+import { colorSwatches, tokenVariable } from "./tokens";
+---
+
+<StyleguideSection title="Colors">
+  <ul class="grid gap-3 sm:grid-cols-2">
+    {colorSwatches.map(({ token, usage }) => (
+      <li class="flex items-center gap-3">
+        <span
+          class="size-11 shrink-0 rounded-lg border border-line"
+          style={{ backgroundColor: tokenVariable(token) }}
+        />
+        <span class="min-w-0">
+          <span class="block font-mono text-small text-text">{token}</span>
+          <span class="block text-caption text-muted">
+            <span data-token-value={token} class="font-mono" /> · {usage}
+          </span>
+        </span>
+      </li>
+    ))}
+  </ul>
+</StyleguideSection>

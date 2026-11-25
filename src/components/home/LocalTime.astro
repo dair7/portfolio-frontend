@@ -1,0 +1,11 @@
+---
+import { site } from "../../data/site";
+---
+
+<local-time data-timezone={site.timezone} hidden class="text-small text-muted">
+  <time></time> in {site.city}
+</local-time>
+
+<script>
+  import "../../scripts/local-time";
+</script>

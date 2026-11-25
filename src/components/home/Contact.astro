@@ -1,0 +1,18 @@
+---
+import SocialLinks from "../ui/SocialLinks.astro";
+import CopyEmail from "./CopyEmail.astro";
+import PageSection from "../ui/PageSection.astro";
+import { sectionIds } from "../../data/navigation";
+---
+
+<PageSection
+  id={sectionIds.contact}
+  title="Have a role or a project in mind?"
+  lead="I usually reply within a day."
+  isNavigationTarget
+>
+  <div class="space-y-8">
+    <CopyEmail />
+    <SocialLinks includeResume />
+  </div>
+</PageSection>

@@ -1,0 +1,24 @@
+---
+import Button from "../components/ui/Button.astro";
+import Container from "../components/ui/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../data/site";
+---
+
+<BaseLayout
+  title={`Not found — ${site.name}`}
+  description="This page doesn't exist."
+  noindex
+>
+  <Container
+    as="section"
+    class="flex min-h-[70dvh] flex-col items-start justify-center gap-6 py-16"
+  >
+    <p class="font-mono text-hero font-medium text-accent">404</p>
+    <h1 class="text-section text-text">This endpoint doesn't exist</h1>
+    <p class="max-w-reading text-muted">
+      The page you asked for was moved or never existed.
+    </p>
+    <Button href="/">Back to home</Button>
+  </Container>
+</BaseLayout>
