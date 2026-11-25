@@ -1,5 +1,6 @@
 ---
 import Container from "../ui/Container.astro";
+import TextLink from "../ui/TextLink.astro";
 import Logo from "./Logo.astro";
 import { site } from "../../data/site";
 
@@ -10,11 +11,8 @@ const copyright = `© ${new Date().getFullYear()} ${site.name} · Built with Ast
   <Container class="flex flex-col items-start gap-4 py-10 sm:flex-row sm:items-center sm:justify-between">
     <Logo class="-ml-2" />
     <p class="text-small text-muted">{copyright}</p>
-    <a
-      href="#top"
-      class="inline-flex min-h-11 items-center text-small font-medium text-text underline decoration-1 underline-offset-4 hover:decoration-2"
-    >
+    <TextLink href="#top" class="text-small">
       Back to top
-    </a>
+    </TextLink>
   </Container>
 </footer>

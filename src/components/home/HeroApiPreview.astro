@@ -1,0 +1,61 @@
+---
+import StatusBadge from "../ui/StatusBadge.astro";
+import Tag from "../ui/Tag.astro";
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { data } = Astro.props.project;
+
+const projectResponse = {
+  id: data.order,
+  name: data.title,
+  description: data.summary,
+  githubUrl: data.repoUrl,
+  technologyNames: data.stack,
+};
+
+const requestPath = `/api/projects/${projectResponse.id}`;
+const responseLines = JSON.stringify(projectResponse, null, 2).split("\n");
+const keyPattern = /^(\s*)("[^"]+")(: )(.*)$/;
+---
+
+<div class="min-w-0 space-y-4">
+  <figure
+    class="overflow-hidden rounded-3xl bg-feature font-mono text-small text-feature-text"
+    aria-label={`API response for ${data.title}`}
+  >
+    <figcaption class="flex items-center justify-between gap-4 border-b border-feature-muted/25 px-5 py-3">
+      <span>
+        <span class="text-feature-accent">GET</span>
+        {` ${requestPath}`}
+      </span>
+      <span class="text-feature-muted">200 OK</span>
+    </figcaption>
+    <pre class="px-5 py-4 break-words whitespace-pre-wrap"><code>{responseLines.map((line) => {
+      const match = keyPattern.exec(line);
+      if (!match) return <span class="text-feature-muted">{line}{"\n"}</span>;
+      const [, indent, key, separator, value] = match;
+      return <span>{indent}<span class="text-feature-accent">{key}</span><span class="text-feature-muted">{separator}</span>{value}{"\n"}</span>;
+    })}</code></pre>
+  </figure>
+  <p class="font-mono text-caption text-muted">
+    <span aria-hidden="true">↓</span> rendered by React
+  </p>
+  <div class="space-y-4 rounded-3xl border border-line bg-surface p-6">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <p class="font-display text-title font-bold">{data.title}</p>
+      <StatusBadge status={data.status} />
+    </div>
+    <p class="text-small text-muted">{data.summary}</p>
+    <ul class="flex flex-wrap gap-2">
+      {data.stack.map((technology) => (
+        <li>
+          <Tag label={technology} />
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>

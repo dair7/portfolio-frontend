@@ -1,37 +1,20 @@
 ---
-import Container from "../components/ui/Container.astro";
-import SectionHeading from "../components/ui/SectionHeading.astro";
+import About from "../components/home/About.astro";
+import Contact from "../components/home/Contact.astro";
+import Hero from "../components/home/Hero.astro";
+import OpenSource from "../components/home/OpenSource.astro";
+import SelectedWork from "../components/home/SelectedWork.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { navigationLinks } from "../data/navigation";
 import { site } from "../data/site";
-
-const sectionNumber = (index: number) => String(index + 1).padStart(2, "0");
 ---
 
 <BaseLayout
-  title={`${site.name} — Full stack developer`}
-  description="Portfolio of Dair Guerrero, full stack developer. Version 2 is in progress."
+  title={`${site.name} — ${site.role}`}
+  description={site.description}
 >
-  <Container class="flex min-h-[60dvh] items-center py-16">
-    <h1 class="text-hero">v2 in progress</h1>
-  </Container>
-  {navigationLinks.map(({ label, sectionId }, index) => (
-    <section
-      id={sectionId}
-      tabindex="-1"
-      aria-labelledby={`${sectionId}-title`}
-      class="min-h-dvh py-24 even:bg-band"
-    >
-      <Container class="space-y-6">
-        <SectionHeading
-          id={`${sectionId}-title`}
-          number={sectionNumber(index)}
-          title={label}
-        />
-        <p class="max-w-reading text-muted">
-          Placeholder section. It is replaced with real content in phase 4.
-        </p>
-      </Container>
-    </section>
-  ))}
+  <Hero />
+  <SelectedWork />
+  <OpenSource />
+  <About />
+  <Contact />
 </BaseLayout>

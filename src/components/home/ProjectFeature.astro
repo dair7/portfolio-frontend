@@ -1,0 +1,77 @@
+---
+import { Image } from "astro:assets";
+
+import StatusBadge from "../ui/StatusBadge.astro";
+import Tag from "../ui/Tag.astro";
+import ProjectFlow from "./ProjectFlow.astro";
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+  number: string;
+  reversed: boolean;
+}
+
+const { project, number, reversed } = Astro.props;
+const { data } = project;
+const titleId = `project-${project.id}-title`;
+const callToActionId = `project-${project.id}-cta`;
+---
+
+<a
+  href={`/projects/${project.id}`}
+  aria-labelledby={`${titleId} ${callToActionId}`}
+  class="group grid items-center gap-8 rounded-3xl lg:grid-cols-2 lg:gap-16"
+>
+  <div class:list={["overflow-hidden rounded-3xl", reversed && "lg:order-2"]}>
+    <div class="transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100">
+      {data.cover && data.coverAlt ? (
+        <Image
+          src={data.cover}
+          alt={data.coverAlt}
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 64rem) 50vw, 100vw"
+          class="h-auto w-full"
+        />
+      ) : data.flow ? (
+        <ProjectFlow steps={data.flow} />
+      ) : (
+        <div class="grid aspect-video place-items-center rounded-3xl bg-feature font-mono text-small text-feature-text">
+          {data.title}
+        </div>
+      )}
+    </div>
+  </div>
+  <div class="space-y-5">
+    <div class="flex flex-wrap items-center gap-4">
+      <span
+        aria-hidden="true"
+        class="font-display text-section font-medium text-accent"
+      >
+        {number}
+      </span>
+      <StatusBadge status={data.status} />
+    </div>
+    <h3 id={titleId} class="text-headline">
+      {data.title}
+    </h3>
+    <p class="max-w-reading text-body text-muted">{data.summary}</p>
+    <p class="text-small">
+      <span class="font-semibold">Role:</span>
+      {` ${data.role}`}
+    </p>
+    <ul class="flex flex-wrap gap-2">
+      {data.stack.map((technology) => (
+        <li>
+          <Tag label={technology} />
+        </li>
+      ))}
+    </ul>
+    <p
+      id={callToActionId}
+      class="font-medium text-text underline decoration-1 underline-offset-4 group-hover:decoration-2"
+    >
+      Read the case study <span aria-hidden="true">→</span>
+    </p>
+  </div>
+</a>

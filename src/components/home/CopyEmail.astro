@@ -1,0 +1,37 @@
+---
+import Button from "../ui/Button.astro";
+import PendingText from "../ui/PendingText.astro";
+import { isPending } from "../../lib/pending";
+import { site } from "../../data/site";
+
+const { email } = site;
+---
+
+{isPending(email) ? (
+  <PendingText value={email} />
+) : (
+  <div data-copy-email class="flex flex-wrap items-center gap-x-5 gap-y-3">
+    <a
+      href={`mailto:${email}`}
+      data-copy-email-value
+      class="font-display text-headline font-bold break-all text-text underline decoration-accent decoration-2 underline-offset-8"
+    >
+      {email}
+    </a>
+    <Button variant="secondary" data-copy-email-button>
+      Copy email
+    </Button>
+    <p
+      role="status"
+      aria-live="polite"
+      data-copy-email-status
+      class="text-small text-muted"
+    />
+  </div>
+)}
+
+<script>
+  import { setupCopyEmail } from "../../scripts/copy-email";
+
+  document.addEventListener("astro:page-load", setupCopyEmail);
+</script>

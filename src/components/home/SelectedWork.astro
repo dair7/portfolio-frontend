@@ -1,0 +1,23 @@
+---
+import HomeSection from "./HomeSection.astro";
+import ProjectFeature from "./ProjectFeature.astro";
+import { sectionIds } from "../../data/navigation";
+import { getPublishedProjects } from "../../lib/projects";
+
+const projects = await getPublishedProjects();
+const projectNumber = (index: number) => String(index + 1).padStart(2, "0");
+---
+
+<HomeSection id={sectionIds.work} title="Selected work">
+  <ol class="space-y-20 lg:space-y-28">
+    {projects.map((project, index) => (
+      <li>
+        <ProjectFeature
+          project={project}
+          number={projectNumber(index)}
+          reversed={index % 2 === 1}
+        />
+      </li>
+    ))}
+  </ol>
+</HomeSection>

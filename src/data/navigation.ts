@@ -1,17 +1,25 @@
+import { site } from "./site";
+
 export interface NavigationLink {
   label: string;
   sectionId: string;
 }
 
+export const sectionIds = {
+  work: "work",
+  openSource: "oss",
+  about: "about",
+  contact: "contact",
+} as const;
+
 export const navigationLinks: NavigationLink[] = [
-  { label: "Work", sectionId: "work" },
-  { label: "Open source", sectionId: "oss" },
-  { label: "About", sectionId: "about" },
-  { label: "Contact", sectionId: "contact" },
+  { label: "Work", sectionId: sectionIds.work },
+  { label: "Open source", sectionId: sectionIds.openSource },
+  { label: "About", sectionId: sectionIds.about },
+  { label: "Contact", sectionId: sectionIds.contact },
 ];
 
-// TODO(dair): add the résumé PDF at public/resume.pdf.
-export const resumeHref = "/resume.pdf";
+export const resumeHref = site.resumeHref;
 
 export const homePath = "/";
 

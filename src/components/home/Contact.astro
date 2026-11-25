@@ -1,0 +1,17 @@
+---
+import SocialLinks from "../ui/SocialLinks.astro";
+import CopyEmail from "./CopyEmail.astro";
+import HomeSection from "./HomeSection.astro";
+import { sectionIds } from "../../data/navigation";
+---
+
+<HomeSection
+  id={sectionIds.contact}
+  title="Have a role or a project in mind?"
+  lead="I usually reply within a day."
+>
+  <div class="space-y-8">
+    <CopyEmail />
+    <SocialLinks includeResume />
+  </div>
+</HomeSection>

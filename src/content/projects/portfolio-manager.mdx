@@ -1,0 +1,48 @@
+---
+title: Portfolio Manager
+summary: A Spring Boot REST API that manages portfolio projects and technologies behind JWT authentication.
+role: "TODO(dair): your role in the project (for example, sole developer)."
+year: 2026
+scope: REST API · CRUD for projects and technologies · JWT authentication
+stack:
+  - Java 17
+  - Spring Boot
+  - Spring Data JPA
+  - PostgreSQL
+  - Spring Security
+  - JWT
+repoUrl: https://github.com/dair7/dev-portfolio-manager
+order: 1
+status: in-progress
+draft: false
+problem: "TODO(dair): why this project exists and the problem it solves."
+decisions:
+  - title: DTOs with mappers
+    body: Controllers receive and return DTOs, never JPA entities. Mappers translate between the two, so the API contract does not change when the database schema does, and lazy relations or internal fields never leak into a response.
+  - title: Stateless JWT authentication
+    body: Spring Security validates a signed JWT on every request instead of keeping an HTTP session. The API holds no per-user state, so any instance can answer any request.
+  - title: Services behind interfaces
+    body: Controllers depend on service interfaces, not on their implementations. The business rules live in one place and can be replaced or mocked in tests without touching the web layer.
+  - title: Secrets in environment variables
+    body: The database credentials and the JWT signing key come from environment variables. Nothing sensitive is committed, and each environment supplies its own values.
+  - title: open-in-view disabled
+    body: With spring.jpa.open-in-view set to false, the persistence session closes when the service returns. Lazy loading cannot fire queries while the response is being serialized, so every query is visible in the service layer.
+differently:
+  - Manage the schema with Flyway migrations instead of Hibernate's ddl-auto.
+  - Throw specific exceptions and map each one to the correct HTTP status code.
+  - Validate incoming DTOs with Bean Validation.
+  - Write integration tests against a real PostgreSQL with Testcontainers.
+flow:
+  - layer: Client
+    label: React
+  - layer: Security
+    label: JWT filter
+  - layer: Web
+    label: Controller (DTO)
+  - layer: Business
+    label: Service
+  - layer: Data access
+    label: Repository (Spring Data JPA)
+  - layer: Database
+    label: PostgreSQL
+---

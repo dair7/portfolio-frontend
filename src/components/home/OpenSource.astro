@@ -1,0 +1,34 @@
+---
+import TextLink from "../ui/TextLink.astro";
+import HomeSection from "./HomeSection.astro";
+import OpenSourceCard from "./OpenSourceCard.astro";
+import { sectionIds } from "../../data/navigation";
+import {
+  mergedPullRequestsUrl,
+  openSourceHighlights,
+} from "../../data/oss-highlights";
+import { getOpenSourceStats } from "../../lib/opensource-stats";
+
+const { pullRequestCount, organizationCount } = getOpenSourceStats();
+
+function countLabel(count: number, singular: string, plural: string): string {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+const statsLine = `${countLabel(pullRequestCount, "merged PR", "merged PRs")} across ${countLabel(organizationCount, "organization", "organizations")}`;
+---
+
+<HomeSection id={sectionIds.openSource} title="Open source" band>
+  <ul class="grid gap-6 lg:grid-cols-3">
+    {openSourceHighlights.map((highlight) => (
+      <li>
+        <OpenSourceCard highlight={highlight} />
+      </li>
+    ))}
+  </ul>
+  <p class="flex flex-wrap items-center gap-x-2 text-small text-muted">
+    <span>{statsLine}</span>
+    <span aria-hidden="true">·</span>
+    <TextLink href={mergedPullRequestsUrl}>see all on GitHub</TextLink>
+  </p>
+</HomeSection>

@@ -1,0 +1,16 @@
+---
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  status: Project["data"]["status"];
+}
+
+const { status } = Astro.props;
+---
+
+{status === "in-progress" && (
+  <span class="inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 text-caption font-medium text-text">
+    <span aria-hidden="true" class="size-1.5 rounded-full bg-accent" />
+    In progress
+  </span>
+)}

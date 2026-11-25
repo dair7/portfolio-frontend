@@ -1,0 +1,48 @@
+---
+import Button from "../ui/Button.astro";
+import Container from "../ui/Container.astro";
+import SocialLinks from "../ui/SocialLinks.astro";
+import HeroApiPreview from "./HeroApiPreview.astro";
+import LocalTime from "./LocalTime.astro";
+import { sectionIds } from "../../data/navigation";
+import { site } from "../../data/site";
+import { getPublishedProjects } from "../../lib/projects";
+
+const [featuredProject] = await getPublishedProjects();
+const { availability } = site;
+const availabilityLine = [
+  availability.label,
+  `${site.location} (${availability.utcOffset})`,
+  availability.workMode,
+].join(" · ");
+---
+
+<section aria-labelledby="hero-title" class="py-16 sm:py-24">
+  <Container class="grid items-center gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
+    <div class="space-y-8">
+      {availability.isAvailable && (
+        <p class="flex items-center gap-3 text-small font-medium text-text">
+          <span aria-hidden="true" class="size-2 rounded-full bg-accent" />
+          {availabilityLine}
+        </p>
+      )}
+      <div class="space-y-5">
+        <h1 id="hero-title" class="text-hero">
+          {site.name}
+        </h1>
+        <p class="max-w-reading text-body text-text">{site.tagline}</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <Button href={`#${sectionIds.work}`}>View my work</Button>
+        <Button variant="secondary" href={`#${sectionIds.contact}`}>
+          Get in touch
+        </Button>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <SocialLinks />
+        <LocalTime />
+      </div>
+    </div>
+    {featuredProject && <HeroApiPreview project={featuredProject} />}
+  </Container>
+</section>

@@ -1,0 +1,33 @@
+---
+import Tag from "../ui/Tag.astro";
+import { site } from "../../data/site";
+
+interface StackRow {
+  label: string;
+  technologies: readonly string[];
+}
+
+const rows: StackRow[] = [
+  { label: "Every day", technologies: site.stack.everyDay },
+  { label: "Worked with", technologies: site.stack.workedWith },
+  { label: "Learning now", technologies: site.stack.learning },
+];
+const visibleRows = rows.filter(({ technologies }) => technologies.length > 0);
+---
+
+<dl class="divide-y divide-line border-y border-line">
+  {visibleRows.map(({ label, technologies }) => (
+    <div class="grid gap-3 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:items-baseline">
+      <dt class="text-small font-semibold">{label}</dt>
+      <dd>
+        <ul class="flex flex-wrap gap-2">
+          {technologies.map((technology) => (
+            <li>
+              <Tag label={technology} />
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
+  ))}
+</dl>
