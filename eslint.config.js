@@ -1,30 +1,19 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from "@eslint/js";
+import astro from "eslint-plugin-astro";
+import prettier from "eslint-config-prettier";
+import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
-export default defineConfig([
-  globalIgnores(['dist']),
+export default defineConfig(
+  globalIgnores(["dist/", ".astro/", ".vercel/"]),
+  js.configs.recommended,
+  tseslint.configs.strict,
+  astro.configs.recommended,
   {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: { ...globals.browser, ...globals.node },
     },
   },
-  {
-    // Build-time scripts run in Node, not in the browser.
-    files: ['scripts/**/*.ts'],
-    languageOptions: {
-      globals: globals.node,
-    },
-  },
-])
+  prettier,
+);

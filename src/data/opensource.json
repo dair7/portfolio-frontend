@@ -1,7 +1,35 @@
 {
-  "generatedAt": "2026-08-15T01:21:05.060Z",
-  "count": 14,
+  "generatedAt": "2026-11-25T02:02:42.186Z",
+  "count": 17,
   "pullRequests": [
+    {
+      "organization": "Epta-Node",
+      "repository": "Linkora-social",
+      "title": "fix(indexer): bind auth signatures to request method, path and body",
+      "url": "https://github.com/Epta-Node/Linkora-social/pull/1183",
+      "mergedAt": "2026-08-27T06:13:42Z"
+    },
+    {
+      "organization": "Epta-Node",
+      "repository": "ai-net",
+      "title": "feat(ui): add i18n support with English and Chinese locales",
+      "url": "https://github.com/Epta-Node/ai-net/pull/309",
+      "mergedAt": "2026-08-24T02:47:35Z"
+    },
+    {
+      "organization": "CortexRail",
+      "repository": "cortex-protocols",
+      "title": "feat(fraud): detection pipeline for streams and licenses",
+      "url": "https://github.com/CortexRail/cortex-protocols/pull/105",
+      "mergedAt": "2026-08-20T07:37:35Z"
+    },
+    {
+      "organization": "water-credits",
+      "repository": "water-credits-frontend",
+      "title": "Fix/97 project form store navigation",
+      "url": "https://github.com/water-credits/water-credits-frontend/pull/105",
+      "mergedAt": "2026-08-18T17:43:02Z"
+    },
     {
       "organization": "Grainlify",
       "repository": "Grainlify-Backend",
@@ -36,13 +64,6 @@
       "title": "﻿docs: add network architecture overview",
       "url": "https://github.com/Axionvera/axionvera-network/pull/306",
       "mergedAt": "2026-07-29T14:01:32Z"
-    },
-    {
-      "organization": "Deen-Bridge",
-      "repository": "dnb-frontend",
-      "title": "feat(#127): drive video player from real course data",
-      "url": "https://github.com/Deen-Bridge/dnb-frontend/pull/151",
-      "mergedAt": "2026-07-29T11:40:09Z"
     },
     {
       "organization": "Grainlify",
@@ -80,17 +101,17 @@
       "mergedAt": "2026-07-28T12:59:54Z"
     },
     {
-      "organization": "Axionvera",
+      "organization": "Stellar-PocketPay",
       "repository": "pocketpay-contracts",
       "title": "docs: add contract release checklist (#461)",
-      "url": "https://github.com/Axionvera/pocketpay-contracts/pull/467",
+      "url": "https://github.com/Stellar-PocketPay/pocketpay-contracts/pull/467",
       "mergedAt": "2026-07-28T01:28:34Z"
     },
     {
-      "organization": "Axionvera",
+      "organization": "Stellar-PocketPay",
       "repository": "pocketpay-mobile",
       "title": "docs: add mobile architecture readiness review",
-      "url": "https://github.com/Axionvera/pocketpay-mobile/pull/384",
+      "url": "https://github.com/Stellar-PocketPay/pocketpay-mobile/pull/384",
       "mergedAt": "2026-07-27T18:52:15Z"
     },
     {

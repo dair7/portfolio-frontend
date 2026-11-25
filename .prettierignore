@@ -1,0 +1,7 @@
+dist
+.astro
+.vercel
+pnpm-lock.yaml
+src/data/opensource.json
+CLAUDE.md
+.github
