@@ -2,6 +2,7 @@
 import SocialLinks from "../ui/SocialLinks.astro";
 import CopyEmail from "./CopyEmail.astro";
 import PageSection from "../ui/PageSection.astro";
+import Tinto from "../tinto/Tinto.astro";
 import { sectionIds } from "../../data/navigation";
 ---
 
@@ -11,8 +12,11 @@ import { sectionIds } from "../../data/navigation";
   lead="I usually reply within a day."
   isNavigationTarget
 >
-  <div class="space-y-8">
-    <CopyEmail />
-    <SocialLinks includeResume />
+  <div class="flex flex-wrap items-end gap-x-16 gap-y-8">
+    <div class="space-y-8">
+      <CopyEmail />
+      <SocialLinks includeResume />
+    </div>
+    <Tinto size={144} class="ml-auto w-30 sm:ml-0 sm:w-36" />
   </div>
 </PageSection>

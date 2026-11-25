@@ -6,6 +6,8 @@ export const motionNames = {
   flip: "flip",
   reveal: "reveal",
   requestFlow: "request-flow",
+  tinto: "tinto",
+  beanDrop: "bean-drop",
 } as const;
 
 export type MotionName = (typeof motionNames)[keyof typeof motionNames];
@@ -31,6 +33,17 @@ export const motionTiming = {
   flip: { duration: 0.5, stagger: 0.3 },
   reveal: { duration: 0.5 },
   requestFlow: { hop: 0.25, hold: 0.3, status: 0.4 },
+  beanDrop: { hop: 0.25, land: 0.5 },
+  tintoIdle: {
+    float: 1.2,
+    floatLegs: 4,
+    blinkAt: [1.4, 3.6],
+    blink: 0.08,
+    zzz: 1.1,
+    zzzLegs: 4,
+  },
+  tintoHappy: { jump: 0.25, land: 0.45, sparkles: 0.6 },
+  tintoGaze: 0.3,
   themeTransitionMs: 300,
 } as const;
 
@@ -39,6 +52,14 @@ export const motionDistance = {
   waveLiftPx: 4,
   revealOffsetPx: 16,
   flipPerspectivePx: 400,
+  beanHopEm: 0.45,
+  tintoFloat: 6,
+  tintoZzzRise: 8,
+  tintoJump: 24,
+  tintoGazeReach: 5,
+  tintoSparkleScale: 1.6,
 } as const;
+
+export const copyEmailCopiedEvent = "copy-email:copied";
 
 export const revealStartOpacity = 0.5;

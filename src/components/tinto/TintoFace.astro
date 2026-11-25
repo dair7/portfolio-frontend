@@ -1,0 +1,84 @@
+---
+import { tintoEyeGeometry, tintoEyes } from "../../data/tinto";
+import { createUniqueId } from "../../lib/unique-id";
+
+const { centerY, radius, pupilRadius, lidTop, lidHeight } = tintoEyeGeometry;
+const lidWidth = radius * 2 + 2;
+const eyes = tintoEyes.map(({ side, centerX }) => ({
+  side,
+  centerX,
+  clipId: createUniqueId(`tinto-eye-${side}`),
+}));
+---
+
+<g class="tinto-face">
+  <defs>
+    {eyes.map(({ centerX, clipId }) => (
+      <clipPath id={clipId}>
+        <circle cx={centerX} cy={centerY} r={radius} />
+      </clipPath>
+    ))}
+  </defs>
+  {eyes.map(({ centerX, clipId }) => (
+    <g class="tinto-eye">
+      <circle cx={centerX} cy={centerY} r={radius} fill="var(--tinto-eye)" />
+      <circle
+        class="tinto-pupil"
+        cx={centerX}
+        cy={centerY}
+        r={pupilRadius}
+        fill="var(--tinto-pupil)"
+      />
+      <g clip-path={`url(#${clipId})`}>
+        <rect
+          class="tinto-lid"
+          x={centerX - lidWidth / 2}
+          y={lidTop}
+          width={lidWidth}
+          height={lidHeight}
+          fill="var(--tinto-body)"
+        />
+        <rect
+          class="tinto-blink"
+          x={centerX - lidWidth / 2}
+          y={lidTop}
+          width={lidWidth}
+          height="0"
+          fill="var(--tinto-body)"
+        />
+      </g>
+    </g>
+  ))}
+  <ellipse
+    cx="78"
+    cy="140"
+    rx="9"
+    ry="5"
+    fill="var(--tinto-cheek)"
+    opacity=".6"
+  />
+  <ellipse
+    cx="144"
+    cy="140"
+    rx="9"
+    ry="5"
+    fill="var(--tinto-cheek)"
+    opacity=".6"
+  />
+  <path
+    class="tinto-mouth-smile"
+    d="M100 142 Q111 152 122 142"
+    fill="none"
+    stroke="var(--tinto-mouth)"
+    stroke-width="3.5"
+    stroke-linecap="round"
+  />
+  <ellipse
+    class="tinto-mouth-surprised"
+    cx="111"
+    cy="146"
+    rx="5"
+    ry="6"
+    fill="var(--tinto-pupil)"
+  />
+</g>

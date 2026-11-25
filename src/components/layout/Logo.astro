@@ -1,4 +1,5 @@
 ---
+import Bean from "../brand/Bean.astro";
 import { logoLabel, logoParts } from "../../data/brand";
 import { motionNames, motionSessions } from "../../data/motion";
 import { homePath } from "../../data/navigation";
@@ -12,11 +13,13 @@ interface Props {
 
 const { motion, class: className } = Astro.props;
 const isDecoding = motion === "decode";
-const segments = [
-  { text: logoParts.name, isAccent: false },
-  { text: logoParts.dot, isAccent: true },
-  { text: logoParts.suffix, isAccent: false },
-];
+const introSession = isDecoding ? motionSessions.navLogo : undefined;
+const decodeAttributes = {
+  "data-motion": isDecoding ? motionNames.decode : undefined,
+  "data-motion-once": introSession,
+  "data-motion-accent": isDecoding ? "text-accent" : undefined,
+};
+const segments = [logoParts.name, undefined, logoParts.suffix];
 ---
 
 <a
@@ -28,13 +31,17 @@ const segments = [
     className,
   ]}
 >
-  <span
-    data-motion={isDecoding ? motionNames.decode : undefined}
-    data-motion-once={isDecoding ? motionSessions.navLogo : undefined}
-    data-motion-accent={isDecoding ? "text-accent" : undefined}
-  >
-    {segments.map(({ text, isAccent }) =>
-      isAccent ? <span class="text-accent">{text}</span> : text,
+  <span>
+    {segments.map((text) =>
+      text ? (
+        <span {...decodeAttributes}>{text}</span>
+      ) : (
+        <Bean
+          class="mx-[0.06em] text-accent"
+          data-motion={isDecoding ? motionNames.beanDrop : undefined}
+          data-motion-once={introSession}
+        />
+      ),
     )}
   </span>
 </a>

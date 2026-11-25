@@ -1,8 +1,10 @@
 ---
+import Tinto from "../components/tinto/Tinto.astro";
 import Button from "../components/ui/Button.astro";
 import Container from "../components/ui/Container.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { site } from "../data/site";
+import { tintoLabels } from "../data/tinto";
 ---
 
 <BaseLayout
@@ -12,13 +14,21 @@ import { site } from "../data/site";
 >
   <Container
     as="section"
-    class="flex min-h-[70dvh] flex-col items-start justify-center gap-6 py-16"
+    class="grid min-h-[70dvh] content-center items-center gap-10 py-16 sm:grid-cols-[minmax(0,1fr)_auto]"
   >
-    <p class="font-mono text-hero font-medium text-accent">404</p>
-    <h1 class="text-section text-text">This endpoint doesn't exist</h1>
-    <p class="max-w-reading text-muted">
-      The page you asked for was moved or never existed.
-    </p>
-    <Button href="/">Back to home</Button>
+    <div class="flex flex-col items-start gap-6">
+      <p class="font-mono text-hero font-medium text-accent">404</p>
+      <h1 class="text-section text-text">This endpoint doesn't exist</h1>
+      <p class="max-w-reading text-muted">
+        The page you asked for was moved or never existed.
+      </p>
+      <Button href="/">Back to home</Button>
+    </div>
+    <Tinto
+      mood="confused"
+      size={200}
+      label={tintoLabels.notFound}
+      class="w-50"
+    />
   </Container>
 </BaseLayout>

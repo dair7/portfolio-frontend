@@ -1,0 +1,101 @@
+/* size-adjust is measured against the site's own text; ascent and descent keep the real fonts' line metrics. */
+
+@font-face {
+  font-family: "Inter Fallback Arial";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 400;
+  size-adjust: 106.41%;
+  ascent-override: 91.04%;
+  descent-override: 22.67%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Fallback Arial";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 500;
+  size-adjust: 107.41%;
+  ascent-override: 90.19%;
+  descent-override: 22.46%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600;
+  size-adjust: 101.23%;
+  ascent-override: 95.7%;
+  descent-override: 23.83%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Fallback Roboto";
+  src: local("Roboto"), local("Roboto-Regular");
+  font-weight: 400;
+  size-adjust: 107.37%;
+  ascent-override: 90.23%;
+  descent-override: 22.47%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Fallback Roboto";
+  src: local("Roboto"), local("Roboto-Regular");
+  font-weight: 500;
+  size-adjust: 108.37%;
+  ascent-override: 89.39%;
+  descent-override: 22.26%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Fallback Roboto";
+  src: local("Roboto Bold"), local("Roboto-Bold");
+  font-weight: 600;
+  size-adjust: 107.54%;
+  ascent-override: 90.08%;
+  descent-override: 22.43%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback Arial";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 500;
+  size-adjust: 108.57%;
+  ascent-override: 90.63%;
+  descent-override: 26.9%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback Arial";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 700;
+  size-adjust: 101.25%;
+  ascent-override: 97.19%;
+  descent-override: 28.84%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback Roboto";
+  src: local("Roboto"), local("Roboto-Regular");
+  font-weight: 500;
+  size-adjust: 108.87%;
+  ascent-override: 90.38%;
+  descent-override: 26.82%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Space Grotesk Fallback Roboto";
+  src: local("Roboto Bold"), local("Roboto-Bold");
+  font-weight: 700;
+  size-adjust: 107.21%;
+  ascent-override: 91.78%;
+  descent-override: 27.24%;
+  line-gap-override: 0%;
+}

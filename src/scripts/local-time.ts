@@ -1,3 +1,5 @@
+import { formatLocalTime } from "../lib/local-time";
+
 const minuteInMs = 60_000;
 
 class LocalTimeElement extends HTMLElement {
@@ -6,20 +8,16 @@ class LocalTimeElement extends HTMLElement {
 
   connectedCallback(): void {
     const output = this.querySelector("time");
-    if (!output) return;
-    const formatter = new Intl.DateTimeFormat("en-US", {
-      timeZone: this.dataset.timezone,
-      hour: "numeric",
-      minute: "2-digit",
-    });
+    const timeZone = this.dataset.timezone;
+    if (!output || !timeZone) return;
     const render = () => {
       const now = new Date();
-      output.textContent = formatter.format(now);
+      output.textContent = formatLocalTime(now, timeZone);
       output.dateTime = now.toISOString();
     };
 
     render();
-    this.hidden = false;
+    this.classList.remove("invisible");
     this.#alignTimeout = window.setTimeout(
       () => {
         render();

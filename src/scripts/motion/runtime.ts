@@ -22,6 +22,8 @@ const featureLoaders: Record<MotionName, () => Promise<MotionFeature>> = {
   [motionNames.reveal]: async () => (await import("./reveal")).reveal,
   [motionNames.requestFlow]: async () =>
     (await import("./request-flow")).requestFlow,
+  [motionNames.tinto]: async () => (await import("./tinto")).tinto,
+  [motionNames.beanDrop]: async () => (await import("./bean-drop")).beanDrop,
 };
 
 let activePage: PageMotion | undefined;

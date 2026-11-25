@@ -10,12 +10,14 @@ function fontsourceFamily({
   cssVariable,
   weights,
   fallbacks,
+  optimizedFallbacks = true,
 }) {
   return {
     provider: fontProviders.local(),
     name,
     cssVariable,
     fallbacks,
+    optimizedFallbacks,
     options: {
       variants: weights.map((weight) => ({
         weight,
@@ -60,14 +62,26 @@ export default defineConfig({
       packageName: "space-grotesk",
       cssVariable: "--font-space-grotesk",
       weights: [500, 700],
-      fallbacks: ["system-ui", "sans-serif"],
+      fallbacks: [
+        "Space Grotesk Fallback Arial",
+        "Space Grotesk Fallback Roboto",
+        "system-ui",
+        "sans-serif",
+      ],
+      optimizedFallbacks: false,
     }),
     fontsourceFamily({
       name: "Inter",
       packageName: "inter",
       cssVariable: "--font-inter",
       weights: [400, 500, 600],
-      fallbacks: ["system-ui", "sans-serif"],
+      fallbacks: [
+        "Inter Fallback Arial",
+        "Inter Fallback Roboto",
+        "system-ui",
+        "sans-serif",
+      ],
+      optimizedFallbacks: false,
     }),
     fontsourceFamily({
       name: "JetBrains Mono",

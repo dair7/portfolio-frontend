@@ -1,3 +1,5 @@
+import { copyEmailCopiedEvent } from "../data/motion";
+
 const feedbackDurationInMs = 1600;
 const copiedMessage = "Copied";
 const selectedMessage = "Selected. Copy it with your keyboard.";
@@ -32,7 +34,11 @@ function setupCopyEmailBlock(block: HTMLElement): void {
   button.addEventListener("click", async () => {
     window.clearTimeout(clearFeedback);
     const copied = await copyText(value.textContent?.trim() ?? "");
-    if (!copied) selectText(value);
+    if (copied) {
+      document.dispatchEvent(new CustomEvent(copyEmailCopiedEvent));
+    } else {
+      selectText(value);
+    }
     status.textContent = copied ? copiedMessage : selectedMessage;
     clearFeedback = window.setTimeout(() => {
       status.textContent = "";

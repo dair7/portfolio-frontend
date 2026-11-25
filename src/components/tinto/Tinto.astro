@@ -1,0 +1,112 @@
+---
+import TintoFace from "./TintoFace.astro";
+import { motionNames } from "../../data/motion";
+import { tintoSparkles, tintoViewBox, type TintoMood } from "../../data/tinto";
+
+interface Props {
+  mood?: TintoMood;
+  size: number;
+  label?: string;
+  class?: string;
+}
+
+const { mood = "idle", size, label, class: className } = Astro.props;
+const { x, y, width, height } = tintoViewBox;
+const viewBox = [x, y, width, height].join(" ");
+const renderedHeight = Math.round((size * height) / width);
+const accessibility = label
+  ? { role: "img" as const, "aria-label": label }
+  : { "aria-hidden": "true" as const };
+---
+
+<svg
+  class:list={["tinto h-auto max-w-full", className]}
+  data-mood={mood}
+  data-motion={motionNames.tinto}
+  viewBox={viewBox}
+  width={size}
+  height={renderedHeight}
+  {...accessibility}
+>
+  <ellipse
+    cx="110"
+    cy="222"
+    rx="44"
+    ry="7"
+    fill="var(--tinto-shadow)"
+    opacity=".12"
+  />
+  <g
+    fill="none"
+    stroke="var(--tinto-steam)"
+    stroke-width="3"
+    stroke-linecap="round"
+    opacity=".7"
+  >
+    <path d="M98 30 q-8 -10 0 -20 q8 -10 0 -20" />
+    <path d="M118 34 q-8 -10 0 -20 q8 -10 0 -20" />
+  </g>
+  <g class="tinto-figure">
+    <g transform="rotate(-14 110 125)">
+      <ellipse
+        cx="110"
+        cy="125"
+        rx="58"
+        ry="74"
+        fill="var(--tinto-body)"
+        stroke="var(--tinto-outline)"
+        stroke-width="3"
+      />
+      <ellipse
+        cx="94"
+        cy="98"
+        rx="14"
+        ry="26"
+        fill="var(--tinto-highlight)"
+        opacity=".5"
+      />
+      <path
+        d="M110 54 C 88 98, 132 150, 110 197"
+        fill="none"
+        stroke="var(--tinto-crease)"
+        stroke-width="6"
+        stroke-linecap="round"
+      />
+    </g>
+    <g class="tinto-cap">
+      <path d="M62 78 Q100 20 150 70 Z" fill="var(--tinto-cap)" />
+      <rect
+        x="58"
+        y="70"
+        width="98"
+        height="12"
+        rx="6"
+        fill="var(--tinto-cap-trim)"
+      />
+      <circle cx="152" cy="60" r="9" fill="var(--tinto-cap-trim)" />
+    </g>
+    <TintoFace />
+  </g>
+  <text
+    class="tinto-question tinto-glyph"
+    x="168"
+    y="70"
+    font-size="34"
+    fill="var(--tinto-accent)"
+  >
+    ?
+  </text>
+  <g class="tinto-zzz tinto-glyph" fill="var(--tinto-zzz)">
+    <text x="174" y="54" font-size="26">
+      z
+    </text>
+    <text x="196" y="30" font-size="20">
+      z
+    </text>
+  </g>
+  <g class="tinto-sparkles" fill="var(--tinto-accent)">
+    {tintoSparkles.map(({ x: sparkleX, y: sparkleY, radius }) => (
+      <circle cx={sparkleX} cy={sparkleY} r={radius} />
+    ))}
+  </g>
+</svg>

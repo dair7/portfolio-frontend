@@ -1,9 +1,18 @@
 ---
 import { site } from "../../data/site";
+import { formatLocalTime } from "../../lib/local-time";
+
+const buildTime = new Date();
+const placeholderTime = formatLocalTime(buildTime, site.timezone);
+const cityLabel = `in ${site.city}`;
 ---
 
-<local-time data-timezone={site.timezone} hidden class="text-small text-muted">
-  <time></time> in {site.city}
+<local-time
+  data-timezone={site.timezone}
+  class="invisible text-small text-muted"
+>
+  <time datetime={buildTime.toISOString()}>{placeholderTime}</time>
+  {cityLabel}
 </local-time>
 
 <script>
