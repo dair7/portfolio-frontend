@@ -13,10 +13,28 @@ const flowStepSchema = z.object({
   emphasis: z.boolean().default(false),
 });
 
+const repositorySchema = z.object({
+  label: z.string().min(1),
+  url: z.url(),
+});
+
 const projects = defineCollection({
   loader: glob({ pattern: "*.mdx", base: "./src/content/projects" }),
-  schema: ({ image }) =>
-    z
+  schema: ({ image }) => {
+    const screenSchema = z.object({
+      image: image(),
+      alt: z.string().min(1),
+    });
+    const coverSchema = z.discriminatedUnion("kind", [
+      screenSchema.extend({ kind: z.literal("screenshot") }),
+      z.object({
+        kind: z.literal("phone"),
+        label: z.string().min(1),
+        screen: screenSchema.optional(),
+      }),
+      z.object({ kind: z.literal("diagram") }),
+    ]);
+    return z
       .object({
         title: z.string().min(1),
         summary: z.string().min(1),
@@ -24,10 +42,9 @@ const projects = defineCollection({
         year: z.number().int(),
         scope: z.string().min(1),
         stack: z.array(z.string().min(1)).min(1),
-        repoUrl: z.url(),
+        repositories: z.array(repositorySchema).min(1),
         demoUrl: z.url().optional(),
-        cover: image().optional(),
-        coverAlt: z.string().min(1).optional(),
+        cover: coverSchema,
         order: z.number().int(),
         status: z.enum(["complete", "in-progress"]),
         draft: z.boolean().default(false),
@@ -36,10 +53,11 @@ const projects = defineCollection({
         differently: z.array(z.string().min(1)).min(1),
         flow: z.array(flowStepSchema).optional(),
       })
-      .refine((project) => !project.cover || project.coverAlt, {
-        message: "coverAlt is required when a cover image is set",
-        path: ["coverAlt"],
-      }),
+      .refine((project) => project.cover.kind !== "diagram" || project.flow, {
+        message: "A diagram cover needs the flow steps",
+        path: ["flow"],
+      });
+  },
 });
 
 export const collections = { projects };

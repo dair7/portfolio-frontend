@@ -1,0 +1,46 @@
+---
+import PendingText from "../ui/PendingText.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import Tag from "../ui/Tag.astro";
+import TextLink from "../ui/TextLink.astro";
+import type { MoreProject } from "../../data/more-projects";
+import { isPending } from "../../lib/pending";
+
+interface Props {
+  project: MoreProject;
+}
+
+const { title, summary, stack, status, repoUrl, demoUrl } = Astro.props.project;
+const linkContext = ` for ${title}`;
+---
+
+<article class="flex h-full flex-col gap-4 rounded-3xl border border-line bg-surface p-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h3 class="text-title">{title}</h3>
+    {isPending(status) ? (
+      <PendingText value={status} />
+    ) : (
+      <StatusBadge status={status} />
+    )}
+  </div>
+  <p class="text-small text-muted">{summary}</p>
+  <ul class="flex flex-wrap gap-2">
+    {stack.map((technology) => (
+      <li>
+        <Tag label={technology} />
+      </li>
+    ))}
+  </ul>
+  <p class="mt-auto flex flex-wrap gap-x-6 text-small">
+    <TextLink href={repoUrl}>
+      Code<span class="sr-only">{linkContext}</span>
+      <span aria-hidden="true">&nbsp;↗</span>
+    </TextLink>
+    {demoUrl && (
+      <TextLink href={demoUrl}>
+        Live demo<span class="sr-only">{linkContext}</span>
+        <span aria-hidden="true">&nbsp;↗</span>
+      </TextLink>
+    )}
+  </p>
+</article>

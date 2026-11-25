@@ -1,6 +1,6 @@
 ---
 import PageSection from "../ui/PageSection.astro";
-import ProjectFeature from "./ProjectFeature.astro";
+import ProjectCard from "./ProjectCard.astro";
 import { sectionIds } from "../../data/navigation";
 import { formatProjectNumber, getPublishedProjects } from "../../lib/projects";
 
@@ -8,13 +8,13 @@ const projects = await getPublishedProjects();
 ---
 
 <PageSection id={sectionIds.work} title="Selected work" isNavigationTarget>
-  <ol class="space-y-14 lg:space-y-20">
+  <ol class="grid gap-6 lg:grid-cols-3">
     {projects.map((project, index) => (
       <li>
-        <ProjectFeature
+        <ProjectCard
           project={project}
           number={formatProjectNumber(index)}
-          reversed={index % 2 === 1}
+          isFirst={index === 0}
         />
       </li>
     ))}

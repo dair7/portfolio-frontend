@@ -1,0 +1,43 @@
+---
+import { Picture } from "astro:assets";
+
+import CoverFallback from "./CoverFallback.astro";
+import PhoneFrame from "./PhoneFrame.astro";
+import ProjectFlow from "./ProjectFlow.astro";
+import type { Project, ProjectCover as Cover } from "../../lib/projects";
+
+interface Props {
+  cover: Cover;
+  title: string;
+  flow: Project["data"]["flow"];
+  isFirst: boolean;
+}
+
+const { cover, title, flow, isFirst } = Astro.props;
+const loading = isFirst ? "eager" : "lazy";
+---
+
+{cover.kind === "screenshot" && (
+  <Picture
+    src={cover.image}
+    alt={cover.alt}
+    formats={["avif", "webp"]}
+    widths={[400, 800, cover.image.width]}
+    sizes="(min-width: 64rem) 33vw, (min-width: 48rem) 40vw, 100vw"
+    loading={loading}
+    class="h-full w-full object-cover object-top"
+  />
+)}
+{cover.kind === "phone" &&
+  (cover.screen ? (
+    <PhoneFrame
+      image={cover.screen.image}
+      alt={cover.screen.alt}
+      loading={loading}
+    />
+  ) : (
+    <CoverFallback title={title} label={cover.label} />
+  ))}
+{cover.kind === "diagram" && flow && (
+  <ProjectFlow steps={flow} variant="compact" />
+)}

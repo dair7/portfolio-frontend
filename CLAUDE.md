@@ -66,7 +66,7 @@ Un solo color de marca: el **rojo tomate**. El modo oscuro es el claro con los p
 | `feature-text` | `#F7F1EC` | `#F2EAE4` | Texto en `feature` |
 | `feature-muted` | `#D9C9C2` | `#A8958F` | Texto secundario en `feature` |
 | `feature-accent` | `#FF7A63` | `#F0513A` | Acento dentro de `feature` |
-| `glass` | `rgba(247,241,236,.62)` | `rgba(35,24,25,.55)` | Fondo de la barra de navegación y de las tarjetas de vidrio (proyecto del hero, Open source, Key decisions, Next project) |
+| `glass` | `rgba(247,241,236,.62)` | `rgba(35,24,25,.55)` | Fondo de la barra de navegación y de las tarjetas de vidrio (proyecto del hero, Selected work, Open source, Key decisions, Next project) |
 | `glass-line` | `rgba(42,20,24,.12)` | `rgba(242,234,228,.12)` | Borde de la barra de navegación y de las tarjetas de vidrio |
 
 Reglas de color:
@@ -98,18 +98,19 @@ Reglas de color:
 
 ## Estructura del sitio
 
-- `/` home: hero → trabajo seleccionado → open source → about → contacto.
+- `/` home: hero → trabajo seleccionado → more projects → open source → about → contacto.
 - `/projects/[slug]`: caso de estudio por proyecto.
 - `/resume.pdf`: CV descargable (archivo lo pongo yo).
 - `404` propia.
 
 ### Home
 
-1. **Hero**: "Available for work · Colombia (UTC-5) · Remote" con punto `accent`; nombre; una frase de lo que hago; botones "View my work" y "Get in touch"; links a GitHub y LinkedIn; hora actual de Bogotá. A la derecha, el concepto "del backend a la pantalla": una respuesta JSON real de la API (`GET /api/projects/1`) y debajo la misma info como tarjeta.
-2. **Selected work**: 3 proyectos grandes, numerados `01` `02` `03`, imagen y texto alternando de lado. Cada uno: nombre, problema en una línea, rol y stack, link "Read the case study →".
-3. **Open source**: 3 PRs elegidos a mano, cada uno con repo, título, una línea de qué resolví y link. Debajo, "N merged PRs across M organizations · see all" con los números del script.
-4. **About**: foto, párrafo en primera persona, stack en tres filas (Every day / Worked with / Learning now).
-5. **Contact**: título grande, email con botón de copiar (feedback "Copied" 1.6 s), links a LinkedIn, GitHub y CV.
+1. **Hero**: "Available for work · Colombia (UTC-5) · Remote" con punto `accent`; nombre; una frase de lo que hago; botones "View my work" y "Get in touch"; links a GitHub y LinkedIn; hora actual de Bogotá. A la derecha, el concepto "del backend a la pantalla": una respuesta JSON ilustrativa (`GET /api/projects/1`, no es una API desplegada) con los datos del destacado 01 y debajo la misma info como tarjeta.
+2. **Selected work**: grilla de 3 tarjetas de vidrio (`glass` + `glass-shine`): verticales en móvil, horizontales entre md y lg (portada ~40 % a la izquierda) y en 3 columnas desde lg. En 3 columnas miden lo mismo porque comparten fila; en 1 columna cada una mide lo suyo. Cada tarjeta: portada 16:10 (`object-cover` anclada arriba, scale 1.02 en hover solo con motion-safe), número `01` `02` `03` y estado, título, summary, las primeras 4 etiquetas `technology` y un "+N" neutro, y "Read the case study →" cubriendo la tarjeta. El rol y el stack completo quedan en el caso de estudio. La portada (`cover` en el schema) es de un tipo: `screenshot` (web), `phone` (móvil: marco de celular con `screen`; sin captura, panel neutro con el título y su `label`) o `diagram` (backend, usa `flow`). Imágenes con astro:assets (AVIF/WebP), aspect-ratio reservado, solo la primera eager.
+3. **More projects**: lista compacta debajo de Selected work, sin imagen para marcar la jerarquía, desde `src/data/more-projects.ts`. Cada tarjeta: título, una línea, etiquetas neutras, estado y links a repo y demo, sin imagen ni caso de estudio.
+4. **Open source**: 3 PRs elegidos a mano, cada uno con repo, título, una línea de qué resolví y link. Debajo, "N merged PRs across M organizations · see all" con los números del script.
+5. **About**: foto, párrafo en primera persona, stack en tres filas (Every day / Worked with / Learning now).
+6. **Contact**: título grande, email con botón de copiar (feedback "Copied" 1.6 s), links a LinkedIn, GitHub y CV.
 
 ### Caso de estudio
 
@@ -134,7 +135,12 @@ Título y una línea → botones de código y demo → franja de datos (año, ro
 ## Datos reales que ya existen
 
 - GitHub: `https://github.com/dair7`
-- Backend del proyecto principal: `https://github.com/dair7/dev-portfolio-manager` (Spring Boot, Java 17, JPA, PostgreSQL, Spring Security + JWT, DTOs con mappers, servicios con interfaces, secretos en variables de entorno, `open-in-view` desactivado). Endpoints: CRUD de `/api/projects` y `/api/technologies`.
+- Proyectos destacados (con caso de estudio; datos sacados solo de sus repos):
+  - 01 Ágora: `https://github.com/dair7/agora-platform`, demo `https://agora-platform-steel.vercel.app`. Node, Express, Socket.io, Prisma, PostgreSQL, Angular.
+  - 02 NotesApp: app `https://github.com/dair7/notesapp_flutter` y API `https://github.com/dair7/notesapp-backend`, sin demo. Flutter, Riverpod, Spring Boot, Spring Security + JWT, PostgreSQL, Redis.
+  - 03 Kronos: `https://github.com/dair7/kronos`, demo `https://kronos-xi-pied.vercel.app`. Next.js, React, Recharts, Vitest. No se nombra al negocio del caso real ni a su dueño: se dice "un pequeño negocio".
+- More projects: CitaSegura (`https://github.com/dair7/citasegura`) y Hotel CostaCode (`https://github.com/dair7/Hotel-Costacode-react`).
+- dev-portfolio-manager quedó fuera del portafolio: no compila y no implementa la autenticación JWT que se le atribuía.
 - PRs a destacar:
   - `Predictify-org/predictify-backend#873`: reconcile circuit breaker API and mount impersonate router.
   - `ThinknetCollective/mesh-up_api#46`: cursor-based pagination for solutions, comments and search.
@@ -142,4 +148,4 @@ Título y una línea → botones de código y demo → franja de datos (año, ro
 
 ## Datos que faltan (dejar TODO)
 
-Email, URL de LinkedIn, foto, CV en PDF, proyectos 02 y 03, el porqué del proyecto Portfolio Manager, una línea de explicación por cada PR, qué estoy aprendiendo ahora.
+Email, URL de LinkedIn, foto, CV en PDF, una línea de explicación por cada PR, qué estoy aprendiendo ahora. En los proyectos: mi rol, el porqué y qué haría distinto en los tres destacados, el problema de NotesApp, capturas limpias de la app de NotesApp y el estado de Hotel CostaCode.

@@ -1,0 +1,15 @@
+---
+import PageSection from "../ui/PageSection.astro";
+import MoreProjectCard from "./MoreProjectCard.astro";
+import { moreProjects } from "../../data/more-projects";
+---
+
+<PageSection id="more-projects" title="More projects">
+  <ul class="grid gap-6 md:grid-cols-2">
+    {moreProjects.map((project) => (
+      <li>
+        <MoreProjectCard project={project} />
+      </li>
+    ))}
+  </ul>
+</PageSection>

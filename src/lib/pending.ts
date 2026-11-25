@@ -1,5 +1,7 @@
 const pendingMarker = "TODO(dair)";
 
-export function isPending(value: string): boolean {
+export type PendingNote = `${typeof pendingMarker}${string}`;
+
+export function isPending(value: string): value is PendingNote {
   return value.trimStart().startsWith(pendingMarker);
 }

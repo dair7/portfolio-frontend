@@ -1,0 +1,36 @@
+---
+title: Kronos
+summary: A web tool that evaluates a small business's investment, building its cash flow and explaining NPV, IRR, payback and break-even in a dashboard.
+role: "TODO(dair): your role in the project."
+year: 2026
+scope: Web app · economic model · scenario comparison · no backend
+stack:
+  - Next.js
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Recharts
+  - Vitest
+repositories:
+  - label: View the code
+    url: https://github.com/dair7/kronos
+demoUrl: https://kronos-xi-pied.vercel.app
+cover:
+  kind: screenshot
+  image: ../../assets/projects/kronos/example-dashboard.png
+  alt: "Kronos results dashboard for an illustrative bakery example: net present value, internal rate of return, payback period, break-even point and the investment recovery chart."
+order: 3
+status: complete
+problem: A small business wants to expand, but deciding on intuition alone leaves out the initial investment, the new salaries and running costs, and the time it takes for the new capacity to fill. Kronos gathers those numbers, projects them over time and returns the indicators needed to decide whether the investment pays off.
+decisions:
+  - title: The economic model is pure functions
+    body: NPV, IRR, payback, break-even and the scenarios are plain functions that take a case and return numbers. The model imports only types, never React, so the interface calls it and nothing flows back.
+  - title: Tested where the money is
+    body: 31 Vitest tests load a real case and check that every indicator matches the documented economic model, without a browser.
+  - title: No backend on purpose
+    body: The case lives in the browser's localStorage and can be saved to or opened from a .json file. With no server or database, the tool is free to deploy and easy to carry from one machine to another.
+  - title: localStorage as an external store
+    body: The case is read through useSyncExternalStore with a separate server snapshot, so the server render and hydration agree and no effect is needed to load saved data.
+differently:
+  - "TODO(dair): what you would do differently."
+---

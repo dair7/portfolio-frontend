@@ -1,0 +1,78 @@
+---
+import LinkArrow from "../ui/LinkArrow.astro";
+import StatusBadge from "../ui/StatusBadge.astro";
+import Tag from "../ui/Tag.astro";
+import ProjectCover from "../project/ProjectCover.astro";
+import { motionNames } from "../../data/motion";
+import { projectTitleTransitionName, type Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+  number: string;
+  isFirst: boolean;
+}
+
+const visibleTagCount = 4;
+
+const { project, number, isFirst } = Astro.props;
+const { data } = project;
+const caseStudyHref = `/projects/${project.id}`;
+const caseStudyContext = `about ${data.title}`;
+const visibleTags = data.stack.slice(0, visibleTagCount);
+const hiddenTagCount = data.stack.length - visibleTags.length;
+const hiddenTagsLabel = `+${hiddenTagCount}`;
+---
+
+<article
+  class="group grid h-full content-start gap-5 glass glass-shine rounded-3xl p-4 sm:p-5 md:grid-cols-[2fr_3fr] md:gap-6 lg:grid-cols-1 lg:grid-rows-[auto_1fr] lg:gap-5"
+  data-motion={motionNames.reveal}
+>
+  <div class="aspect-16/10 overflow-hidden rounded-2xl border border-line">
+    <div class="h-full w-full transition-transform duration-300 motion-safe:group-hover:scale-[1.02]">
+      <ProjectCover
+        cover={data.cover}
+        title={data.title}
+        flow={data.flow}
+        isFirst={isFirst}
+      />
+    </div>
+  </div>
+  <div class="flex min-w-0 flex-col gap-4">
+    <div class="flex flex-wrap items-center gap-3">
+      <span
+        aria-hidden="true"
+        class="font-display text-headline font-medium text-accent"
+      >
+        {number}
+      </span>
+      <StatusBadge status={data.status} />
+    </div>
+    <h3
+      class="text-title"
+      transition:name={projectTitleTransitionName(project.id)}
+    >
+      {data.title}
+    </h3>
+    <p class="text-small text-muted">{data.summary}</p>
+    <ul class="flex flex-wrap gap-2">
+      {visibleTags.map((technology) => (
+        <li>
+          <Tag label={technology} variant="technology" />
+        </li>
+      ))}
+      {hiddenTagCount > 0 && (
+        <li>
+          <Tag label={hiddenTagsLabel} />
+          <span class="sr-only"> more technologies</span>
+        </li>
+      )}
+    </ul>
+    <a
+      href={caseStudyHref}
+      class="group/arrow mt-auto inline-block self-start pt-2 font-medium text-text underline decoration-1 underline-offset-4 group-hover:decoration-2 after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+    >
+      Read the case study <span class="sr-only">{caseStudyContext}</span>
+      <LinkArrow />
+    </a>
+  </div>
+</article>

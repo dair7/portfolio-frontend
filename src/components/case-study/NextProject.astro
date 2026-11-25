@@ -9,32 +9,27 @@ interface Props {
 }
 
 const { nextProject } = Astro.props;
-const titleId = `next-project-${nextProject.id}-title`;
-const callToActionId = `next-project-${nextProject.id}-cta`;
+const caseStudyContext = `about ${nextProject.data.title}`;
 ---
 
 <div class="relative isolate overflow-x-clip">
   <Container class="py-16 sm:py-20">
-    <a
-      href={`/projects/${nextProject.id}`}
-      aria-labelledby={`${titleId} ${callToActionId}`}
-      class="group group/arrow block space-y-4 glass glass-shine rounded-3xl p-8 hover:border-text sm:p-10"
-    >
+    <div class="group space-y-4 glass glass-shine rounded-3xl p-8 hover:border-text sm:p-10">
       <p class="text-small text-muted">Next project</p>
-      <p id={titleId} class="font-display text-headline font-bold">
+      <p class="font-display text-headline font-bold">
         {nextProject.data.title}
       </p>
       <p class="max-w-reading text-body text-muted">
         {nextProject.data.summary}
       </p>
-      <p
-        id={callToActionId}
-        class="font-medium underline decoration-1 underline-offset-4 group-hover:decoration-2"
+      <a
+        href={`/projects/${nextProject.id}`}
+        class="group/arrow inline-block font-medium underline decoration-1 underline-offset-4 group-hover:decoration-2 after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
       >
-        Read the case study
+        Read the case study <span class="sr-only">{caseStudyContext}</span>
         <LinkArrow />
-      </p>
-    </a>
+      </a>
+    </div>
   </Container>
   <BackdropBlobs placement="center" />
 </div>

@@ -34,9 +34,12 @@ const inProgressNote =
     <p class="max-w-reading text-body text-text">{data.summary}</p>
   </div>
   <div class="flex flex-wrap gap-3">
-    <Button href={data.repoUrl}>
-      View the code<span aria-hidden="true">&nbsp;↗</span>
-    </Button>
+    {data.repositories.map(({ label, url }, index) => (
+      <Button variant={index === 0 ? "primary" : "secondary"} href={url}>
+        {label}
+        <span aria-hidden="true">&nbsp;↗</span>
+      </Button>
+    ))}
     {data.demoUrl && (
       <Button variant="secondary" href={data.demoUrl}>
         Live demo<span aria-hidden="true">&nbsp;↗</span>

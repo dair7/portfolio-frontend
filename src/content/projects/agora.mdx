@@ -1,0 +1,56 @@
+---
+title: Ágora
+summary: A collaborative platform for university research projects, where tasks, documents and chat update in real time for every member.
+role: "TODO(dair): your role in the project."
+year: 2026
+scope: REST API · real-time events · Angular web client · 11 domain modules
+stack:
+  - Node.js
+  - Express
+  - Socket.io
+  - Prisma
+  - PostgreSQL
+  - Angular
+  - TypeScript
+  - Zod
+repositories:
+  - label: View the code
+    url: https://github.com/dair7/agora-platform
+demoUrl: https://agora-platform-steel.vercel.app
+cover:
+  kind: screenshot
+  image: ../../assets/projects/agora/project-overview.png
+  alt: "Ágora's project overview: a research project with its status, task progress, budget and how many members are online."
+order: 1
+status: in-progress
+problem: Research projects move through planning, execution and closure, and coordinators and investigators need one shared view of phases, tasks, progress, documents and conversation. Ágora gives each project a single source of truth and pushes every change to its members as it happens.
+decisions:
+  - title: Write first, then broadcast
+    body: Every change goes through the REST API and is saved to PostgreSQL first. Only after the write succeeds does the service emit a Socket.io event to the project's room. Clients only listen on the socket, so nobody hears about a change that was never stored.
+  - title: One token, two channels
+    body: The same JWT protects both channels. REST checks it on every request; the socket handshake checks it once, when connecting. Because the socket only receives, a token that expires mid-session can no longer write anything.
+  - title: Projects you can't see don't exist
+    body: The project-access middleware answers 404, not 403, to someone who is not a member. A 403 would confirm that the project exists. The 403 is kept for members who lack the required role.
+  - title: A modular monolith
+    body: Each domain (projects, phases, tasks, documents, chat and the rest) has its own routes, controller, service, repository and validation schemas, all mounted under /api/v1 on a single Express server that also runs Socket.io.
+  - title: File storage behind a port
+    body: The database keeps only file metadata. The bytes go through a small FileStorage interface with two implementations, Supabase Storage and local disk, chosen once at startup from the environment.
+  - title: Validation at the edges
+    body: Zod validates the environment when the server starts, so it refuses to boot with a missing database URL or a JWT secret shorter than 32 characters, and each module's schemas validate request bodies and parameters before a service sees them.
+differently:
+  - "TODO(dair): what you would do differently."
+flow:
+  - layer: Client
+    label: Angular
+  - layer: API
+    label: REST /api/v1
+  - layer: Middleware
+    label: JWT · project access · Zod
+  - layer: Business
+    label: Service
+  - layer: Data
+    label: Prisma · PostgreSQL
+  - layer: Real time
+    label: Socket.io to the project room
+    emphasis: true
+---

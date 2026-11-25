@@ -1,0 +1,57 @@
+---
+title: NotesApp
+summary: A Flutter notes and reminders app backed by its own Spring Boot API, with JWT sessions, email verification and scheduled notifications.
+role: "TODO(dair): your role in the project."
+year: 2026
+scope: Mobile app · REST API · email verification · admin roles
+stack:
+  - Flutter
+  - Riverpod
+  - Spring Boot
+  - Java 17
+  - Spring Security
+  - JWT
+  - PostgreSQL
+  - Redis
+repositories:
+  - label: App code
+    url: https://github.com/dair7/notesapp_flutter
+  - label: API code
+    url: https://github.com/dair7/notesapp-backend
+cover:
+  kind: phone
+  label: Flutter app
+  # TODO(dair): add clean screenshots of the app as cover.screen (image and alt).
+order: 2
+status: in-progress
+problem: "TODO(dair): why this project exists and the problem it solves."
+decisions:
+  - title: Rotated refresh tokens
+    body: Login returns a short-lived JWT and a refresh token stored in PostgreSQL. Every refresh deletes the old token and issues a new one, so each refresh token works only once, and logging out deletes it.
+  - title: One refresh at a time on the phone
+    body: The app keeps both tokens in flutter_secure_storage. When a request comes back 401, the ApiClient refreshes once and retries; requests that fail meanwhile wait for that refresh instead of starting their own.
+  - title: Rate limiting backed by Redis
+    body: POST requests to login, forgot-password and reset-password are counted per IP and path in Redis, and more than 10 in 15 minutes returns 429. If Redis is down, the filter logs a warning and lets the request through instead of blocking every login.
+  - title: Stateless security with roles
+    body: Spring Security keeps no HTTP session. A JWT filter authenticates each request, /api/auth/** stays public and /api/admin/** requires the ADMIN role.
+  - title: Accounts verified by email
+    body: Registration creates a verification token and sends the link through Brevo's HTTP API. Password resets use their own token, which expires after one hour.
+  - title: DTOs and mappers between layers
+    body: Controllers take and return DTOs, never entities. Mappers translate between the two, and controllers depend on service interfaces rather than on their implementations.
+differently:
+  - "TODO(dair): what you would do differently."
+flow:
+  - layer: Client
+    label: Flutter · Riverpod
+  - layer: HTTP
+    label: ApiClient (Bearer, auto refresh)
+  - layer: Security
+    label: Rate limit (Redis) · JWT filter
+    emphasis: true
+  - layer: Web
+    label: Controller (DTO)
+  - layer: Business
+    label: Service
+  - layer: Data
+    label: JPA · PostgreSQL
+---
