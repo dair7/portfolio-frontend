@@ -9,6 +9,8 @@
     "fetch-prs": "tsx scripts/fetch-prs.ts",
     "prebuild": "pnpm run fetch-prs",
     "build": "astro build",
+    "postbuild": "pnpm run check:todos",
+    "check:todos": "tsx scripts/check-todos.ts",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
@@ -28,6 +30,8 @@
     "astro": "^7.4.13",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "satori": "^0.63.2",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.5"
   },
   "devDependencies": {

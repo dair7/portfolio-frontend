@@ -19,6 +19,7 @@ export const site = {
     "Portfolio of Dair Guerrero, full stack developer working with Java, Spring Boot, React and TypeScript.",
   tagline: "TODO(dair): one sentence about what you do.",
   location: "Colombia",
+  countryCode: "CO",
   timezone: "America/Bogota",
   city: "Bogotá",
   // TODO(dair): review this provisional bio.

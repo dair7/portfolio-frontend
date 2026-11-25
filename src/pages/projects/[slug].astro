@@ -8,6 +8,7 @@ import NextProject from "../../components/case-study/NextProject.astro";
 import ProblemSection from "../../components/case-study/ProblemSection.astro";
 import RequestFlow from "../../components/case-study/RequestFlow.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { projectOgCard, projectSocialImage } from "../../data/seo";
 import { site } from "../../data/site";
 import {
   formatProjectNumber,
@@ -33,11 +34,13 @@ const { project, number } = Astro.props;
 const { data } = project;
 const nextProject = await getNextProject(project.id);
 const showNextProject = nextProject && nextProject.id !== project.id;
+const socialImage = projectSocialImage(project.id, projectOgCard(data));
 ---
 
 <BaseLayout
   title={`${data.title} — Case study · ${site.name}`}
   description={data.summary}
+  socialImage={socialImage}
 >
   <CaseStudyHeader project={project} number={number} />
   <FactsStrip project={project} />

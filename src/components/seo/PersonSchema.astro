@@ -1,0 +1,23 @@
+---
+import { isPending } from "../../lib/pending";
+import { site } from "../../data/site";
+
+const profileUrls = [site.githubUrl, site.linkedinUrl].filter(
+  (url) => !isPending(url),
+);
+
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  url: new URL("/", Astro.site).href,
+  sameAs: profileUrls,
+  knowsAbout: site.stack.everyDay,
+  address: { "@type": "PostalAddress", addressCountry: site.countryCode },
+};
+// Escaping "<" keeps any value from closing the script element early.
+const structuredData = JSON.stringify(person).replaceAll("<", "\u003c");
+---
+
+<script is:inline type="application/ld+json" set:html={structuredData} />

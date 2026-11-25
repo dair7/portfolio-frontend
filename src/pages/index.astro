@@ -4,6 +4,7 @@ import Contact from "../components/home/Contact.astro";
 import Hero from "../components/home/Hero.astro";
 import OpenSource from "../components/home/OpenSource.astro";
 import SelectedWork from "../components/home/SelectedWork.astro";
+import PersonSchema from "../components/seo/PersonSchema.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { site } from "../data/site";
 ---
@@ -12,6 +13,7 @@ import { site } from "../data/site";
   title={`${site.name} — ${site.role}`}
   description={site.description}
 >
+  <PersonSchema slot="head" />
   <Hero />
   <SelectedWork />
   <OpenSource />
