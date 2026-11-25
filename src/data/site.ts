@@ -1,10 +1,10 @@
-export interface StackGroups {
+interface StackGroups {
   everyDay: string[];
   workedWith: string[];
   learning: string[];
 }
 
-export interface Availability {
+interface Availability {
   isAvailable: boolean;
   label: string;
   workMode: string;

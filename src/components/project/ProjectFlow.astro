@@ -13,19 +13,28 @@ const { steps, variant = "compact" } = Astro.props;
 
 const variantClasses: Record<
   FlowVariant,
-  { list: string; item: string; step: string; border: string; emphasis: string }
+  {
+    list: string;
+    item: string;
+    step: string;
+    layer: string;
+    border: string;
+    emphasis: string;
+  }
 > = {
   compact: {
     list: "space-y-1",
     item: "",
     step: "flex flex-wrap items-baseline gap-x-4",
+    layer: "w-28 shrink-0",
     border: "",
     emphasis: "",
   },
   diagram: {
-    list: "flex flex-col gap-2 lg:flex-row lg:items-stretch",
-    item: "flex flex-col gap-2 lg:flex-1 lg:flex-row lg:items-center",
-    step: "flex h-full flex-col gap-1 rounded-2xl border p-4 lg:flex-1",
+    list: "flex flex-col gap-2 xl:flex-row xl:items-stretch",
+    item: "flex flex-col gap-2 xl:flex-1 xl:flex-row xl:items-center",
+    step: "flex h-full min-w-0 flex-col gap-1 rounded-2xl border p-4 xl:flex-1",
+    layer: "",
     border: "border-feature-muted/30",
     emphasis: "border-feature-accent",
   },
@@ -46,11 +55,11 @@ const classes = variantClasses[variant];
             aria-hidden="true"
             class:list={[
               "block pl-2 text-feature-accent",
-              variant === "compact" ? "py-1" : "lg:pl-0",
+              variant === "compact" ? "py-1" : "xl:pl-0",
             ]}
           >
-            <span class:list={[variant === "diagram" && "lg:hidden"]}>↓</span>
-            {variant === "diagram" && <span class="hidden lg:inline">→</span>}
+            <span class:list={[variant === "diagram" && "xl:hidden"]}>↓</span>
+            {variant === "diagram" && <span class="hidden xl:inline">→</span>}
           </span>
         )}
         <span
@@ -59,7 +68,7 @@ const classes = variantClasses[variant];
             emphasis ? classes.emphasis : classes.border,
           ]}
         >
-          <span class="w-28 shrink-0 text-caption text-feature-muted">
+          <span class:list={[classes.layer, "text-caption text-feature-muted"]}>
             {layer}
           </span>
           <span class="text-feature-text">{label}</span>

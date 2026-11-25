@@ -1,7 +1,7 @@
 import openSourceData from "../data/opensource.json";
 import type { OpenSourceData } from "../types/opensource";
 
-export interface OpenSourceStats {
+interface OpenSourceStats {
   pullRequestCount: number;
   organizationCount: number;
 }

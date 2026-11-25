@@ -14,15 +14,11 @@ interface Props {
 
 const { project, number, reversed } = Astro.props;
 const { data } = project;
-const titleId = `project-${project.id}-title`;
-const callToActionId = `project-${project.id}-cta`;
+const caseStudyHref = `/projects/${project.id}`;
+const caseStudyContext = `about ${data.title}`;
 ---
 
-<a
-  href={`/projects/${project.id}`}
-  aria-labelledby={`${titleId} ${callToActionId}`}
-  class="group grid items-center gap-8 rounded-3xl lg:grid-cols-2 lg:gap-16"
->
+<div class="group relative grid items-center gap-8 rounded-3xl lg:grid-cols-2 lg:gap-16">
   <div class:list={["overflow-hidden rounded-3xl", reversed && "lg:order-2"]}>
     <div class="transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100">
       {data.cover && data.coverAlt ? (
@@ -53,7 +49,6 @@ const callToActionId = `project-${project.id}-cta`;
       <StatusBadge status={data.status} />
     </div>
     <h3
-      id={titleId}
       class="text-headline"
       transition:name={projectTitleTransitionName(project.id)}
     >
@@ -70,11 +65,14 @@ const callToActionId = `project-${project.id}-cta`;
         </li>
       ))}
     </ul>
-    <p
-      id={callToActionId}
-      class="font-medium text-text underline decoration-1 underline-offset-4 group-hover:decoration-2"
-    >
-      Read the case study <span aria-hidden="true">→</span>
+    <p>
+      <a
+        href={caseStudyHref}
+        class="font-medium text-text underline decoration-1 underline-offset-4 group-hover:decoration-2 after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+      >
+        Read the case study <span class="sr-only">{caseStudyContext}</span>
+        <span aria-hidden="true">→</span>
+      </a>
     </p>
   </div>
-</a>
+</div>

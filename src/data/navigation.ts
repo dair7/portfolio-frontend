@@ -1,6 +1,6 @@
 import { site } from "./site";
 
-export interface NavigationLink {
+interface NavigationLink {
   label: string;
   sectionId: string;
 }
