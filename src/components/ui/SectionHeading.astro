@@ -1,4 +1,6 @@
 ---
+import { motionNames } from "../../data/motion";
+
 interface Props {
   title: string;
   id?: string;
@@ -19,7 +21,11 @@ const Heading = `h${level}` as const;
       {number}
     </span>
   )}
-  <Heading id={id} class="text-section text-text">
+  <Heading
+    id={id}
+    class="text-section text-text"
+    data-motion={motionNames.flip}
+  >
     {title}
   </Heading>
 </div>

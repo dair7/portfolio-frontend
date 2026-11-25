@@ -1,19 +1,40 @@
 ---
+import { logoLabel, logoParts } from "../../data/brand";
+import { motionNames, motionSessions } from "../../data/motion";
 import { homePath } from "../../data/navigation";
 
+type LogoMotion = "decode" | "wave";
+
 interface Props {
+  motion: LogoMotion;
   class?: string;
 }
 
-const { class: className } = Astro.props;
+const { motion, class: className } = Astro.props;
+const isDecoding = motion === "decode";
+const segments = [
+  { text: logoParts.name, isAccent: false },
+  { text: logoParts.dot, isAccent: true },
+  { text: logoParts.suffix, isAccent: false },
+];
 ---
 
 <a
   href={homePath}
+  aria-label={logoLabel}
+  data-motion={isDecoding ? undefined : motionNames.wave}
   class:list={[
     "inline-flex min-h-11 items-center rounded-full px-2 font-display text-title font-bold text-text",
     className,
   ]}
 >
-  dair<span class="text-accent">.</span>dev
+  <span
+    data-motion={isDecoding ? motionNames.decode : undefined}
+    data-motion-once={isDecoding ? motionSessions.navLogo : undefined}
+    data-motion-accent={isDecoding ? "text-accent" : undefined}
+  >
+    {segments.map(({ text, isAccent }) =>
+      isAccent ? <span class="text-accent">{text}</span> : text,
+    )}
+  </span>
 </a>

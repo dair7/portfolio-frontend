@@ -2,8 +2,10 @@
 import { Image } from "astro:assets";
 
 import StatusBadge from "../ui/StatusBadge.astro";
+import LinkArrow from "../ui/LinkArrow.astro";
 import Tag from "../ui/Tag.astro";
 import ProjectFlow from "../project/ProjectFlow.astro";
+import { motionNames } from "../../data/motion";
 import { projectTitleTransitionName, type Project } from "../../lib/projects";
 
 interface Props {
@@ -18,7 +20,10 @@ const caseStudyHref = `/projects/${project.id}`;
 const caseStudyContext = `about ${data.title}`;
 ---
 
-<div class="group relative grid items-center gap-8 rounded-3xl lg:grid-cols-2 lg:gap-16">
+<div
+  class="group relative grid items-center gap-8 rounded-3xl lg:grid-cols-2 lg:gap-16"
+  data-motion={motionNames.reveal}
+>
   <div class:list={["overflow-hidden rounded-3xl", reversed && "lg:order-2"]}>
     <div class="transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100">
       {data.cover && data.coverAlt ? (
@@ -68,10 +73,10 @@ const caseStudyContext = `about ${data.title}`;
     <p>
       <a
         href={caseStudyHref}
-        class="font-medium text-text underline decoration-1 underline-offset-4 group-hover:decoration-2 after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+        class="group/arrow font-medium text-text underline decoration-1 underline-offset-4 group-hover:decoration-2 after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
       >
         Read the case study <span class="sr-only">{caseStudyContext}</span>
-        <span aria-hidden="true">→</span>
+        <LinkArrow />
       </a>
     </p>
   </div>

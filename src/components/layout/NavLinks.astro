@@ -1,4 +1,5 @@
 ---
+import { motionNames } from "../../data/motion";
 import { navigationLinks, sectionHref } from "../../data/navigation";
 
 type NavLinksVariant = "desktop" | "mobile";
@@ -27,12 +28,15 @@ const linkClasses: Record<NavLinksVariant, string> = {
       <a
         href={sectionHref(sectionId, currentPath)}
         data-nav-link={sectionId}
+        data-motion={motionNames.wave}
         class:list={[
-          "flex min-h-11 items-center rounded-full font-medium text-text decoration-2 underline-offset-[6px] hover:underline aria-[current=true]:underline aria-[current=true]:decoration-accent",
+          "group/nav flex min-h-11 items-center rounded-full font-medium text-text",
           linkClasses[variant],
         ]}
       >
-        {label}
+        <span class="relative after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:bg-current after:opacity-0 group-hover/nav:after:opacity-100 group-aria-[current=true]/nav:after:bg-accent group-aria-[current=true]/nav:after:opacity-100">
+          {label}
+        </span>
       </a>
     </li>
   ))}

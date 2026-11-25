@@ -1,4 +1,6 @@
 ---
+import { okStatusLabel } from "../../data/brand";
+import { motionNames } from "../../data/motion";
 import type { Project } from "../../lib/projects";
 
 type FlowStep = NonNullable<Project["data"]["flow"]>[number];
@@ -33,7 +35,7 @@ const variantClasses: Record<
   diagram: {
     list: "flex flex-col gap-2 xl:flex-row xl:items-stretch",
     item: "flex flex-col gap-2 xl:flex-1 xl:flex-row xl:items-center",
-    step: "flex h-full min-w-0 flex-col gap-1 rounded-2xl border p-4 xl:flex-1",
+    step: "flex h-full min-w-0 flex-col gap-1 rounded-2xl border p-4 transition-colors duration-200 data-flow-active:bg-feature-accent/15 xl:flex-1",
     layer: "",
     border: "border-feature-muted/30",
     emphasis: "border-feature-accent",
@@ -41,9 +43,13 @@ const variantClasses: Record<
 };
 
 const classes = variantClasses[variant];
+const isDiagram = variant === "diagram";
 ---
 
-<div class="rounded-3xl bg-feature p-6 font-mono text-small sm:p-10">
+<div
+  class="relative rounded-3xl bg-feature p-6 font-mono text-small sm:p-10"
+  data-motion={isDiagram ? motionNames.requestFlow : undefined}
+>
   {variant === "compact" && (
     <p class="mb-6 text-caption text-feature-muted">Request flow</p>
   )}
@@ -58,11 +64,12 @@ const classes = variantClasses[variant];
               variant === "compact" ? "py-1" : "xl:pl-0",
             ]}
           >
-            <span class:list={[variant === "diagram" && "xl:hidden"]}>↓</span>
-            {variant === "diagram" && <span class="hidden xl:inline">→</span>}
+            <span class:list={[isDiagram && "xl:hidden"]}>↓</span>
+            {isDiagram && <span class="hidden xl:inline">→</span>}
           </span>
         )}
         <span
+          data-flow-step={isDiagram ? "" : undefined}
           class:list={[
             classes.step,
             emphasis ? classes.emphasis : classes.border,
@@ -76,4 +83,13 @@ const classes = variantClasses[variant];
       </li>
     ))}
   </ol>
+  {isDiagram && (
+    <p
+      data-flow-status
+      class="mt-6 text-feature-muted transition-colors duration-200 data-flow-active:text-feature-accent"
+    >
+      <span aria-hidden="true">← </span>
+      {okStatusLabel}
+    </p>
+  )}
 </div>

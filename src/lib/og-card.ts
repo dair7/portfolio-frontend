@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactElement } from "react";
 
+import { logoParts } from "../data/brand";
 import { themeColors } from "../data/theme";
 import type { OgCardContent } from "../data/seo";
 
@@ -36,7 +37,11 @@ function logo(): CardNode {
       fontWeight: 700,
       color: colors.text,
     },
-    [box({}, "dair"), box({ color: colors.accent }, "."), box({}, "dev")],
+    [
+      box({}, logoParts.name),
+      box({ color: colors.accent }, logoParts.dot),
+      box({}, logoParts.suffix),
+    ],
   );
 }
 

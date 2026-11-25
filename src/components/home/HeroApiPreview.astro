@@ -1,6 +1,8 @@
 ---
 import StatusBadge from "../ui/StatusBadge.astro";
 import Tag from "../ui/Tag.astro";
+import { okStatusLabel } from "../../data/brand";
+import { motionNames, motionSessions } from "../../data/motion";
 import type { Project } from "../../lib/projects";
 
 interface Props {
@@ -32,9 +34,23 @@ const keyPattern = /^(\s*)("[^"]+")(: )(.*)$/;
         <span class="text-feature-accent">GET</span>
         {requestPath}
       </span>
-      <span class="text-feature-muted">200 OK</span>
+      <span class="text-feature-muted">
+        <span
+          aria-hidden="true"
+          data-motion={motionNames.decode}
+          data-motion-once={motionSessions.hero}
+          data-motion-accent="text-feature-accent"
+        >
+          {okStatusLabel}
+        </span>
+        <span class="sr-only">{okStatusLabel}</span>
+      </span>
     </figcaption>
-    <pre class="px-5 py-4 break-words whitespace-pre-wrap"><code>{responseLines.map((line) => {
+    <pre
+      class="relative px-5 py-4 break-words whitespace-pre-wrap"
+      data-motion={motionNames.typing}
+      data-motion-once={motionSessions.hero}
+    ><code>{responseLines.map((line) => {
       const match = keyPattern.exec(line);
       if (!match) return <span class="text-feature-muted">{line}{"\n"}</span>;
       const [, indent, key, separator, value] = match;

@@ -44,6 +44,7 @@ const { class: className } = Astro.props;
 
 <script>
   import { themeStorageKey, type Theme } from "../../data/theme";
+  import { transitionTheme } from "../../scripts/theme-transition";
 
   const toggleSelector = "[data-theme-toggle]";
 
@@ -71,19 +72,18 @@ const { class: className } = Astro.props;
     }
   }
 
-  function toggleTheme(): void {
-    const nextTheme = oppositeOf(currentTheme());
-    document.documentElement.dataset.theme = nextTheme;
-    storeTheme(nextTheme);
+  function applyTheme(theme: Theme): void {
+    document.documentElement.dataset.theme = theme;
+    storeTheme(theme);
     syncToggleLabels();
   }
 
   document.addEventListener("click", (event) => {
-    if (
-      event.target instanceof Element &&
-      event.target.closest(toggleSelector)
-    ) {
-      toggleTheme();
+    const toggle =
+      event.target instanceof Element && event.target.closest(toggleSelector);
+    if (toggle) {
+      const nextTheme = oppositeOf(currentTheme());
+      transitionTheme(toggle, () => applyTheme(nextTheme));
     }
   });
   document.addEventListener("astro:page-load", syncToggleLabels);

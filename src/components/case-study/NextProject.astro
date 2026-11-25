@@ -1,5 +1,6 @@
 ---
 import Container from "../ui/Container.astro";
+import LinkArrow from "../ui/LinkArrow.astro";
 import type { Project } from "../../lib/projects";
 
 interface Props {
@@ -15,7 +16,7 @@ const callToActionId = `next-project-${nextProject.id}-cta`;
   <a
     href={`/projects/${nextProject.id}`}
     aria-labelledby={`${titleId} ${callToActionId}`}
-    class="group block space-y-4 rounded-3xl border border-line bg-surface p-8 transition-colors duration-200 hover:border-text sm:p-10"
+    class="group group/arrow block space-y-4 rounded-3xl border border-line bg-surface p-8 transition-colors duration-200 hover:border-text sm:p-10"
   >
     <p class="text-small text-muted">Next project</p>
     <p id={titleId} class="font-display text-headline font-bold">
@@ -26,7 +27,8 @@ const callToActionId = `next-project-${nextProject.id}-cta`;
       id={callToActionId}
       class="font-medium underline decoration-1 underline-offset-4 group-hover:decoration-2"
     >
-      Read the case study<span aria-hidden="true">&nbsp;→</span>
+      Read the case study
+      <LinkArrow />
     </p>
   </a>
 </Container>

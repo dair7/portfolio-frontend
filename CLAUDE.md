@@ -41,7 +41,7 @@ Este archivo es la fuente de verdad. Si una instrucción de una fase contradice 
 ## Qué se reutiliza de la v1
 
 - `scripts/fetch-prs.ts` y `.github/workflows/refresh-opensource.yml`: trae los PRs aceptados de GitHub al compilar. Se mantiene, pero en la página solo se muestran los PRs elegidos a mano (ver Contenido).
-- Nada más de la v1: ni el hero de terminal, ni el efecto CRT, ni GSAP, ni la paleta ámbar.
+- Nada más de la v1: ni el hero de terminal, ni el efecto CRT, ni la paleta ámbar.
 
 ## Idioma
 
@@ -115,7 +115,13 @@ Título y una línea → botones de código y demo → franja de datos (año, ro
 ## Reglas de UX (no negociables)
 
 - El contenido se ve desde el primer frame. Ninguna animación retrasa ni oculta texto.
-- Animaciones cortas (≤ 300 ms), solo en hover o transiciones de página, y desactivadas con `prefers-reduced-motion`.
+- Animaciones:
+  - GSAP permitido (con SplitText, ScrambleText y ScrollTrigger), cargado con import dinámico y nunca descargado con `prefers-reduced-motion`.
+  - Hover y foco: ≤ 300 ms.
+  - Entrada y scroll: ≤ 800 ms, una sola vez (la del hero, una vez por sesión).
+  - El contenido nunca desaparece para animarse: se anima a partir del texto visible.
+  - Nada se mueve solo más de 5 s; si hace falta más, lleva control de pausa.
+  - Cero CLS por animaciones.
 - Nada de modales para proyectos: cada proyecto es una página con URL propia.
 - Todo lo clicable es `<a>` o `<button>` real, accesible con teclado y con foco visible.
 - Imágenes con `alt`, ancho y alto definidos, formato optimizado (`astro:assets`).

@@ -28,6 +28,7 @@
     "@fontsource/space-grotesk": "^5.3.0",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.13",
+    "gsap": "^3.15.1",
     "satori": "^0.63.2",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.5"

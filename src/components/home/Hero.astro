@@ -4,6 +4,7 @@ import Container from "../ui/Container.astro";
 import SocialLinks from "../ui/SocialLinks.astro";
 import HeroApiPreview from "./HeroApiPreview.astro";
 import LocalTime from "./LocalTime.astro";
+import { motionNames, motionSessions } from "../../data/motion";
 import { sectionIds } from "../../data/navigation";
 import { site } from "../../data/site";
 import { getPublishedProjects } from "../../lib/projects";
@@ -27,7 +28,12 @@ const availabilityLine = [
         </p>
       )}
       <div class="space-y-5">
-        <h1 id="hero-title" class="text-hero">
+        <h1
+          id="hero-title"
+          class="text-hero"
+          data-motion={motionNames.rise}
+          data-motion-once={motionSessions.hero}
+        >
           {site.name}
         </h1>
         <p class="max-w-reading text-body text-text">{site.tagline}</p>
