@@ -1,1 +1,49 @@
 @import "tailwindcss";
+@import "./tokens.css";
+
+@custom-variant dark (&:where(:root[data-theme="dark"] *));
+
+@layer base {
+  html {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg font-sans text-body text-text antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-bold;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--theme-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--theme-accent);
+    color: var(--theme-on-accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

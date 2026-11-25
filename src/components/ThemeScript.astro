@@ -1,0 +1,29 @@
+---
+import { themeStorageKey } from "../data/theme";
+---
+
+<script is:inline define:vars={{ themeStorageKey }}>
+  const readStoredTheme = () => {
+    // Storage can throw in private modes or when cookies are blocked.
+    try {
+      return localStorage.getItem(themeStorageKey);
+    } catch {
+      return null;
+    }
+  };
+
+  const resolveTheme = () => {
+    const stored = readStoredTheme();
+    if (stored === "light" || stored === "dark") return stored;
+    return matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+
+  const applyTheme = () => {
+    document.documentElement.dataset.theme = resolveTheme();
+  };
+
+  applyTheme();
+  document.addEventListener("astro:after-swap", applyTheme);
+</script>

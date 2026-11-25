@@ -1,0 +1,45 @@
+---
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+
+import ThemeScript from "../components/ThemeScript.astro";
+import { site } from "../data/site";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+// TODO(dair): add an Open Graph image (og:image) once the visual identity is final.
+---
+
+<!doctype html>
+<html lang={site.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ThemeScript />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Font cssVariable="--font-space-grotesk" preload={[{ weight: 700 }]} />
+    <Font cssVariable="--font-inter" preload={[{ weight: 400 }]} />
+    <Font cssVariable="--font-jetbrains-mono" />
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

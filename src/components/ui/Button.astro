@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type ButtonVariant = "primary" | "secondary";
+
+interface SharedProps {
+  variant?: ButtonVariant;
+}
+
+type LinkProps = SharedProps & HTMLAttributes<"a"> & { href: string };
+type NativeButtonProps = SharedProps &
+  HTMLAttributes<"button"> & { href?: never };
+
+type Props = LinkProps | NativeButtonProps;
+
+const variantClasses: Record<ButtonVariant, string> = {
+  primary: "bg-accent text-on-accent hover:ring-4 hover:ring-accent/25",
+  secondary: "border border-text text-text hover:bg-text hover:text-bg",
+};
+
+const { variant = "primary", class: className, ...attributes } = Astro.props;
+
+const classes = [
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 text-small font-semibold transition-[background-color,color,box-shadow] duration-200",
+  variantClasses[variant],
+  className,
+];
+---
+
+{"href" in attributes && attributes.href !== undefined ? (
+  <a class:list={classes} {...(attributes as HTMLAttributes<"a">)}>
+    <slot />
+  </a>
+) : (
+  <button
+    class:list={classes}
+    type="button"
+    {...(attributes as HTMLAttributes<"button">)}
+  >
+    <slot />
+  </button>
+)}

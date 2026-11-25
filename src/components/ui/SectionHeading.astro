@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  id?: string;
+  number?: string;
+  level?: 2 | 3;
+}
+
+const { title, id, number, level = 2 } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<div class="flex items-baseline gap-4 sm:gap-6">
+  {number && (
+    <span
+      aria-hidden="true"
+      class="font-display text-section font-medium text-accent"
+    >
+      {number}
+    </span>
+  )}
+  <Heading id={id} class="text-section text-text">
+    {title}
+  </Heading>
+</div>

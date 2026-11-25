@@ -1,0 +1,77 @@
+---
+import Container from "../components/ui/Container.astro";
+import ThemeToggle from "../components/ui/ThemeToggle.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ThemePanel from "./ThemePanel.astro";
+---
+
+<BaseLayout
+  title="Styleguide"
+  description="Design tokens and components of the portfolio."
+  noindex
+>
+  <Container as="main" class="space-y-10 py-12">
+    <header class="flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-section">Styleguide</h1>
+      <div class="flex items-center gap-4">
+        <a href="/" class="text-small underline underline-offset-4">
+          Home
+        </a>
+        <ThemeToggle />
+      </div>
+    </header>
+    <div class="grid gap-8 xl:grid-cols-2">
+      <ThemePanel theme="light" />
+      <ThemePanel theme="dark" />
+    </div>
+  </Container>
+</BaseLayout>
+
+<script>
+  import { compositeOver, contrastRatio, parseCssColor } from "./contrast";
+
+  function fillTokenValues(panel: HTMLElement): void {
+    const styles = getComputedStyle(panel);
+    for (const output of panel.querySelectorAll<HTMLElement>(
+      "[data-token-value]",
+    )) {
+      output.textContent = styles
+        .getPropertyValue(`--theme-${output.dataset.tokenValue}`)
+        .trim();
+    }
+  }
+
+  function fillContrastRatios(panel: HTMLElement): void {
+    const panelBackground = parseCssColor(
+      getComputedStyle(panel).backgroundColor,
+    );
+    for (const sample of panel.querySelectorAll<HTMLElement>(
+      "[data-contrast-sample]",
+    )) {
+      const styles = getComputedStyle(sample);
+      const background = compositeOver(
+        parseCssColor(styles.backgroundColor),
+        panelBackground,
+      );
+      const foreground = compositeOver(parseCssColor(styles.color), background);
+      const ratio = contrastRatio(foreground, background);
+      const passes = ratio >= Number(sample.dataset.minimumRatio);
+      const output = sample
+        .closest("tr")
+        ?.querySelector("[data-contrast-ratio]");
+      if (output)
+        output.textContent = `${ratio.toFixed(2)}:1 ${passes ? "✓" : "✗ fails"}`;
+    }
+  }
+
+  function renderStyleguideValues(): void {
+    for (const panel of document.querySelectorAll<HTMLElement>(
+      "[data-theme-panel]",
+    )) {
+      fillTokenValues(panel);
+      fillContrastRatios(panel);
+    }
+  }
+
+  document.addEventListener("astro:page-load", renderStyleguideValues);
+</script>
