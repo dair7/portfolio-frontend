@@ -1,6 +1,6 @@
 # Portafolio v2 — dair.dev
 
-Portafolio personal de Dair Guerrero, desarrollador full stack (Java + Spring Boot en backend, React + TypeScript en frontend). Esta es la versión 2: se reconstruye desde cero en **Astro**, reutilizando solo lo que se indica abajo.
+Portafolio personal de Dair González, desarrollador full stack (Java + Spring Boot en backend, React + TypeScript en frontend). Esta es la versión 2: se reconstruye desde cero en **Astro**, reutilizando solo lo que se indica abajo.
 
 Este archivo es la fuente de verdad. Si una instrucción de una fase contradice este archivo, pregunta antes de seguir.
 
@@ -65,11 +65,11 @@ Un solo color de marca: el **rojo tomate**. El modo oscuro es el claro con los p
 | `feature-text` | `#F7F1EC` | `#F2EAE4` | Texto en `feature` |
 | `feature-muted` | `#D9C9C2` | `#A8958F` | Texto secundario en `feature` |
 | `feature-accent` | `#FF7A63` | `#F0513A` | Acento dentro de `feature` |
-| `glass` | `rgba(247,241,236,.62)` | `rgba(35,24,25,.55)` | Fondo de la barra de navegación |
-| `glass-line` | `rgba(42,20,24,.12)` | `rgba(242,234,228,.12)` | Borde de la barra de navegación |
+| `glass` | `rgba(247,241,236,.62)` | `rgba(35,24,25,.55)` | Fondo de la barra de navegación y de las tarjetas de vidrio (proyecto del hero, Open source, Key decisions, Next project) |
+| `glass-line` | `rgba(42,20,24,.12)` | `rgba(242,234,228,.12)` | Borde de la barra de navegación y de las tarjetas de vidrio |
 
 Reglas de color:
-- El `accent` es solo para: botón principal, punto de disponibilidad, números grandes de sección, subrayado de links destacados y detalles pequeños. Nunca en superficies grandes.
+- El `accent` es solo para: botón principal, punto de disponibilidad, números grandes de sección, subrayado de links destacados y detalles pequeños. Nunca en superficies grandes, con una excepción: manchas decorativas difuminadas detrás de las tarjetas de vidrio, con accent a ≤ 12 % de opacidad (y menos en oscuro si hace falta), solo en las secciones que tienen tarjetas de vidrio y nunca detrás de texto largo de lectura.
 - En modo claro, el rojo **no** se usa como color de texto por debajo de 24 px (contraste 4.1:1). Los links pequeños van en `text` con subrayado.
 - Todo texto debe pasar WCAG AA: 4.5:1 normal, 3:1 grande.
 - Implementación: variables CSS en `:root` (claro) y `[data-theme="dark"]`, mapeadas a `@theme` de Tailwind para usar `bg-bg`, `text-muted`, etc.

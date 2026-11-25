@@ -12,12 +12,12 @@ const { variant } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const listClasses: Record<NavLinksVariant, string> = {
-  desktop: "flex items-center gap-1",
+  desktop: "flex items-center gap-2",
   mobile: "flex flex-col",
 };
 
 const linkClasses: Record<NavLinksVariant, string> = {
-  desktop: "px-3 text-small",
+  desktop: "px-4 text-nav",
   mobile: "px-4 text-body",
 };
 ---

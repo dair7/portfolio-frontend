@@ -1,4 +1,5 @@
 ---
+import BackdropBlobs from "../decor/BackdropBlobs.astro";
 import PageSection from "../ui/PageSection.astro";
 import { formatProjectNumber, type Project } from "../../lib/projects";
 
@@ -12,7 +13,7 @@ const { decisions } = Astro.props;
 <PageSection id="decisions" title="Key decisions">
   <ol class="grid gap-6 md:grid-cols-2">
     {decisions.map(({ title, body }, index) => (
-      <li class="space-y-4 rounded-3xl border border-line bg-surface p-6 sm:p-8">
+      <li class="space-y-4 glass rounded-3xl p-6 sm:p-8">
         <span
           aria-hidden="true"
           class="block font-display text-headline font-medium text-accent"
@@ -24,4 +25,5 @@ const { decisions } = Astro.props;
       </li>
     ))}
   </ol>
+  <BackdropBlobs slot="backdrop" placement="center" />
 </PageSection>

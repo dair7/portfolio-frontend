@@ -84,6 +84,8 @@
   --text-title--letter-spacing: -0.015em;
   --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
   --text-body--line-height: 1.7;
+  --text-nav: 1rem;
+  --text-nav--line-height: 1.5;
   --text-small: 0.9375rem;
   --text-small--line-height: 1.5;
   --text-caption: 0.8125rem;

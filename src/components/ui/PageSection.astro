@@ -24,7 +24,7 @@ const {
 const titleId = `${id}-title`;
 
 const layoutClasses: Record<SectionLayout, string> = {
-  stacked: "space-y-12",
+  stacked: "space-y-8",
   split: "grid gap-8 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16",
 };
 ---
@@ -33,13 +33,17 @@ const layoutClasses: Record<SectionLayout, string> = {
   id={id}
   tabindex={isNavigationTarget ? -1 : undefined}
   aria-labelledby={titleId}
-  class:list={["py-24 sm:py-32", band && "bg-band"]}
+  class:list={[
+    "relative isolate overflow-clip py-16 sm:py-18",
+    band && "bg-band",
+  ]}
 >
   <Container class={layoutClasses[layout]}>
-    <div class="space-y-4">
+    <div class="space-y-3">
       <SectionHeading id={titleId} title={title} />
       {lead && <p class="max-w-reading text-body text-muted">{lead}</p>}
     </div>
     <slot />
   </Container>
+  <slot name="backdrop" />
 </section>

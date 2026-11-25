@@ -12,11 +12,11 @@ interface Availability {
 }
 
 export const site = {
-  name: "Dair Guerrero",
+  name: "Dair González",
   locale: "en",
   role: "Full stack developer",
   description:
-    "Portfolio of Dair Guerrero, full stack developer working with Java, Spring Boot, React and TypeScript.",
+    "Portfolio of Dair González, full stack developer working with Java, Spring Boot, React and TypeScript.",
   tagline: "TODO(dair): one sentence about what you do.",
   location: "Colombia",
   countryCode: "CO",

@@ -18,7 +18,30 @@ function isShown(element: Element): boolean {
   return getComputedStyle(element).opacity !== "0";
 }
 
-function buildIdle({ figure, blinks, zzz }: TintoParts): gsap.core.Timeline {
+const steamProps = "strokeDasharray,strokeDashoffset";
+
+function riseSteam(timeline: gsap.core.Timeline, steam: Element[]): void {
+  const { dash, gap } = motionDistance.tintoSteam;
+  timeline.fromTo(
+    steam,
+    { strokeDasharray: `${dash} ${gap}`, strokeDashoffset: 0 },
+    {
+      strokeDashoffset: -(dash + gap),
+      duration: motionTiming.tintoIdle.steam,
+      ease: "none",
+      repeat: motionTiming.tintoIdle.steamLegs - 1,
+      onComplete: () => gsap.set(steam, { clearProps: steamProps }),
+    },
+    0,
+  );
+}
+
+function buildIdle({
+  figure,
+  blinks,
+  zzz,
+  steam,
+}: TintoParts): gsap.core.Timeline {
   const {
     float,
     floatLegs,
@@ -53,6 +76,7 @@ function buildIdle({ figure, blinks, zzz }: TintoParts): gsap.core.Timeline {
       at,
     );
   }
+  riseSteam(timeline, steam);
   if (isShown(zzz)) {
     timeline.to(
       zzz,

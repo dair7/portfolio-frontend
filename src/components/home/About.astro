@@ -16,7 +16,7 @@ const photo = Object.values(photoModules)[0]?.default;
 ---
 
 <PageSection id={sectionIds.about} title="About" isNavigationTarget>
-  <div class="grid gap-12 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
     {photo ? (
       <Image
         src={photo}
@@ -30,7 +30,7 @@ const photo = Object.values(photoModules)[0]?.default;
         <PendingText value="TODO(dair): add your photo at src/assets/photo.jpg" />
       </div>
     )}
-    <div class="space-y-10">
+    <div class="space-y-8">
       <p class="max-w-reading text-body text-text">{site.bio}</p>
       <StackRows />
     </div>

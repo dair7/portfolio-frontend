@@ -3,6 +3,7 @@ import StatusBadge from "../ui/StatusBadge.astro";
 import Tag from "../ui/Tag.astro";
 import { okStatusLabel } from "../../data/brand";
 import { motionNames, motionSessions } from "../../data/motion";
+import { toCompactJsonLines } from "../../lib/compact-json";
 import type { Project } from "../../lib/projects";
 
 interface Props {
@@ -14,13 +15,11 @@ const { data } = Astro.props.project;
 const projectResponse = {
   id: data.order,
   name: data.title,
-  description: data.summary,
-  githubUrl: data.repoUrl,
   technologyNames: data.stack,
 };
 
 const requestPath = `/api/projects/${projectResponse.id}`;
-const responseLines = JSON.stringify(projectResponse, null, 2).split("\n");
+const responseLines = toCompactJsonLines(projectResponse);
 const keyPattern = /^(\s*)("[^"]+")(: )(.*)$/;
 ---
 
@@ -60,7 +59,7 @@ const keyPattern = /^(\s*)("[^"]+")(: )(.*)$/;
   <p class="font-mono text-caption text-muted">
     <span aria-hidden="true">↓</span> rendered as a card
   </p>
-  <div class="space-y-4 rounded-3xl border border-line bg-surface p-6">
+  <div class="glass space-y-4 rounded-3xl p-6">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <p class="font-display text-title font-bold">{data.title}</p>
       <StatusBadge status={data.status} />

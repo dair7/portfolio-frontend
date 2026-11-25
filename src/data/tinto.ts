@@ -1,29 +1,35 @@
 export type TintoMood = "idle" | "sleepy" | "happy" | "confused";
 
-export const tintoViewBox = { x: 0, y: -16, width: 220, height: 256 } as const;
+export const tintoViewBox = { x: 0, y: 0, width: 220, height: 240 } as const;
 
 export const tintoLabels = {
-  notFound: "Tinto, a coffee bean mascot, looking confused",
+  notFound: "Tinto, a coffee cup mascot, looking confused",
 } as const;
 
 export const tintoEyes = [
-  { side: "left", centerX: 90 },
-  { side: "right", centerX: 132 },
+  { side: "left", centerX: 92 },
+  { side: "right", centerX: 128 },
 ] as const;
 
 export const tintoEyeGeometry = {
-  centerY: 118,
-  radius: 12,
-  pupilRadius: 6,
-  lidTop: 104,
-  lidHeight: 28,
+  centerY: 138,
+  radius: 10,
+  pupilRadius: 5,
+  lidTop: 127,
+  lidHeight: 22,
 } as const;
 
+export const tintoSteamPaths = [
+  "M88 76 c-9 -10 9 -18 0 -28 c-9 -10 9 -18 0 -28",
+  "M110 70 c-9 -10 9 -18 0 -28 c-9 -10 9 -18 0 -28",
+  "M132 76 c-9 -10 9 -18 0 -28 c-9 -10 9 -18 0 -28",
+] as const;
+
 export const tintoSparkles = [
-  { x: 40, y: 80, radius: 4 },
-  { x: 182, y: 90, radius: 5 },
-  { x: 56, y: 40, radius: 3 },
-  { x: 170, y: 36, radius: 4 },
-  { x: 30, y: 140, radius: 3 },
-  { x: 192, y: 150, radius: 3 },
+  { x: 34, y: 90, radius: 4 },
+  { x: 196, y: 96, radius: 5 },
+  { x: 50, y: 44, radius: 3 },
+  { x: 180, y: 40, radius: 4 },
+  { x: 24, y: 150, radius: 3 },
+  { x: 204, y: 160, radius: 3 },
 ] as const;

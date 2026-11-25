@@ -1,4 +1,5 @@
 ---
+import BackdropBlobs from "../decor/BackdropBlobs.astro";
 import Button from "../ui/Button.astro";
 import Container from "../ui/Container.astro";
 import SocialLinks from "../ui/SocialLinks.astro";
@@ -18,8 +19,11 @@ const availabilityLine = [
 ].join(" · ");
 ---
 
-<section aria-labelledby="hero-title" class="py-16 sm:py-24">
-  <Container class="grid items-center gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
+<section
+  aria-labelledby="hero-title"
+  class="relative isolate overflow-clip py-10 sm:py-12"
+>
+  <Container class="grid items-start gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
     <div class="space-y-8">
       {availability.isAvailable && (
         <p class="flex items-center gap-3 text-small font-medium text-text">
@@ -51,4 +55,5 @@ const availabilityLine = [
     </div>
     {featuredProject && <HeroApiPreview project={featuredProject} />}
   </Container>
+  <BackdropBlobs placement="end" />
 </section>

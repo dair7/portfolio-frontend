@@ -1,33 +1,41 @@
 :root,
 [data-theme="light"] {
-  --tinto-body: #4a2c21;
-  --tinto-highlight: #6b4232;
-  --tinto-crease: #2e1a13;
-  --tinto-outline: transparent;
+  --tinto-cup: #d93a25;
+  --tinto-cup-shade: #b32e1c;
+  --tinto-rim: #b32e1c;
+  --tinto-coffee: #3b2219;
+  --tinto-coffee-shine: #6b4232;
+  --tinto-saucer: #e6dad3;
+  --tinto-saucer-well: #d9c9c2;
+  --tinto-saucer-edge: rgba(42, 20, 24, 0.18);
   --tinto-eye: #f7f1ec;
   --tinto-pupil: #160e0f;
-  --tinto-cheek: #f0513a;
-  --tinto-mouth: #f7f1ec;
+  --tinto-cheek: #ffb4a5;
+  --tinto-mouth: #2a1418;
   --tinto-shadow: #2a1418;
   --tinto-steam: #a8958f;
-  --tinto-cap: #d93a25;
+  --tinto-cap: #2a1418;
   --tinto-cap-trim: #f7f1ec;
   --tinto-accent: #d93a25;
   --tinto-zzz: #76625f;
 }
 
 [data-theme="dark"] {
-  --tinto-body: #7e4e39;
-  --tinto-highlight: #a06a52;
-  --tinto-crease: #3a2219;
-  --tinto-outline: rgba(242, 234, 228, 0.45);
+  --tinto-cup: #f0513a;
+  --tinto-cup-shade: #b83722;
+  --tinto-rim: #c23a26;
+  --tinto-coffee: #2a1418;
+  --tinto-coffee-shine: #6b4232;
+  --tinto-saucer: #5a4846;
+  --tinto-saucer-well: #46383a;
+  --tinto-saucer-edge: rgba(242, 234, 228, 0.4);
   --tinto-eye: #f2eae4;
   --tinto-pupil: #160e0f;
-  --tinto-cheek: #f0513a;
-  --tinto-mouth: #f2eae4;
+  --tinto-cheek: #ffb4a5;
+  --tinto-mouth: #2a1418;
   --tinto-shadow: #000000;
   --tinto-steam: #a8958f;
-  --tinto-cap: #f0513a;
+  --tinto-cap: #7a5a56;
   --tinto-cap-trim: #f2eae4;
   --tinto-accent: #f0513a;
   --tinto-zzz: #a8958f;

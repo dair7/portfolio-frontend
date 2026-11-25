@@ -1,0 +1,43 @@
+---
+type BlobPlacement = "end" | "center";
+type BlobTone = "accent" | "neutral";
+
+interface Props {
+  placement: BlobPlacement;
+}
+
+const { placement } = Astro.props;
+
+const toneClasses: Record<BlobTone, string> = {
+  accent: "from-accent/8 dark:from-accent/12",
+  neutral: "from-line",
+};
+
+const blobsByPlacement: Record<
+  BlobPlacement,
+  { tone: BlobTone; position: string }[]
+> = {
+  end: [
+    { tone: "accent", position: "-top-24 -right-32 size-[38rem]" },
+    { tone: "neutral", position: "top-1/3 right-1/4 size-[30rem]" },
+    { tone: "accent", position: "-bottom-48 right-1/3 size-[26rem]" },
+  ],
+  center: [
+    { tone: "accent", position: "top-8 -left-24 size-[28rem]" },
+    { tone: "neutral", position: "-top-24 left-1/3 size-[30rem]" },
+    { tone: "accent", position: "top-8 -right-24 size-[28rem]" },
+  ],
+};
+---
+
+<div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+  {blobsByPlacement[placement].map(({ tone, position }) => (
+    <div
+      class:list={[
+        "absolute rounded-full bg-radial to-transparent to-70%",
+        toneClasses[tone],
+        position,
+      ]}
+    />
+  ))}
+</div>

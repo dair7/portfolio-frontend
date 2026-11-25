@@ -4,6 +4,7 @@ export interface TintoParts {
   blinks: Element[];
   zzz: Element;
   sparkles: Element;
+  steam: Element[];
 }
 
 export const animatedProps = "transform,opacity";
@@ -14,5 +15,6 @@ export function findParts(root: HTMLElement): TintoParts | undefined {
   const sparkles = root.querySelector(".tinto-sparkles");
   if (!figure || !zzz || !sparkles) return undefined;
   const blinks = [...root.querySelectorAll(".tinto-blink")];
-  return { root, figure, blinks, zzz, sparkles };
+  const steam = [...root.querySelectorAll(".tinto-steam path")];
+  return { root, figure, blinks, zzz, sparkles, steam };
 }

@@ -1,4 +1,5 @@
 ---
+import BackdropBlobs from "../decor/BackdropBlobs.astro";
 import TextLink from "../ui/TextLink.astro";
 import PageSection from "../ui/PageSection.astro";
 import OpenSourceCard from "./OpenSourceCard.astro";
@@ -36,4 +37,5 @@ const statsLine = `${countLabel(pullRequestCount, "merged PR", "merged PRs")} ac
     <span aria-hidden="true">·</span>
     <TextLink href={mergedPullRequestsUrl}>see all on GitHub</TextLink>
   </p>
+  <BackdropBlobs slot="backdrop" placement="center" />
 </PageSection>

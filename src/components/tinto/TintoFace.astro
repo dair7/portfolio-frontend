@@ -9,6 +9,10 @@ const eyes = tintoEyes.map(({ side, centerX }) => ({
   centerX,
   clipId: createUniqueId(`tinto-eye-${side}`),
 }));
+const cheeks = [
+  { centerX: 78, centerY: 156 },
+  { centerX: 142, centerY: 156 },
+];
 ---
 
 <g class="tinto-face">
@@ -36,7 +40,7 @@ const eyes = tintoEyes.map(({ side, centerX }) => ({
           y={lidTop}
           width={lidWidth}
           height={lidHeight}
-          fill="var(--tinto-body)"
+          fill="var(--tinto-cup)"
         />
         <rect
           class="tinto-blink"
@@ -44,30 +48,24 @@ const eyes = tintoEyes.map(({ side, centerX }) => ({
           y={lidTop}
           width={lidWidth}
           height="0"
-          fill="var(--tinto-body)"
+          fill="var(--tinto-cup)"
         />
       </g>
     </g>
   ))}
-  <ellipse
-    cx="78"
-    cy="140"
-    rx="9"
-    ry="5"
-    fill="var(--tinto-cheek)"
-    opacity=".6"
-  />
-  <ellipse
-    cx="144"
-    cy="140"
-    rx="9"
-    ry="5"
-    fill="var(--tinto-cheek)"
-    opacity=".6"
-  />
+  {cheeks.map(({ centerX, centerY: cheekY }) => (
+    <ellipse
+      cx={centerX}
+      cy={cheekY}
+      rx="8"
+      ry="4.5"
+      fill="var(--tinto-cheek)"
+      opacity=".75"
+    />
+  ))}
   <path
     class="tinto-mouth-smile"
-    d="M100 142 Q111 152 122 142"
+    d="M101 157 Q110 166 119 157"
     fill="none"
     stroke="var(--tinto-mouth)"
     stroke-width="3.5"
@@ -75,10 +73,10 @@ const eyes = tintoEyes.map(({ side, centerX }) => ({
   />
   <ellipse
     class="tinto-mouth-surprised"
-    cx="111"
-    cy="146"
-    rx="5"
-    ry="6"
-    fill="var(--tinto-pupil)"
+    cx="110"
+    cy="161"
+    rx="4.5"
+    ry="5.5"
+    fill="var(--tinto-mouth)"
   />
 </g>

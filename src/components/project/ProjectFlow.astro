@@ -47,11 +47,11 @@ const isDiagram = variant === "diagram";
 ---
 
 <div
-  class="relative rounded-3xl bg-feature p-6 font-mono text-small sm:p-10"
+  class="relative rounded-3xl bg-feature p-6 font-mono text-small sm:p-8"
   data-motion={isDiagram ? motionNames.requestFlow : undefined}
 >
   {variant === "compact" && (
-    <p class="mb-6 text-caption text-feature-muted">Request flow</p>
+    <p class="mb-4 text-caption text-feature-muted">Request flow</p>
   )}
   <ol class={classes.list}>
     {steps.map(({ layer, label, emphasis }, index) => (
@@ -61,7 +61,7 @@ const isDiagram = variant === "diagram";
             aria-hidden="true"
             class:list={[
               "block pl-2 text-feature-accent",
-              variant === "compact" ? "py-1" : "xl:pl-0",
+              variant === "compact" ? "py-0.5" : "xl:pl-0",
             ]}
           >
             <span class:list={[isDiagram && "xl:hidden"]}>↓</span>
