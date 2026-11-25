@@ -17,7 +17,7 @@ export const site = {
   role: "Full stack developer",
   description:
     "Portfolio of Dair González, full stack developer working with Java, Spring Boot, React and TypeScript.",
-  tagline: "TODO(dair): one sentence about what you do.",
+  tagline: "If it runs between the database and the screen, I can build it.",
   location: "Colombia",
   countryCode: "CO",
   timezone: "America/Bogota",

@@ -11,7 +11,10 @@ function setupWave(
   element: HTMLElement,
   { context, signal }: MotionScope,
 ): void {
-  const { chars } = SplitText.create(element, { type: "chars", aria: "auto" });
+  const { chars } = SplitText.create(element, {
+    type: "chars",
+    aria: element.hasAttribute("aria-label") ? "none" : "auto",
+  });
   let wave: gsap.core.Tween | undefined;
   const play = (): void => {
     if (wave?.isActive()) return;

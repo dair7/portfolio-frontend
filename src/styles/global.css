@@ -21,6 +21,48 @@
   }
 }
 
+@utility glass-shine {
+  position: relative;
+  isolation: isolate;
+  transition-property: translate, border-color;
+  transition-duration: var(--hover-duration);
+  transition-timing-function: ease-out;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle var(--glass-shine-radius) at var(--shine-x, 50%)
+        var(--shine-y, 50%),
+      var(--theme-glass-shine),
+      transparent
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--hover-duration) ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover::before {
+      opacity: 1;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      &:hover {
+        translate: 0 calc(var(--glass-lift) * -1);
+      }
+    }
+  }
+}
+
+/* The "." glyph rests on the baseline, about 80 % down its line box, so it squashes against the text line. */
+@utility logo-dot {
+  transform-origin: 50% 80%;
+}
+
 @utility prose-reading {
   max-width: var(--container-reading);
   font-size: var(--text-body);

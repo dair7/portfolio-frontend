@@ -63,3 +63,5 @@ export const motionDistance = {
 export const copyEmailCopiedEvent = "copy-email:copied";
 
 export const revealStartOpacity = 0.5;
+
+export const activeSectionChangeEvent = "active-section:change";

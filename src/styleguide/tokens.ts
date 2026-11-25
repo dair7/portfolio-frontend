@@ -6,6 +6,7 @@ export type ColorToken =
   | "surface"
   | "band"
   | "accent"
+  | "accent-text"
   | "on-accent"
   | "feature"
   | "feature-text"
@@ -36,6 +37,7 @@ export const colorSwatches: ColorSwatch[] = [
   { token: "surface", usage: "Cards" },
   { token: "band", usage: "Alternate sections" },
   { token: "accent", usage: "Primary button, details (10 %)" },
+  { token: "accent-text", usage: "Small red text, technology tags" },
   { token: "on-accent", usage: "Text on accent" },
   { token: "feature", usage: "Featured block" },
   { token: "feature-text", usage: "Text on feature" },
@@ -86,6 +88,11 @@ export const contrastPairs: ContrastPair[] = [
     background: "feature",
     minimumRatio: normalTextMinimum,
   },
+  ...(["bg", "surface", "band", "glass"] as const).map((background) => ({
+    foreground: "accent-text" as const,
+    background,
+    minimumRatio: normalTextMinimum,
+  })),
   { foreground: "text", background: "glass", minimumRatio: normalTextMinimum },
   { foreground: "muted", background: "glass", minimumRatio: normalTextMinimum },
 ];

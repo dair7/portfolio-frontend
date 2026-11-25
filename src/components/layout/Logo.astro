@@ -11,30 +11,42 @@ interface Props {
 }
 
 const { motion, class: className } = Astro.props;
-const isDecoding = motion === "decode";
-const segments = [
-  { text: logoParts.name, isAccent: false },
-  { text: logoParts.dot, isAccent: true },
-  { text: logoParts.suffix, isAccent: false },
-];
+const isNavLogo = motion === "decode";
+const decodeAttributes = isNavLogo
+  ? {
+      "data-motion": motionNames.decode,
+      "data-motion-once": motionSessions.navLogo,
+      "data-motion-accent": "text-accent",
+    }
+  : {};
 ---
 
 <a
   href={homePath}
   aria-label={logoLabel}
-  data-motion={isDecoding ? undefined : motionNames.wave}
+  data-motion={isNavLogo ? undefined : motionNames.wave}
   class:list={[
-    "inline-flex min-h-11 items-center rounded-full px-2 font-display text-title font-bold text-text",
+    "group/logo inline-flex min-h-11 items-center rounded-full px-2 font-display text-title font-bold text-text",
     className,
   ]}
 >
+  <span {...decodeAttributes}>{logoParts.name}</span>
   <span
-    data-motion={isDecoding ? motionNames.decode : undefined}
-    data-motion-once={isDecoding ? motionSessions.navLogo : undefined}
-    data-motion-accent={isDecoding ? "text-accent" : undefined}
+    data-logo-dot={isNavLogo ? "" : undefined}
+    class:list={[
+      "inline-block text-accent",
+      isNavLogo && "logo-dot motion-safe:data-bouncing:animate-dot-bounce",
+    ]}
   >
-    {segments.map(({ text, isAccent }) =>
-      isAccent ? <span class="text-accent">{text}</span> : text,
-    )}
+    <span
+      class:list={[
+        "inline-block",
+        isNavLogo &&
+          "logo-dot motion-safe:group-hover/logo:animate-dot-squash motion-safe:group-focus-visible/logo:animate-dot-squash",
+      ]}
+    >
+      {logoParts.dot}
+    </span>
   </span>
+  <span {...decodeAttributes}>{logoParts.suffix}</span>
 </a>

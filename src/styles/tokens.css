@@ -1,6 +1,9 @@
 :root {
   --nav-offset: 6rem;
   --page-gutter-wide: clamp(2rem, 5vw, 5rem);
+  --hover-duration: 250ms;
+  --glass-shine-radius: 7.5rem;
+  --glass-lift: 2px;
 }
 
 :root,
@@ -13,6 +16,7 @@
   --theme-surface: #efe6e0;
   --theme-band: #f1e8e2;
   --theme-accent: #d93a25;
+  --theme-accent-text: #b02d1b;
   --theme-on-accent: #ffffff;
   --theme-feature: #2a1418;
   --theme-feature-text: #f7f1ec;
@@ -22,6 +26,7 @@
   --theme-glass-line: rgba(42, 20, 24, 0.12);
   --theme-glass-highlight: rgba(255, 255, 255, 0.7);
   --theme-glass-shadow: 0 0.5rem 2rem rgba(42, 20, 24, 0.08);
+  --theme-glass-shine: rgba(255, 255, 255, 0.35);
 }
 
 [data-theme="dark"] {
@@ -33,6 +38,7 @@
   --theme-surface: #231819;
   --theme-band: #1c1314;
   --theme-accent: #f0513a;
+  --theme-accent-text: #ff7a63;
   --theme-on-accent: #160e0f;
   --theme-feature: #231819;
   --theme-feature-text: #f2eae4;
@@ -42,6 +48,7 @@
   --theme-glass-line: rgba(242, 234, 228, 0.12);
   --theme-glass-highlight: rgba(242, 234, 228, 0.08);
   --theme-glass-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.35);
+  --theme-glass-shine: rgba(255, 255, 255, 0.06);
 }
 
 @theme inline {
@@ -53,6 +60,7 @@
   --color-surface: var(--theme-surface);
   --color-band: var(--theme-band);
   --color-accent: var(--theme-accent);
+  --color-accent-text: var(--theme-accent-text);
   --color-on-accent: var(--theme-on-accent);
   --color-feature: var(--theme-feature);
   --color-feature-text: var(--theme-feature-text);
@@ -94,6 +102,40 @@
   --text-small--line-height: 1.5;
   --text-caption: 0.8125rem;
   --text-caption--line-height: 1.45;
+
+  --animate-dot-squash: dot-squash 280ms ease-out;
+  --animate-dot-bounce: dot-bounce 700ms ease-in-out;
+
+  @keyframes dot-squash {
+    35% {
+      scale: 1.4 0.6;
+    }
+    70% {
+      scale: 0.9 1.1;
+    }
+  }
+
+  @keyframes dot-bounce {
+    15% {
+      translate: 0 0;
+      scale: 1.3 0.7;
+    }
+    40% {
+      translate: 0 -0.45em;
+      scale: 0.8 1.25;
+    }
+    60% {
+      translate: 0 -0.5em;
+      scale: 1 1;
+    }
+    80% {
+      translate: 0 0;
+      scale: 1.3 0.7;
+    }
+    90% {
+      scale: 0.95 1.05;
+    }
+  }
 
   --container-page: 72rem;
   --container-page-wide: 90rem;

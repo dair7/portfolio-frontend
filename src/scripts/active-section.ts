@@ -1,3 +1,5 @@
+import { activeSectionChangeEvent } from "../data/motion";
+
 // A thin band across the middle of the viewport: the section crossing it is the one being read.
 const readingBand = "-45% 0px -50% 0px";
 
@@ -14,6 +16,20 @@ function markActiveLink(
   }
 }
 
+function createSectionChangeAnnouncer(): (sectionId: string | null) => void {
+  let lastSectionId: string | null = null;
+  let isInitialReport = true;
+  return (sectionId) => {
+    if (sectionId && sectionId !== lastSectionId) {
+      if (!isInitialReport) {
+        document.dispatchEvent(new Event(activeSectionChangeEvent));
+      }
+      lastSectionId = sectionId;
+    }
+    isInitialReport = false;
+  };
+}
+
 export function observeActiveSection(signal: AbortSignal): void {
   const links = [
     ...document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"),
@@ -25,6 +41,7 @@ export function observeActiveSection(signal: AbortSignal): void {
   if (sections.length === 0) return;
 
   let activeId: string | null = null;
+  const announceSectionChange = createSectionChangeAnnouncer();
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -36,6 +53,7 @@ export function observeActiveSection(signal: AbortSignal): void {
         }
       }
       markActiveLink(links, activeId);
+      announceSectionChange(activeId);
     },
     { rootMargin: readingBand },
   );

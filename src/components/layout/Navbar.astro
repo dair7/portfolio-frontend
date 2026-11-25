@@ -36,6 +36,7 @@ const mobileMenuId = "mobile-menu";
 
 <script>
   import { observeActiveSection } from "../../scripts/active-section";
+  import { bounceLogoDotOnSectionChange } from "../../scripts/logo-bounce";
   import { setupMobileMenu } from "../../scripts/mobile-menu";
 
   let pageListeners: AbortController | undefined;
@@ -44,6 +45,7 @@ const mobileMenuId = "mobile-menu";
     pageListeners?.abort();
     pageListeners = new AbortController();
     setupMobileMenu(pageListeners.signal);
+    bounceLogoDotOnSectionChange(pageListeners.signal);
     observeActiveSection(pageListeners.signal);
   });
 </script>

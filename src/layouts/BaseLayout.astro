@@ -89,8 +89,10 @@ const socialImageUrl = new URL(socialImage.path, Astro.site);
 
 <script>
   import { setupFragmentFocus } from "../scripts/fragment-focus";
+  import { setupGlassShine } from "../scripts/glass-shine";
   import { startMotion } from "../scripts/motion/runtime";
 
   setupFragmentFocus();
+  setupGlassShine();
   startMotion();
 </script>

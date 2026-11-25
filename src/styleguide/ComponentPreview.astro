@@ -6,6 +6,7 @@ import ThemeToggle from "../components/ui/ThemeToggle.astro";
 import StyleguideSection from "./StyleguideSection.astro";
 
 const sampleTags = ["Java", "Spring Boot", "PostgreSQL", "React", "TypeScript"];
+const tagVariants = ["neutral", "technology"] as const;
 ---
 
 <StyleguideSection title="Components">
@@ -19,13 +20,15 @@ const sampleTags = ["Java", "Spring Boot", "PostgreSQL", "React", "TypeScript"];
       <Button variant="secondary">Secondary</Button>
       <ThemeToggle />
     </div>
-    <ul class="flex flex-wrap gap-2">
-      {sampleTags.map((label) => (
-        <li>
-          <Tag label={label} />
-        </li>
-      ))}
-    </ul>
+    {tagVariants.map((variant) => (
+      <ul class="flex flex-wrap gap-2">
+        {sampleTags.map((label) => (
+          <li>
+            <Tag label={label} variant={variant} />
+          </li>
+        ))}
+      </ul>
+    ))}
     <SectionHeading number="01" title="Selected work" level={3} />
     <div class="rounded-2xl bg-feature p-6 font-mono text-small">
       <p class="text-feature-muted">GET /api/projects/1</p>

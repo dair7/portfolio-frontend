@@ -60,6 +60,7 @@ Un solo color de marca: el **rojo tomate**. El modo oscuro es el claro con los p
 | `surface` | `#EFE6E0` | `#231819` | Tarjetas |
 | `band` | `#F1E8E2` | `#1C1314` | Fondo de secciones alternas |
 | `accent` (10 %) | `#D93A25` | `#F0513A` | Botón principal, detalles |
+| `accent-text` | `#B02D1B` | `#FF7A63` | Único rojo para texto pequeño (etiquetas de tecnología de los proyectos) |
 | `on-accent` | `#FFFFFF` | `#160E0F` | Texto sobre `accent` |
 | `feature` | `#2A1418` | `#231819` | Bloque destacado (código, diagramas) |
 | `feature-text` | `#F7F1EC` | `#F2EAE4` | Texto en `feature` |
@@ -70,7 +71,8 @@ Un solo color de marca: el **rojo tomate**. El modo oscuro es el claro con los p
 
 Reglas de color:
 - El `accent` es solo para: botón principal, punto de disponibilidad, números grandes de sección, subrayado de links destacados y detalles pequeños. Nunca en superficies grandes, con una excepción: manchas decorativas difuminadas detrás de las tarjetas de vidrio, con accent a ≤ 12 % de opacidad (y menos en oscuro si hace falta), solo en las secciones que tienen tarjetas de vidrio y nunca detrás de texto largo de lectura.
-- En modo claro, el rojo **no** se usa como color de texto por debajo de 24 px (contraste 4.1:1). Los links pequeños van en `text` con subrayado.
+- En modo claro, `accent` **no** se usa como color de texto por debajo de 24 px (contraste 4.1:1). Los links pequeños van en `text` con subrayado.
+- `accent-text` es el único rojo para texto pequeño en todo el sitio; nunca `accent`. Hoy se usa en las etiquetas de tecnología de los proyectos (variante `technology` de Tag: borde `accent` al 45 %, fondo `accent` al 12 %, texto en peso 500). Pasa 4.5:1 sobre `bg`, `surface` y `band`, y mín. 4.6:1 dentro de esas etiquetas, también en vidrio con reflejo, medido con píxeles reales en los dos modos. Si deja de pasar, se ajusta el color, no el fondo. El summary de los proyectos va en texto normal y las etiquetas del stack en About usan la variante neutra.
 - Todo texto debe pasar WCAG AA: 4.5:1 normal, 3:1 grande.
 - Implementación: variables CSS en `:root` (claro) y `[data-theme="dark"]`, mapeadas a `@theme` de Tailwind para usar `bg-bg`, `text-muted`, etc.
 

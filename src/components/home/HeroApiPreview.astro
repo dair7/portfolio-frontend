@@ -59,7 +59,7 @@ const keyPattern = /^(\s*)("[^"]+")(: )(.*)$/;
   <p class="font-mono text-caption text-muted">
     <span aria-hidden="true">↓</span> rendered as a card
   </p>
-  <div class="glass space-y-4 rounded-3xl p-6">
+  <div class="glass glass-shine space-y-4 rounded-3xl p-6">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <p class="font-display text-title font-bold">{data.title}</p>
       <StatusBadge status={data.status} />
@@ -68,7 +68,7 @@ const keyPattern = /^(\s*)("[^"]+")(: )(.*)$/;
     <ul class="flex flex-wrap gap-2">
       {data.stack.map((technology) => (
         <li>
-          <Tag label={technology} />
+          <Tag label={technology} variant="technology" />
         </li>
       ))}
     </ul>
