@@ -1,0 +1,50 @@
+---
+import CaseStudyBody from "../../components/case-study/CaseStudyBody.astro";
+import CaseStudyHeader from "../../components/case-study/CaseStudyHeader.astro";
+import DoDifferently from "../../components/case-study/DoDifferently.astro";
+import FactsStrip from "../../components/case-study/FactsStrip.astro";
+import KeyDecisions from "../../components/case-study/KeyDecisions.astro";
+import NextProject from "../../components/case-study/NextProject.astro";
+import ProblemSection from "../../components/case-study/ProblemSection.astro";
+import RequestFlow from "../../components/case-study/RequestFlow.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { site } from "../../data/site";
+import {
+  formatProjectNumber,
+  getNextProject,
+  getPublishedProjects,
+  type Project,
+} from "../../lib/projects";
+
+export async function getStaticPaths() {
+  const projects = await getPublishedProjects();
+  return projects.map((project, index) => ({
+    params: { slug: project.id },
+    props: { project, number: formatProjectNumber(index) },
+  }));
+}
+
+interface Props {
+  project: Project;
+  number: string;
+}
+
+const { project, number } = Astro.props;
+const { data } = project;
+const nextProject = await getNextProject(project.id);
+const showNextProject = nextProject && nextProject.id !== project.id;
+---
+
+<BaseLayout
+  title={`${data.title} — Case study · ${site.name}`}
+  description={data.summary}
+>
+  <CaseStudyHeader project={project} number={number} />
+  <FactsStrip project={project} />
+  {data.flow && <RequestFlow steps={data.flow} />}
+  <ProblemSection problem={data.problem} />
+  <KeyDecisions decisions={data.decisions} />
+  <DoDifferently items={data.differently} />
+  <CaseStudyBody project={project} />
+  {showNextProject && <NextProject nextProject={nextProject} />}
+</BaseLayout>

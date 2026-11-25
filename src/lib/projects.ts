@@ -15,3 +15,11 @@ export async function getNextProject(
   if (currentIndex === -1) return undefined;
   return projects[(currentIndex + 1) % projects.length];
 }
+
+export function formatProjectNumber(index: number): string {
+  return String(index + 1).padStart(2, "0");
+}
+
+export function projectTitleTransitionName(slug: string): string {
+  return `project-title-${slug}`;
+}

@@ -1,0 +1,17 @@
+---
+import PageSection from "../ui/PageSection.astro";
+
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<PageSection id="differently" title="What I'd do differently" band>
+  <ul class="max-w-reading divide-y divide-line border-y border-line">
+    {items.map((item) => (
+      <li class="py-5 text-body text-text">{item}</li>
+    ))}
+  </ul>
+</PageSection>

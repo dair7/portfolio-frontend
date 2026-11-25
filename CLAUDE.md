@@ -26,6 +26,7 @@ Este archivo es la fuente de verdad. Si una instrucción de una fase contradice 
 - Sin valores mágicos: colores, tamaños y textos repetidos salen de tokens o de `src/data`.
 - Tipos explícitos en props y datos. Nada de `any`.
 - Formato consistente con Prettier (con el plugin de Astro) y ESLint sin errores ni advertencias.
+- En los .astro, nunca pegues texto a una {expresión} sin espacio (por ejemplo /api/{id} o PR #{n}): arma el texto completo en el frontmatter y renderiza una sola expresión.
 
 ## Stack
 

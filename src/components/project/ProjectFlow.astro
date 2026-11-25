@@ -1,0 +1,70 @@
+---
+import type { Project } from "../../lib/projects";
+
+type FlowStep = NonNullable<Project["data"]["flow"]>[number];
+type FlowVariant = "compact" | "diagram";
+
+interface Props {
+  steps: FlowStep[];
+  variant?: FlowVariant;
+}
+
+const { steps, variant = "compact" } = Astro.props;
+
+const variantClasses: Record<
+  FlowVariant,
+  { list: string; item: string; step: string; border: string; emphasis: string }
+> = {
+  compact: {
+    list: "space-y-1",
+    item: "",
+    step: "flex flex-wrap items-baseline gap-x-4",
+    border: "",
+    emphasis: "",
+  },
+  diagram: {
+    list: "flex flex-col gap-2 lg:flex-row lg:items-stretch",
+    item: "flex flex-col gap-2 lg:flex-1 lg:flex-row lg:items-center",
+    step: "flex h-full flex-col gap-1 rounded-2xl border p-4 lg:flex-1",
+    border: "border-feature-muted/30",
+    emphasis: "border-feature-accent",
+  },
+};
+
+const classes = variantClasses[variant];
+---
+
+<div class="rounded-3xl bg-feature p-6 font-mono text-small sm:p-10">
+  {variant === "compact" && (
+    <p class="mb-6 text-caption text-feature-muted">Request flow</p>
+  )}
+  <ol class={classes.list}>
+    {steps.map(({ layer, label, emphasis }, index) => (
+      <li class={classes.item}>
+        {index > 0 && (
+          <span
+            aria-hidden="true"
+            class:list={[
+              "block pl-2 text-feature-accent",
+              variant === "compact" ? "py-1" : "lg:pl-0",
+            ]}
+          >
+            <span class:list={[variant === "diagram" && "lg:hidden"]}>↓</span>
+            {variant === "diagram" && <span class="hidden lg:inline">→</span>}
+          </span>
+        )}
+        <span
+          class:list={[
+            classes.step,
+            emphasis ? classes.emphasis : classes.border,
+          ]}
+        >
+          <span class="w-28 shrink-0 text-caption text-feature-muted">
+            {layer}
+          </span>
+          <span class="text-feature-text">{label}</span>
+        </span>
+      </li>
+    ))}
+  </ol>
+</div>

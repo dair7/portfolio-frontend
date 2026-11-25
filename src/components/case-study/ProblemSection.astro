@@ -1,0 +1,13 @@
+---
+import PageSection from "../ui/PageSection.astro";
+
+interface Props {
+  problem: string;
+}
+
+const { problem } = Astro.props;
+---
+
+<PageSection id="problem" title="The problem" layout="split">
+  <p class="max-w-reading text-body text-text">{problem}</p>
+</PageSection>

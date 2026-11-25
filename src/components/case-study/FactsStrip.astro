@@ -1,0 +1,40 @@
+---
+import Container from "../ui/Container.astro";
+import Tag from "../ui/Tag.astro";
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { year, role, stack, scope } = Astro.props.project.data;
+---
+
+<Container>
+  <dl class="grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+    <div class="space-y-2 bg-bg p-6">
+      <dt class="text-caption font-semibold text-muted">Year</dt>
+      <dd class="font-display text-title font-bold">{year}</dd>
+    </div>
+    <div class="space-y-2 bg-bg p-6">
+      <dt class="text-caption font-semibold text-muted">Role</dt>
+      <dd class="text-small">{role}</dd>
+    </div>
+    <div class="space-y-2 bg-bg p-6">
+      <dt class="text-caption font-semibold text-muted">Stack</dt>
+      <dd>
+        <ul class="flex flex-wrap gap-2">
+          {stack.map((technology) => (
+            <li>
+              <Tag label={technology} />
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
+    <div class="space-y-2 bg-bg p-6">
+      <dt class="text-caption font-semibold text-muted">Scope</dt>
+      <dd class="text-small">{scope}</dd>
+    </div>
+  </dl>
+</Container>

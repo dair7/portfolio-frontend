@@ -3,7 +3,7 @@ import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 
 import PendingText from "../ui/PendingText.astro";
-import HomeSection from "./HomeSection.astro";
+import PageSection from "../ui/PageSection.astro";
 import StackRows from "./StackRows.astro";
 import { sectionIds } from "../../data/navigation";
 import { site } from "../../data/site";
@@ -15,7 +15,7 @@ const photoModules = import.meta.glob<{ default: ImageMetadata }>(
 const photo = Object.values(photoModules)[0]?.default;
 ---
 
-<HomeSection id={sectionIds.about} title="About">
+<PageSection id={sectionIds.about} title="About" isNavigationTarget>
   <div class="grid gap-12 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
     {photo ? (
       <Image
@@ -35,4 +35,4 @@ const photo = Object.values(photoModules)[0]?.default;
       <StackRows />
     </div>
   </div>
-</HomeSection>
+</PageSection>

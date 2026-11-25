@@ -1,0 +1,15 @@
+---
+import PageSection from "../ui/PageSection.astro";
+import ProjectFlow from "../project/ProjectFlow.astro";
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  steps: NonNullable<Project["data"]["flow"]>;
+}
+
+const { steps } = Astro.props;
+---
+
+<PageSection id="request-flow" title="How a request flows">
+  <ProjectFlow steps={steps} variant="diagram" />
+</PageSection>

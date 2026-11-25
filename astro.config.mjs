@@ -46,6 +46,13 @@ export default defineConfig({
   // TODO(dair): replace with the final domain.
   site: "https://portfolio-frontend-six-red.vercel.app",
 
+  // Compression drops the line-break whitespace Prettier leaves between {expressions} and tags.
+  compressHTML: false,
+
+  markdown: {
+    shikiConfig: { theme: "css-variables" },
+  },
+
   integrations: [mdx(), react(), sitemap(), devOnlyStyleguide],
 
   fonts: [

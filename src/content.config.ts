@@ -10,6 +10,7 @@ const decisionSchema = z.object({
 const flowStepSchema = z.object({
   layer: z.string().min(1),
   label: z.string().min(1),
+  emphasis: z.boolean().default(false),
 });
 
 const projects = defineCollection({

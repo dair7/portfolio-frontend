@@ -1,0 +1,32 @@
+---
+import Container from "../ui/Container.astro";
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  nextProject: Project;
+}
+
+const { nextProject } = Astro.props;
+const titleId = `next-project-${nextProject.id}-title`;
+const callToActionId = `next-project-${nextProject.id}-cta`;
+---
+
+<Container class="py-24 sm:py-32">
+  <a
+    href={`/projects/${nextProject.id}`}
+    aria-labelledby={`${titleId} ${callToActionId}`}
+    class="group block space-y-4 rounded-3xl border border-line bg-surface p-8 transition-colors duration-200 hover:border-text sm:p-10"
+  >
+    <p class="text-small text-muted">Next project</p>
+    <p id={titleId} class="font-display text-headline font-bold">
+      {nextProject.data.title}
+    </p>
+    <p class="max-w-reading text-body text-muted">{nextProject.data.summary}</p>
+    <p
+      id={callToActionId}
+      class="font-medium underline decoration-1 underline-offset-4 group-hover:decoration-2"
+    >
+      Read the case study<span aria-hidden="true">&nbsp;→</span>
+    </p>
+  </a>
+</Container>
