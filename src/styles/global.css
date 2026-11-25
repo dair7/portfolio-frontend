@@ -3,11 +3,28 @@
 
 @custom-variant dark (&:where(:root[data-theme="dark"] *));
 
+@utility glass {
+  background-color: var(--theme-glass);
+  border: 1px solid var(--theme-glass-line);
+  box-shadow:
+    inset 0 1px 0 var(--theme-glass-highlight),
+    var(--theme-glass-shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+
+  @supports not (
+    (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+  ) {
+    background-color: var(--theme-bg);
+  }
+}
+
 @layer base {
   html {
     background-color: var(--theme-bg);
     color: var(--theme-text);
     -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--nav-offset);
   }
 
   body {
@@ -23,6 +40,10 @@
   :focus-visible {
     outline: 2px solid var(--theme-accent);
     outline-offset: 2px;
+  }
+
+  [tabindex="-1"]:focus {
+    outline: none;
   }
 
   ::selection {

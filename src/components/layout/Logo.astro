@@ -1,0 +1,19 @@
+---
+import { homePath } from "../../data/navigation";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<a
+  href={homePath}
+  class:list={[
+    "inline-flex min-h-11 items-center rounded-full px-2 font-display text-title font-bold text-text",
+    className,
+  ]}
+>
+  dair<span class="text-accent">.</span>dev
+</a>

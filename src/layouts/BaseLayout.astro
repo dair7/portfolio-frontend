@@ -2,6 +2,9 @@
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 
+import Footer from "../components/layout/Footer.astro";
+import Navbar from "../components/layout/Navbar.astro";
+import SkipLink from "../components/layout/SkipLink.astro";
 import ThemeScript from "../components/ThemeScript.astro";
 import { site } from "../data/site";
 import "../styles/global.css";
@@ -39,7 +42,18 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <Font cssVariable="--font-jetbrains-mono" />
     <ClientRouter />
   </head>
-  <body>
-    <slot />
+  <body id="top">
+    <SkipLink />
+    <Navbar />
+    <main id="content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
+
+<script>
+  import { setupFragmentFocus } from "../scripts/fragment-focus";
+
+  setupFragmentFocus();
+</script>

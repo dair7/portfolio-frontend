@@ -1,0 +1,39 @@
+---
+import { navigationLinks, sectionHref } from "../../data/navigation";
+
+type NavLinksVariant = "desktop" | "mobile";
+
+interface Props {
+  variant: NavLinksVariant;
+}
+
+const { variant } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const listClasses: Record<NavLinksVariant, string> = {
+  desktop: "flex items-center gap-1",
+  mobile: "flex flex-col",
+};
+
+const linkClasses: Record<NavLinksVariant, string> = {
+  desktop: "px-3 text-small",
+  mobile: "px-4 text-body",
+};
+---
+
+<ul class={listClasses[variant]}>
+  {navigationLinks.map(({ label, sectionId }) => (
+    <li>
+      <a
+        href={sectionHref(sectionId, currentPath)}
+        data-nav-link={sectionId}
+        class:list={[
+          "flex min-h-11 items-center rounded-full font-medium text-text decoration-2 underline-offset-[6px] hover:underline aria-[current=true]:underline aria-[current=true]:decoration-accent",
+          linkClasses[variant],
+        ]}
+      >
+        {label}
+      </a>
+    </li>
+  ))}
+</ul>

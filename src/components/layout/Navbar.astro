@@ -1,0 +1,49 @@
+---
+import Button from "../ui/Button.astro";
+import ThemeToggle from "../ui/ThemeToggle.astro";
+import Logo from "./Logo.astro";
+import MenuButton from "./MenuButton.astro";
+import MobileMenu from "./MobileMenu.astro";
+import NavLinks from "./NavLinks.astro";
+import { resumeHref } from "../../data/navigation";
+
+const mobileMenuId = "mobile-menu";
+---
+
+<header class="pointer-events-none sticky top-4 z-50 mt-4 px-4">
+  <div
+    data-navbar
+    class="pointer-events-auto relative mx-auto w-full max-w-page md:w-fit"
+  >
+    <div class="glass flex items-center justify-between gap-2 rounded-full py-1.5 pr-1.5 pl-3 md:gap-4">
+      <Logo />
+      <nav aria-label="Main" class="hidden md:block">
+        <NavLinks variant="desktop" />
+      </nav>
+      <div class="flex items-center gap-2">
+        <div class="hidden md:block">
+          <Button variant="secondary" href={resumeHref} data-astro-reload>
+            Résumé
+          </Button>
+        </div>
+        <ThemeToggle />
+        <MenuButton controls={mobileMenuId} />
+      </div>
+    </div>
+    <MobileMenu id={mobileMenuId} />
+  </div>
+</header>
+
+<script>
+  import { observeActiveSection } from "../../scripts/active-section";
+  import { setupMobileMenu } from "../../scripts/mobile-menu";
+
+  let pageListeners: AbortController | undefined;
+
+  document.addEventListener("astro:page-load", () => {
+    pageListeners?.abort();
+    pageListeners = new AbortController();
+    setupMobileMenu(pageListeners.signal);
+    observeActiveSection(pageListeners.signal);
+  });
+</script>

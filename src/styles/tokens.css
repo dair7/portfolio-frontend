@@ -1,3 +1,7 @@
+:root {
+  --nav-offset: 6rem;
+}
+
 :root,
 [data-theme="light"] {
   color-scheme: light;
@@ -15,6 +19,8 @@
   --theme-feature-accent: #ff7a63;
   --theme-glass: rgba(247, 241, 236, 0.62);
   --theme-glass-line: rgba(42, 20, 24, 0.12);
+  --theme-glass-highlight: rgba(255, 255, 255, 0.7);
+  --theme-glass-shadow: 0 8px 32px rgba(42, 20, 24, 0.08);
 }
 
 [data-theme="dark"] {
@@ -33,6 +39,8 @@
   --theme-feature-accent: #f0513a;
   --theme-glass: rgba(35, 24, 25, 0.55);
   --theme-glass-line: rgba(242, 234, 228, 0.12);
+  --theme-glass-highlight: rgba(242, 234, 228, 0.08);
+  --theme-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 @theme inline {
