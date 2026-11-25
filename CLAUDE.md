@@ -119,7 +119,7 @@ Título y una línea → botones de código y demo → franja de datos (año, ro
 - Nada de modales para proyectos: cada proyecto es una página con URL propia.
 - Todo lo clicable es `<a>` o `<button>` real, accesible con teclado y con foco visible.
 - Imágenes con `alt`, ancho y alto definidos, formato optimizado (`astro:assets`).
-- Cada página con `title`, `description`, Open Graph y `canonical`.
+- Cada página indexable con `title`, `description`, Open Graph y `canonical`; las páginas `noindex` sin `canonical` ni `og:url`.
 - Objetivo: Lighthouse ≥ 95 en las cuatro categorías.
 
 ## Datos reales que ya existen

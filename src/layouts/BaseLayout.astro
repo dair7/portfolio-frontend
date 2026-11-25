@@ -30,7 +30,9 @@ const {
   noindex = false,
   socialImage = homeSocialImage,
 } = Astro.props;
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const canonicalUrl = noindex
+  ? undefined
+  : new URL(Astro.url.pathname, Astro.site);
 const socialImageUrl = new URL(socialImage.path, Astro.site);
 ---
 
@@ -52,13 +54,13 @@ const socialImageUrl = new URL(socialImage.path, Astro.site);
     <ThemeScript />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:image" content={socialImageUrl} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content={String(ogImageSize.width)} />
