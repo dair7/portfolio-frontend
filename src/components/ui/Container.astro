@@ -7,7 +7,10 @@ const { as: Element = "div", class: className, ...attributes } = Astro.props;
 ---
 
 <Element
-  class:list={["mx-auto w-full max-w-page px-5 sm:px-8", className]}
+  class:list={[
+    "mx-auto w-full max-w-page px-5 sm:px-8 xl:max-w-page-wide xl:px-(--page-gutter-wide)",
+    className,
+  ]}
   {...attributes}
 >
   <slot />

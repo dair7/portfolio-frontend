@@ -8,6 +8,7 @@ import {
   revealStartOpacity,
 } from "../../data/motion";
 import type { MotionFeature } from "./types";
+import { remToPx } from "./units";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,7 +16,7 @@ export const reveal: MotionFeature = (elements) => {
   for (const element of elements) {
     if (ScrollTrigger.isInViewport(element)) continue;
     gsap.from(element, {
-      y: motionDistance.revealOffsetPx,
+      y: remToPx(motionDistance.revealOffsetRem),
       opacity: revealStartOpacity,
       duration: motionTiming.reveal.duration,
       ease: "power2.out",

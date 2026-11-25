@@ -3,6 +3,7 @@ import { SplitText } from "gsap/SplitText";
 
 import { motionDistance, motionTiming } from "../../data/motion";
 import type { MotionFeature, MotionScope } from "./types";
+import { remToPx } from "./units";
 
 gsap.registerPlugin(SplitText);
 
@@ -16,7 +17,7 @@ function setupWave(
     if (wave?.isActive()) return;
     wave = context.add(() =>
       gsap.to(chars, {
-        y: -motionDistance.waveLiftPx,
+        y: -remToPx(motionDistance.waveLiftRem),
         duration: motionTiming.wave.half,
         ease: "sine.out",
         stagger: { amount: motionTiming.wave.stagger, yoyo: true, repeat: 1 },

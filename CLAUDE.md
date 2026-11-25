@@ -82,10 +82,11 @@ Reglas de color:
 | Texto | Inter | 400, 500, 600 |
 | Código y datos | JetBrains Mono | 400, 500 |
 
-- Nombre en el hero: `clamp(56px, 8vw, 104px)`, interletrado `-0.045em`, interlineado 0.95.
+- Nombre en el hero: `clamp(56px, 8vw, 128px)`, interletrado `-0.045em`, interlineado 0.95.
 - Títulos de sección: `clamp(36px, 4.5vw, 52px)`, interletrado `-0.03em`.
 - Texto de lectura: 17–19 px, interlineado 1.6–1.75, máximo ~70 caracteres por línea.
 - Mínimo absoluto: 13 px. Nada de etiquetas en mayúsculas con mucho espaciado.
+- Las medidas están dadas con raíz de 16 px; desde 1536 px la raíz sube a 17 px, desde 1920 a 18 px y desde 2400 a 20 px, y todo escala en proporción.
 
 ## Componentes clave
 

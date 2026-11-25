@@ -1,5 +1,6 @@
 :root {
   --nav-offset: 6rem;
+  --page-gutter-wide: clamp(2rem, 5vw, 5rem);
 }
 
 :root,
@@ -20,7 +21,7 @@
   --theme-glass: rgba(247, 241, 236, 0.62);
   --theme-glass-line: rgba(42, 20, 24, 0.12);
   --theme-glass-highlight: rgba(255, 255, 255, 0.7);
-  --theme-glass-shadow: 0 8px 32px rgba(42, 20, 24, 0.08);
+  --theme-glass-shadow: 0 0.5rem 2rem rgba(42, 20, 24, 0.08);
 }
 
 [data-theme="dark"] {
@@ -40,7 +41,7 @@
   --theme-glass: rgba(35, 24, 25, 0.55);
   --theme-glass-line: rgba(242, 234, 228, 0.12);
   --theme-glass-highlight: rgba(242, 234, 228, 0.08);
-  --theme-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --theme-glass-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.35);
 }
 
 @theme inline {
@@ -69,8 +70,11 @@
 }
 
 @theme {
+  --breakpoint-3xl: 120rem;
+  --breakpoint-4xl: 150rem;
+
   --text-*: initial;
-  --text-hero: clamp(3.5rem, 8vw, 6.5rem);
+  --text-hero: clamp(3.5rem, 8vw, 8rem);
   --text-hero--line-height: 0.95;
   --text-hero--letter-spacing: -0.045em;
   --text-section: clamp(2.25rem, 4.5vw, 3.25rem);
@@ -92,5 +96,6 @@
   --text-caption--line-height: 1.45;
 
   --container-page: 72rem;
+  --container-page-wide: 90rem;
   --container-reading: 70ch;
 }

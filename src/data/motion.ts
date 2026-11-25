@@ -49,8 +49,8 @@ export const motionTiming = {
 
 export const motionDistance = {
   riseMaskBleedEm: 0.2,
-  waveLiftPx: 4,
-  revealOffsetPx: 16,
+  waveLiftRem: 0.25,
+  revealOffsetRem: 1,
   flipPerspectivePx: 400,
   tintoFloat: 6,
   tintoZzzRise: 8,
